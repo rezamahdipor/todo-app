@@ -1,0 +1,398 @@
+/* ========== متغیرها ========== */
+:root {
+    --bg1: #c7d2fe;
+    --bg2: #fbcfe8;
+    --glass: rgba(255, 255, 255, 0.45);
+    --glass-strong: rgba(255, 255, 255, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --text: #0f172a;
+    --muted: #64748b;
+    --border: rgba(148, 163, 184, 0.35);
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --success: #16a34a;
+    --success-hover: #15803d;
+    --danger: #dc2626;
+    --danger-hover: #b91c1c;
+    --gray: #64748b;
+    --gray-hover: #475569;
+    --radius: 18px;
+    --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+    --shadow-hover: 0 14px 40px rgba(79, 70, 229, 0.25);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg1: #1e1b4b;
+        --bg2: #0f172a;
+        --glass: rgba(30, 41, 59, 0.45);
+        --glass-strong: rgba(30, 41, 59, 0.7);
+        --glass-border: rgba(255, 255, 255, 0.12);
+        --text: #f1f5f9;
+        --muted: #94a3b8;
+        --border: rgba(148, 163, 184, 0.2);
+        --primary: #6366f1;
+        --primary-hover: #818cf8;
+        --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        --shadow-hover: 0 14px 40px rgba(99, 102, 241, 0.35);
+    }
+}
+
+/* ========== پایه ========== */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Vazirmatn', Tahoma, sans-serif;
+    background: linear-gradient(135deg, var(--bg1), var(--bg2));
+    background-attachment: fixed;
+    color: var(--text);
+    margin: 0;
+    padding: 40px 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+/* حباب‌های رنگی پشت شیشه */
+.bg-blobs {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(70px);
+    opacity: 0.7;
+    animation: float 14s ease-in-out infinite;
+}
+
+.b1 { width: 320px; height: 320px; background: #6366f1; top: -60px; right: -60px; }
+.b2 { width: 280px; height: 280px; background: #ec4899; bottom: -40px; left: -40px; animation-delay: -5s; }
+.b3 { width: 220px; height: 220px; background: #22d3ee; top: 45%; left: 55%; animation-delay: -9s; }
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50%      { transform: translate(30px, -40px) scale(1.12); }
+}
+
+.container {
+    max-width: 540px;
+    margin: 0 auto;
+    padding: 28px;
+    background: var(--glass);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+h1 {
+    margin: 0 0 20px;
+    text-align: center;
+    font-size: 1.6rem;
+}
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* ========== اینپوت‌ها ========== */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 11px 14px;
+    font: inherit;
+    color: var(--text);
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+input:hover {
+    transform: translateY(-1px);
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.25);
+}
+
+input::placeholder {
+    color: var(--muted);
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+}
+
+/* ========== دکمه‌ها ========== */
+button {
+    position: relative;
+    overflow: hidden;
+    padding: 9px 16px;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #fff;
+    background: var(--primary);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+/* خط نورانی که روی دکمه می‌لغزه */
+button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.6s ease;
+}
+
+button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+}
+
+button:hover::after {
+    left: 140%;
+}
+
+button:active {
+    transform: scale(0.96);
+}
+
+button:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.btn-done {
+    background: var(--success);
+}
+
+.btn-done:hover {
+    background: var(--success-hover);
+}
+
+.btn-delete {
+    background: var(--danger);
+}
+
+.btn-delete:hover {
+    background: var(--danger-hover);
+}
+
+.btn-logout {
+    background: var(--gray);
+    padding: 6px 12px;
+    font-size: 0.8rem;
+}
+
+.btn-logout:hover {
+    background: var(--gray-hover);
+}
+
+/* ========== فرم افزودن ========== */
+.add-form {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.error {
+    color: var(--danger);
+    font-size: 0.85rem;
+    margin: 4px 0 8px;
+    min-height: 1.2em;
+}
+
+/* ========== لیست تسک‌ها ========== */
+.task-list {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.task {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--glass-strong);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    animation: slideIn 0.3s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.task:hover {
+    transform: translateY(-3px) scale(1.01);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--primary);
+}
+
+.task .title {
+    flex: 1;
+    word-break: break-word;
+    transition: color 0.2s;
+}
+
+.task.done .title {
+    text-decoration: line-through;
+    color: var(--muted);
+}
+
+.actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 28px 0;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========== نوار بالا (سلام و خروج) ========== */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 10px 14px;
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    font-size: 0.9rem;
+    color: var(--text);
+}
+
+.empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 28px 0;
+    background: transparent;
+    border: 1px dashed var(--border);
+    border-radius: 14px;
+}
+
+/* ========== فرم‌های ورود و ثبت‌نام ========== */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.auth-form button {
+    margin-top: 6px;
+    padding: 11px;
+}
+
+.auth-link {
+    text-align: center;
+    font-size: 0.9rem;
+    margin-top: 18px;
+    color: var(--muted);
+}
+
+.remember {
+    font-size: 0.85rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ========== ریسپانسیو ========== */
+@media (max-width: 480px) {
+    body {
+        padding: 16px 10px;
+    }
+
+    .container {
+        padding: 18px;
+    }
+
+    .task {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .actions {
+        justify-content: flex-end;
+    }
+}
+
+/* احترام به کاربرانی که انیمیشن رو نمی‌خوان */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+.edit-input {
+    flex: 1;
+    padding: 6px 10px !important;
+    font-size: 1rem;
+}
+
+.task .title {
+    cursor: text;
+}
+
+.bg-blobs {
+    pointer-events: none;
+}
+
+button::after {
+    pointer-events: none;
+}
