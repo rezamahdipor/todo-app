@@ -20,6 +20,9 @@
     <div class="container">
         @yield('content')
     </div>
-    <script src="{{ asset('js/app.js') }}"></script>
+    <footer class="footer">
+     ساخته شده توسط رضا مهدی پور· {{ date('Y') }}
+</footer>
+@stack('scripts')
 </body>
 </html>

@@ -3,18 +3,23 @@
 @section('title', 'لیست کارها')
 
 @section('content')
-<div class="topbar">
-    <span>سلام {{ auth()->user()->name }} 👋</span>
-    <form action="{{ route('logout') }}" method="POST">
-        @csrf
-        <button type="submit" class="btn-logout">خروج</button>
-    </form>
-</div>
-    <h1>لیست کارها</h1>
+    <div class="topbar">
+        <span>سلام {{ auth()->user()->name }} 👋</span>
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="btn-logout">خروج</button>
+        </form>
+    </div>
+
+    <h1>لیست کارهای من</h1>
+    <p class="subtitle">
+        {{ $tasks->where('is_done', false)->count() }} کار باقی مانده
+        از {{ $tasks->count() }} کار
+    </p>
 
     <form id="add-form" action="{{ route('tasks.store') }}" method="POST" class="add-form">
         @csrf
-        <input type="text" name="title" placeholder="کار جدید..." value="{{ old('title') }}" required>
+        <input type="text" name="title" placeholder="امروز چه کاری داری؟" value="{{ old('title') }}" required>
         <button type="submit">افزودن</button>
     </form>
 
@@ -22,6 +27,9 @@
         @error('title') {{ $message }} @enderror
     </p>
 
+    <p class="tip">💡 برای ویرایش یک کار، روی عنوانش دابل‌کلیک کن. Enter ذخیره می‌کنه و Esc لغو.</p>
+
+ 
   <ul id="task-list" class="task-list">
     @forelse ($tasks as $task)
         <li class="task {{ $task->is_done ? 'done' : '' }}"
@@ -40,4 +48,7 @@
         <li class="empty">هنوز کاری اضافه نکردی.</li>
     @endforelse
 </ul>
+@push('scripts')
+    <script src="{{ asset('js/app.js') }}"></script>
+@endpush
 @endsection

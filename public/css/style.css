@@ -396,3 +396,215 @@ button:focus-visible {
 button::after {
     pointer-events: none;
 }
+
+.subtitle {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin: -8px 0 20px;
+}
+
+.auth-form label:not(.remember) {
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: -4px;
+}
+
+.hint {
+    color: var(--muted);
+    font-size: 0.78rem;
+    margin-top: -4px;
+}
+
+.tip {
+    font-size: 0.8rem;
+    color: var(--muted);
+    background: var(--glass-strong);
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin: 0 0 12px;
+}
+
+.footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin-top: 24px;
+}
+
+/* ========== صفحه‌ی فرود ========== */
+.hero {
+    text-align: center;
+    padding: 12px 0 8px;
+}
+
+.hero-icon {
+    font-size: 3rem;
+    margin-bottom: 4px;
+}
+
+.hero-text {
+    color: var(--muted);
+    max-width: 420px;
+    margin: 0 auto 22px;
+}
+
+.hero-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* لینک‌هایی که شبیه دکمه‌ان */
+.btn {
+    display: inline-block;
+    padding: 10px 24px;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.btn:hover {
+    text-decoration: none;
+    transform: translateY(-2px);
+}
+
+.btn-primary {
+    color: #fff;
+    background: var(--primary);
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.45);
+}
+
+.btn-outline {
+    color: var(--primary);
+    background: var(--glass-strong);
+    border: 1px solid var(--primary);
+}
+
+.btn-outline:hover {
+    background: var(--primary);
+    color: #fff;
+}
+
+.section {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+}
+
+.section h2 {
+    font-size: 1.15rem;
+    text-align: center;
+    margin: 0 0 16px;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.feature {
+    padding: 16px 12px;
+    text-align: center;
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+}
+
+.feature:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--primary);
+}
+
+.feature-icon {
+    font-size: 1.6rem;
+}
+
+.feature h3 {
+    font-size: 0.95rem;
+    margin: 6px 0 4px;
+}
+
+.feature p {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin: 0;
+}
+
+.about-text {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.tech {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.tech span {
+    padding: 4px 12px;
+    font-size: 0.78rem;
+    color: var(--primary);
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+}
+
+.creator-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px;
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+}
+
+.creator-card h3 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.creator-card p {
+    margin: 0 0 4px;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.creator-card a {
+    font-size: 0.85rem;
+}
+
+.avatar {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    display: grid;
+    place-items: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, var(--primary), #ec4899);
+    border-radius: 50%;
+}
+
+@media (max-width: 480px) {
+    .features {
+        grid-template-columns: 1fr;
+    }
+}

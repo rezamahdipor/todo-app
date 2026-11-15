@@ -4,7 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/tasks');
+Route::view('/', 'welcome-page')->name('home');
 
 // فقط مهمان‌ها (لاگین‌نکرده‌ها)
 Route::middleware('guest')->group(function () {
