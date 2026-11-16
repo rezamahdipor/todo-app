@@ -40,10 +40,6 @@
         <button type="submit">افزودن</button>
     </form>
 
-    <p id="error" class="error">
-        @error('title') {{ $message }} @enderror
-    </p>
-
     {{-- جستجو --}}
     <div class="search-box">
         <input type="text" id="search-input" placeholder="جستجو در کارها... (کلید / )" autocomplete="off">

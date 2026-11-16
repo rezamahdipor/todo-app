@@ -1,7 +1,49 @@
 const token = document.querySelector('meta[name="csrf-token"]').content;
 const list = document.getElementById('task-list');
 const form = document.getElementById('add-form');
-const errorBox = document.getElementById('error');
+
+// ========== Toast (پیام شناور) ==========
+const toastContainer = document.createElement('div');
+toastContainer.className = 'toast-container';
+toastContainer.setAttribute('aria-live', 'polite');
+document.body.append(toastContainer);
+
+const TOAST_ICONS = {
+    success: '✓',
+    error: '⚠',
+};
+
+function showToast(message, type = 'success', duration = 3000) {
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.setAttribute('role', type === 'error' ? 'alert' : 'status');
+
+    const icon = document.createElement('span');
+    icon.className = 'toast-icon';
+    icon.textContent = TOAST_ICONS[type] ?? '•';
+
+    const text = document.createElement('span');
+    text.className = 'toast-text';
+    text.textContent = message;
+
+    toast.append(icon, text);
+    toastContainer.append(toast);
+
+    // یک فریم صبر می‌کنیم تا انیمیشن ورود اجرا بشه
+    requestAnimationFrame(() => toast.classList.add('show'));
+
+    let closed = false;
+
+    function close() {
+        if (closed) return;
+        closed = true;
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }
+
+    toast.addEventListener('click', close);
+    setTimeout(close, duration);
+}
 
 // ========== فیلتر، جستجو، شمارنده و نوار پیشرفت ==========
 let currentFilter = 'all';
@@ -183,7 +225,6 @@ function updateEmptyState() {
 // ========== افزودن تسک ==========
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    errorBox.textContent = '';
 
     const input = form.querySelector('input[name="title"]');
 
@@ -194,8 +235,9 @@ form.addEventListener('submit', async (e) => {
         list.prepend(createTaskElement(task));
         input.value = '';
         refreshUI();
+        showToast('کار اضافه شد');
     } catch (err) {
-        errorBox.textContent = err.errors?.title?.[0] ?? 'خطایی رخ داد.';
+        showToast(err.errors?.title?.[0] ?? 'خطایی رخ داد.', 'error');
     }
 });
 
@@ -225,9 +267,10 @@ list.addEventListener('click', async (e) => {
             li.remove();
             updateEmptyState();
             refreshUI();
+            showToast('کار حذف شد');
         }
     } catch (err) {
-        errorBox.textContent = 'خطایی رخ داد.';
+        showToast('خطایی رخ داد.', 'error');
     }
 });
 
@@ -262,9 +305,9 @@ function startEdit(li) {
         try {
             const task = await request(`/tasks/${li.dataset.id}`, 'PUT', { title: newTitle });
             titleEl.textContent = task.title;
-            errorBox.textContent = '';
+            showToast('کار ویرایش شد');
         } catch (err) {
-            errorBox.textContent = err.errors?.title?.[0] ?? 'خطایی رخ داد.';
+            showToast(err.errors?.title?.[0] ?? 'خطایی رخ داد.', 'error');
         }
 
         input.replaceWith(titleEl);
