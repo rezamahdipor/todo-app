@@ -3,29 +3,57 @@ const list = document.getElementById('task-list');
 const form = document.getElementById('add-form');
 const errorBox = document.getElementById('error');
 
-// ========== فیلتر و شمارنده ==========
+// ========== فیلتر، جستجو، شمارنده و نوار پیشرفت ==========
 let currentFilter = 'all';
+let searchQuery = '';
+
 const remainingEl = document.getElementById('remaining-count');
 const totalEl = document.getElementById('total-count');
+const progressBar = document.getElementById('progress-bar');
+const progressPercent = document.getElementById('progress-percent');
+const progressWrap = document.querySelector('.progress');
+const searchInput = document.getElementById('search-input');
+const noResults = document.getElementById('no-results');
 
 function applyFilter() {
+    const q = searchQuery.trim().toLowerCase();
+    let visible = 0;
+
     list.querySelectorAll('.task').forEach((li) => {
         const isDone = li.dataset.done === '1';
-        const show =
+        const title = li.querySelector('.title')?.textContent.toLowerCase() ?? '';
+
+        const matchesFilter =
             currentFilter === 'all' ||
             (currentFilter === 'done' && isDone) ||
             (currentFilter === 'active' && !isDone);
 
+        const matchesSearch = q === '' || title.includes(q);
+        const show = matchesFilter && matchesSearch;
+
         li.style.display = show ? '' : 'none';
+        if (show) visible++;
     });
+
+    // پیام «موردی پیدا نشد» فقط وقتی تسک داریم ولی هیچ‌کدوم دیده نمی‌شن
+    const total = list.querySelectorAll('.task').length;
+    noResults.hidden = !(total > 0 && visible === 0);
 }
 
 function updateCounter() {
     const tasks = list.querySelectorAll('.task');
     const remaining = list.querySelectorAll('.task[data-done="0"]').length;
+    const total = tasks.length;
+    const done = total - remaining;
+    const percent = total > 0 ? Math.round((done / total) * 100) : 0;
 
     remainingEl.textContent = remaining;
-    totalEl.textContent = tasks.length;
+    totalEl.textContent = total;
+
+    progressBar.style.width = percent + '%';
+    progressPercent.textContent = percent + '٪';
+    progressWrap.setAttribute('aria-valuenow', percent);
+    progressBar.classList.toggle('complete', total > 0 && percent === 100);
 }
 
 function refreshUI() {
@@ -43,6 +71,30 @@ document.querySelectorAll('.filter-btn').forEach((btn) => {
 
         applyFilter();
     });
+});
+
+// جستجو
+searchInput.addEventListener('input', () => {
+    searchQuery = searchInput.value;
+    applyFilter();
+});
+
+// میانبر: کلید / برای رفتن به جستجو، Esc برای پاک کردن
+document.addEventListener('keydown', (e) => {
+    const tag = document.activeElement.tagName;
+    const typing = tag === 'INPUT' || tag === 'TEXTAREA';
+
+    if (e.key === '/' && !typing) {
+        e.preventDefault();
+        searchInput.focus();
+    }
+
+    if (e.key === 'Escape' && document.activeElement === searchInput) {
+        searchInput.value = '';
+        searchQuery = '';
+        applyFilter();
+        searchInput.blur();
+    }
 });
 
 // ========== درخواست به سرور ==========
@@ -197,6 +249,7 @@ function startEdit(li) {
         }
 
         input.replaceWith(titleEl);
+        applyFilter();
     }
 
     function cancel() {

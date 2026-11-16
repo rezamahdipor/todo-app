@@ -18,6 +18,22 @@
         از <span id="total-count">{{ $tasks->count() }}</span> کار
     </p>
 
+    {{-- نوار پیشرفت --}}
+    @php
+        $total = $tasks->count();
+        $doneCount = $tasks->where('is_done', true)->count();
+        $percent = $total > 0 ? round($doneCount / $total * 100) : 0;
+    @endphp
+    <div class="progress-wrap">
+        <div class="progress-info">
+            <span>پیشرفت</span>
+            <span id="progress-percent">{{ $percent }}٪</span>
+        </div>
+        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $percent }}">
+            <div id="progress-bar" class="progress-bar" style="width: {{ $percent }}%"></div>
+        </div>
+    </div>
+
     <form id="add-form" action="{{ route('tasks.store') }}" method="POST" class="add-form">
         @csrf
         <input type="text" name="title" placeholder="امروز چه کاری داری؟" value="{{ old('title') }}" required>
@@ -27,6 +43,11 @@
     <p id="error" class="error">
         @error('title') {{ $message }} @enderror
     </p>
+
+    {{-- جستجو --}}
+    <div class="search-box">
+        <input type="text" id="search-input" placeholder="جستجو در کارها... (کلید / )" autocomplete="off">
+    </div>
 
     <div class="filters">
         <button type="button" class="filter-btn active" data-filter="all">همه</button>
@@ -54,6 +75,8 @@
             <li class="empty">هنوز کاری اضافه نکردی.</li>
         @endforelse
     </ul>
+
+    <p id="no-results" class="no-results" hidden>🔍 موردی پیدا نشد.</p>
 @endsection
 
 @push('scripts')
