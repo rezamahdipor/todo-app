@@ -852,6 +852,75 @@ button:focus-visible {
 .no-results[hidden] {
     display: none;
 }
+
+/* ==========================================================
+   چک‌باکس گرد
+   ========================================================== */
+.check {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    background: transparent;
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+    box-shadow: none;
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+}
+
+.check:hover {
+    background: rgba(99, 102, 241, 0.15);
+    transform: scale(1.12);
+    box-shadow: none;
+}
+
+.check:active {
+    transform: scale(0.9);
+    box-shadow: none;
+}
+
+.check svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* علامت تیک: با stroke-dashoffset کشیده می‌شه */
+.check path {
+    stroke-dasharray: 24;
+    stroke-dashoffset: 24;
+    transition: stroke-dashoffset 0.3s ease 0.05s;
+}
+
+.check[aria-checked="true"] {
+    background: var(--success);
+    border-color: var(--success);
+    animation: pop 0.35s ease;
+}
+
+.check[aria-checked="true"] path {
+    stroke-dashoffset: 0;
+}
+
+@keyframes pop {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.25); }
+    100% { transform: scale(1); }
+}
+
+.task .title {
+    transition: color 0.25s ease;
+}
+
+:root[data-theme="pink"] .check:hover {
+    background: rgba(236, 72, 153, 0.15);
+}
 /* ==========================================================
    ریسپانسیو
    ========================================================== */

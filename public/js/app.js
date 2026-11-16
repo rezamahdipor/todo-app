@@ -35,7 +35,6 @@ function applyFilter() {
         if (show) visible++;
     });
 
-    // پیام «موردی پیدا نشد» فقط وقتی تسک داریم ولی هیچ‌کدوم دیده نمی‌شن
     const total = list.querySelectorAll('.task').length;
     noResults.hidden = !(total > 0 && visible === 0);
 }
@@ -118,12 +117,37 @@ async function request(url, method, body = null) {
     return data;
 }
 
-// ========== ساخت آیتم لیست ==========
+// ========== ساخت آیتم لیست (با چک‌باکس گرد) ==========
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+function createCheckButton(isDone) {
+    const check = document.createElement('button');
+    check.type = 'button';
+    check.className = 'check';
+    check.setAttribute('role', 'checkbox');
+    check.setAttribute('aria-checked', isDone ? 'true' : 'false');
+    check.setAttribute('aria-label', 'تغییر وضعیت انجام شدن');
+
+    const svg = document.createElementNS(SVG_NS, 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('aria-hidden', 'true');
+
+    const path = document.createElementNS(SVG_NS, 'path');
+    path.setAttribute('d', 'M5 13l4 4L19 7');
+
+    svg.append(path);
+    check.append(svg);
+
+    return check;
+}
+
 function createTaskElement(task) {
     const li = document.createElement('li');
     li.className = 'task' + (task.is_done ? ' done' : '');
     li.dataset.id = task.id;
     li.dataset.done = task.is_done ? 1 : 0;
+
+    const check = createCheckButton(task.is_done);
 
     const title = document.createElement('span');
     title.className = 'title';
@@ -132,18 +156,13 @@ function createTaskElement(task) {
     const actions = document.createElement('div');
     actions.className = 'actions';
 
-    const doneBtn = document.createElement('button');
-    doneBtn.type = 'button';
-    doneBtn.className = 'btn-done';
-    doneBtn.textContent = task.is_done ? 'برگردان' : 'انجام شد';
-
     const deleteBtn = document.createElement('button');
     deleteBtn.type = 'button';
     deleteBtn.className = 'btn-delete';
     deleteBtn.textContent = 'حذف';
 
-    actions.append(doneBtn, deleteBtn);
-    li.append(title, actions);
+    actions.append(deleteBtn);
+    li.append(check, title, actions);
 
     return li;
 }
@@ -180,7 +199,7 @@ form.addEventListener('submit', async (e) => {
     }
 });
 
-// ========== انجام شد و حذف ==========
+// ========== تیک زدن و حذف ==========
 list.addEventListener('click', async (e) => {
     const btn = e.target.closest('button');
     if (!btn) return;
@@ -191,13 +210,13 @@ list.addEventListener('click', async (e) => {
     const url = `/tasks/${li.dataset.id}`;
 
     try {
-        if (btn.classList.contains('btn-done')) {
+        if (btn.classList.contains('check')) {
             const newState = li.dataset.done === '1' ? 0 : 1;
             const task = await request(url, 'PUT', { is_done: newState });
 
             li.dataset.done = task.is_done ? 1 : 0;
             li.classList.toggle('done', task.is_done);
-            btn.textContent = task.is_done ? 'برگردان' : 'انجام شد';
+            btn.setAttribute('aria-checked', task.is_done ? 'true' : 'false');
             refreshUI();
         }
 

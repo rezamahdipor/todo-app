@@ -62,12 +62,20 @@
             <li class="task {{ $task->is_done ? 'done' : '' }}"
                 data-id="{{ $task->id }}"
                 data-done="{{ $task->is_done ? 1 : 0 }}">
+
+                <button type="button"
+                        class="check"
+                        role="checkbox"
+                        aria-checked="{{ $task->is_done ? 'true' : 'false' }}"
+                        aria-label="تغییر وضعیت انجام شدن">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 13l4 4L19 7" />
+                    </svg>
+                </button>
+
                 <span class="title">{{ $task->title }}</span>
 
                 <div class="actions">
-                    <button type="button" class="btn-done">
-                        {{ $task->is_done ? 'برگردان' : 'انجام شد' }}
-                    </button>
                     <button type="button" class="btn-delete">حذف</button>
                 </div>
             </li>
