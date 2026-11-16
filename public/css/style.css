@@ -1568,6 +1568,67 @@ button:focus-visible {
         max-width: none;
     }
 }
+
+/* ==========================================================
+   دستگیره و جابه‌جایی تسک‌ها
+   ========================================================== */
+.drag-handle {
+    flex-shrink: 0;
+    padding: 4px 2px;
+    font-size: 1.1rem;
+    line-height: 1;
+    letter-spacing: -2px;
+    color: var(--muted);
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    box-shadow: none;
+    cursor: grab;
+    touch-action: none; /* جلوی اسکرول صفحه موقع کشیدن با انگشت */
+    user-select: none;
+    transform: none;
+}
+
+.drag-handle:hover {
+    color: var(--primary);
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+    box-shadow: none;
+    transform: none;
+}
+
+/* تسکی که الان کشیده می‌شه */
+.task.dragging {
+    z-index: 5;
+    border-color: var(--primary);
+    box-shadow: var(--shadow-hover);
+    transform: scale(1.025) !important;
+    cursor: grabbing;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+/* موقع کشیدن، متن‌ها انتخاب نشن */
+body.is-dragging {
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: grabbing;
+}
+
+body.is-dragging .task {
+    animation: none;
+}
+
+@media (max-width: 480px) {
+    .drag-handle {
+        align-self: center;
+        padding: 2px 12px;
+    }
+}
 /* ==========================================================
    ریسپانسیو
    ========================================================== */

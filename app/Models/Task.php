@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Task extends Model
 {
-    protected $fillable = ['title', 'is_done', 'priority'];
+    protected $fillable = ['title', 'is_done', 'priority', 'position'];
 
     protected $casts = [
         'is_done' => 'boolean',

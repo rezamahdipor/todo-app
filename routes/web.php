@@ -18,6 +18,9 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+    // قبل از resource
+    Route::post('/tasks/reorder', [TaskController::class, 'reorder'])->name('tasks.reorder');
+
     Route::resource('tasks', TaskController::class)
         ->only(['index', 'store', 'update', 'destroy']);
 });

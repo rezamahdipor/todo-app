@@ -57,7 +57,6 @@ const CONFETTI_COLORS = ['#6366f1', '#ec4899', '#22d3ee', '#f59e0b', '#22c55e', 
 const CONFETTI_EMOJIS = ['💗', '💕', '🎀', '🌸', '✨', '💖'];
 
 function launchConfetti() {
-    // احترام به کاربرانی که انیمیشن نمی‌خوان
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     const isPink = document.documentElement.dataset.theme === 'pink';
@@ -208,7 +207,135 @@ async function request(url, method, body = null) {
     return data;
 }
 
-// ========== ساخت آیتم لیست (چک‌باکس گرد + نشان اولویت) ==========
+// ========== جابه‌جایی تسک‌ها (درگ‌اند‌دراپ ماندگار) ==========
+function currentOrder() {
+    return [...list.querySelectorAll('.task')].map((li) => Number(li.dataset.id));
+}
+
+// آخرین ترتیبی که روی سرور ذخیره شده
+let savedOrder = currentOrder();
+let saveTimer = null;
+
+function restoreOrder() {
+    savedOrder.forEach((id) => {
+        const li = list.querySelector(`.task[data-id="${id}"]`);
+        if (li) list.append(li);
+    });
+}
+
+async function saveOrder() {
+    const order = currentOrder();
+    if (order.join(',') === savedOrder.join(',')) return;
+
+    try {
+        await request('/tasks/reorder', 'POST', { order });
+        savedOrder = order;
+        showToast('ترتیب ذخیره شد', 'success', 1500);
+    } catch (err) {
+        restoreOrder();
+        showToast('ذخیره‌ی ترتیب ناموفق بود', 'error');
+    }
+}
+
+function scheduleSave() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveOrder, 400);
+}
+
+// نزدیک‌ترین تسک قابل‌دیدن قبل (-1) یا بعد (1)
+function visibleSibling(li, dir) {
+    let el = dir < 0 ? li.previousElementSibling : li.nextElementSibling;
+
+    while (el) {
+        if (el.classList.contains('task') && el.style.display !== 'none' && !el.classList.contains('removing')) {
+            return el;
+        }
+        el = dir < 0 ? el.previousElementSibling : el.nextElementSibling;
+    }
+
+    return null;
+}
+
+function middleY(el) {
+    const r = el.getBoundingClientRect();
+    return r.top + r.height / 2;
+}
+
+// کشیدن با موس یا لمس
+list.addEventListener('pointerdown', (e) => {
+    const handle = e.target.closest('.drag-handle');
+    if (!handle) return;
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+
+    const li = handle.closest('.task');
+    if (!li) return;
+
+    e.preventDefault();
+
+    li.classList.add('dragging');
+    document.body.classList.add('is-dragging');
+
+    function onMove(ev) {
+        const y = ev.clientY;
+
+        // اسکرول خودکار نزدیک لبه‌ها
+        if (y < 80) window.scrollBy(0, -12);
+        if (y > window.innerHeight - 80) window.scrollBy(0, 12);
+
+        // به‌جای جابه‌جا کردن خود li، همسایه رو جابه‌جا می‌کنیم
+        // تا المانی که کاربر داره می‌کشه هیچ‌وقت از DOM بیرون نره
+        let prev = visibleSibling(li, -1);
+        while (prev && y < middleY(prev)) {
+            li.after(prev);
+            prev = visibleSibling(li, -1);
+        }
+
+        let next = visibleSibling(li, 1);
+        while (next && y > middleY(next)) {
+            li.before(next);
+            next = visibleSibling(li, 1);
+        }
+    }
+
+    function onEnd() {
+        document.removeEventListener('pointermove', onMove);
+        document.removeEventListener('pointerup', onEnd);
+        document.removeEventListener('pointercancel', onEnd);
+
+        li.classList.remove('dragging');
+        document.body.classList.remove('is-dragging');
+
+        saveOrder();
+    }
+
+    document.addEventListener('pointermove', onMove);
+    document.addEventListener('pointerup', onEnd);
+    document.addEventListener('pointercancel', onEnd);
+});
+
+// جابه‌جایی با کیبورد: فلش بالا و پایین روی دستگیره
+list.addEventListener('keydown', (e) => {
+    const handle = e.target.closest('.drag-handle');
+    if (!handle) return;
+    if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+
+    e.preventDefault();
+
+    const li = handle.closest('.task');
+
+    if (e.key === 'ArrowUp') {
+        const prev = visibleSibling(li, -1);
+        if (prev) li.after(prev);
+    } else {
+        const next = visibleSibling(li, 1);
+        if (next) li.before(next);
+    }
+
+    handle.focus();
+    scheduleSave();
+});
+
+// ========== ساخت آیتم لیست (دستگیره + چک‌باکس گرد + نشان اولویت) ==========
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 function createCheckButton(isDone) {
@@ -232,12 +359,24 @@ function createCheckButton(isDone) {
     return check;
 }
 
+function createDragHandle() {
+    const handle = document.createElement('button');
+    handle.type = 'button';
+    handle.className = 'drag-handle';
+    handle.setAttribute('aria-label', 'جابه‌جایی (بکش یا فلش بالا و پایین بزن)');
+    handle.title = 'بکش تا جابه‌جا بشه';
+    handle.textContent = '⋮⋮';
+
+    return handle;
+}
+
 function createTaskElement(task) {
     const li = document.createElement('li');
     li.className = 'task' + (task.is_done ? ' done' : '');
     li.dataset.id = task.id;
     li.dataset.done = task.is_done ? 1 : 0;
 
+    const handle = createDragHandle();
     const check = createCheckButton(task.is_done);
 
     const title = document.createElement('span');
@@ -258,7 +397,7 @@ function createTaskElement(task) {
     deleteBtn.textContent = 'حذف';
 
     actions.append(deleteBtn);
-    li.append(check, title, priority, actions);
+    li.append(handle, check, title, priority, actions);
 
     return li;
 }
@@ -303,6 +442,10 @@ form.addEventListener('submit', async (e) => {
 
         list.querySelector('.empty')?.remove();
         list.prepend(createTaskElement(task));
+
+        // سرور تسک جدید رو بالای لیست گذاشته
+        savedOrder.unshift(task.id);
+
         input.value = '';
         prioritySelect.value = 'medium';
         refreshUI();
@@ -332,7 +475,6 @@ list.addEventListener('click', async (e) => {
             btn.setAttribute('aria-checked', task.is_done ? 'true' : 'false');
             refreshUI();
 
-            // اگه این آخرین کار بود: جشن! 🎉
             const remaining = list.querySelectorAll('.task[data-done="0"]').length;
             if (task.is_done && remaining === 0) {
                 launchConfetti();
@@ -352,7 +494,11 @@ list.addEventListener('click', async (e) => {
         if (btn.classList.contains('btn-delete')) {
             if (li.classList.contains('removing')) return;
 
+            const id = Number(li.dataset.id);
+
             await request(url, 'DELETE');
+            savedOrder = savedOrder.filter((x) => x !== id);
+
             await animateRemove(li);
             updateEmptyState();
             refreshUI();

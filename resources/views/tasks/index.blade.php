@@ -62,13 +62,18 @@
         <button type="button" class="filter-btn" data-filter="done">انجام‌شده</button>
     </div>
 
-    <p class="tip">💡 دابل‌کلیک روی عنوان = ویرایش. کلیک روی نشان رنگی = تغییر اولویت.</p>
+    <p class="tip">💡 دابل‌کلیک روی عنوان = ویرایش. کلیک روی نشان رنگی = تغییر اولویت. دستگیره‌ی ⋮⋮ رو بکش تا ترتیب عوض بشه.</p>
 
     <ul id="task-list" class="task-list">
         @forelse ($tasks as $task)
             <li class="task {{ $task->is_done ? 'done' : '' }}"
                 data-id="{{ $task->id }}"
                 data-done="{{ $task->is_done ? 1 : 0 }}">
+
+                <button type="button"
+                        class="drag-handle"
+                        aria-label="جابه‌جایی (بکش یا فلش بالا و پایین بزن)"
+                        title="بکش تا جابه‌جا بشه">⋮⋮</button>
 
                 <button type="button"
                         class="check"
