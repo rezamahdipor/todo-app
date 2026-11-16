@@ -14,7 +14,7 @@
             var theme = 'light';
             try {
                 var saved = localStorage.getItem('theme');
-                if (['light', 'dark', 'pink'].indexOf(saved) !== -1) theme = saved;
+                if (['light', 'dark', 'pink', 'mint', 'ocean', 'lavender', 'sunset'].indexOf(saved) !== -1) theme = saved;
             } catch (e) {}
             document.documentElement.setAttribute('data-theme', theme);
         })();

@@ -1310,6 +1310,264 @@ button:focus-visible {
         opacity: 0;
     }
 }
+
+/* ==========================================================
+   تم‌های بیشتر: نعنایی، اقیانوسی، لاوندر، غروب
+   ========================================================== */
+
+/* 🍃 نعنایی */
+:root[data-theme="mint"] {
+    --bg1: #d1fae5;
+    --bg2: #ccfbf1;
+    --glass: rgba(255, 255, 255, 0.5);
+    --glass-strong: rgba(255, 255, 255, 0.72);
+    --glass-border: rgba(255, 255, 255, 0.8);
+    --text: #064e3b;
+    --muted: #4d8f7c;
+    --border: rgba(20, 184, 166, 0.35);
+    --primary: #0d9488;
+    --primary-hover: #0f766e;
+    --accent: #34d399;
+    --ring: rgba(20, 184, 166, 0.3);
+    --btn-shadow: #115e59;
+    --shadow: 0 8px 32px rgba(13, 148, 136, 0.18);
+    --shadow-hover: 0 14px 40px rgba(13, 148, 136, 0.32);
+}
+
+/* 🌊 اقیانوسی */
+:root[data-theme="ocean"] {
+    --bg1: #dbeafe;
+    --bg2: #a5f3fc;
+    --glass: rgba(255, 255, 255, 0.5);
+    --glass-strong: rgba(255, 255, 255, 0.72);
+    --glass-border: rgba(255, 255, 255, 0.8);
+    --text: #0c2a47;
+    --muted: #4a7396;
+    --border: rgba(14, 165, 233, 0.35);
+    --primary: #0284c7;
+    --primary-hover: #0369a1;
+    --accent: #22d3ee;
+    --ring: rgba(14, 165, 233, 0.3);
+    --btn-shadow: #075985;
+    --shadow: 0 8px 32px rgba(2, 132, 199, 0.18);
+    --shadow-hover: 0 14px 40px rgba(2, 132, 199, 0.32);
+}
+
+/* 💜 لاوندر */
+:root[data-theme="lavender"] {
+    --bg1: #ede9fe;
+    --bg2: #fae8ff;
+    --glass: rgba(255, 255, 255, 0.5);
+    --glass-strong: rgba(255, 255, 255, 0.72);
+    --glass-border: rgba(255, 255, 255, 0.8);
+    --text: #2e1065;
+    --muted: #7e6aa8;
+    --border: rgba(167, 139, 250, 0.4);
+    --primary: #8b5cf6;
+    --primary-hover: #7c3aed;
+    --accent: #e879f9;
+    --ring: rgba(139, 92, 246, 0.3);
+    --btn-shadow: #5b21b6;
+    --shadow: 0 8px 32px rgba(139, 92, 246, 0.2);
+    --shadow-hover: 0 14px 40px rgba(139, 92, 246, 0.35);
+}
+
+/* 🌅 غروب */
+:root[data-theme="sunset"] {
+    --bg1: #ffedd5;
+    --bg2: #fecdd3;
+    --glass: rgba(255, 255, 255, 0.5);
+    --glass-strong: rgba(255, 255, 255, 0.72);
+    --glass-border: rgba(255, 255, 255, 0.8);
+    --text: #431407;
+    --muted: #a1623f;
+    --border: rgba(251, 146, 60, 0.4);
+    --primary: #f97316;
+    --primary-hover: #ea580c;
+    --accent: #f43f5e;
+    --ring: rgba(249, 115, 22, 0.3);
+    --btn-shadow: #c2410c;
+    --shadow: 0 8px 32px rgba(249, 115, 22, 0.2);
+    --shadow-hover: 0 14px 40px rgba(249, 115, 22, 0.35);
+}
+
+/* حباب‌های پس‌زمینه‌ی هر تم */
+:root[data-theme="mint"] .b1 { background: #6ee7b7; }
+:root[data-theme="mint"] .b2 { background: #5eead4; }
+:root[data-theme="mint"] .b3 { background: #bef264; }
+
+:root[data-theme="ocean"] .b1 { background: #38bdf8; }
+:root[data-theme="ocean"] .b2 { background: #22d3ee; }
+:root[data-theme="ocean"] .b3 { background: #818cf8; }
+
+:root[data-theme="lavender"] .b1 { background: #c4b5fd; }
+:root[data-theme="lavender"] .b2 { background: #f0abfc; }
+:root[data-theme="lavender"] .b3 { background: #a5b4fc; }
+
+:root[data-theme="sunset"] .b1 { background: #fdba74; }
+:root[data-theme="sunset"] .b2 { background: #fda4af; }
+:root[data-theme="sunset"] .b3 { background: #fde68a; }
+
+/* قاعده‌های مشترک چهار تم جدید (با متغیرهای --ring و --accent) */
+:root:is([data-theme="mint"], [data-theme="ocean"], [data-theme="lavender"], [data-theme="sunset"]) input:focus,
+:root:is([data-theme="mint"], [data-theme="ocean"], [data-theme="lavender"], [data-theme="sunset"]) .add-form select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--ring);
+}
+
+:root:is([data-theme="mint"], [data-theme="ocean"], [data-theme="lavender"], [data-theme="sunset"]) .check:hover {
+    background: var(--ring);
+}
+
+:root:is([data-theme="mint"], [data-theme="ocean"], [data-theme="lavender"], [data-theme="sunset"]) .theme-option.active {
+    box-shadow: 0 0 0 3px var(--ring);
+}
+
+:root:is([data-theme="mint"], [data-theme="ocean"], [data-theme="lavender"], [data-theme="sunset"]) .progress-bar:not(.complete) {
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+}
+
+:root:is([data-theme="mint"], [data-theme="ocean"], [data-theme="lavender"], [data-theme="sunset"]) .avatar {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+}
+
+/* نمونه‌ی رنگ توی انتخابگر */
+.swatch-mint     { background: linear-gradient(135deg, #6ee7b7, #0d9488); }
+.swatch-ocean    { background: linear-gradient(135deg, #67e8f9, #0284c7); }
+.swatch-lavender { background: linear-gradient(135deg, #e9d5ff, #8b5cf6); }
+.swatch-sunset   { background: linear-gradient(135deg, #fdba74, #f43f5e); }
+
+/* ==========================================================
+   چرخ تم (پیتزایی 🍕) با جون
+   ========================================================== */
+.theme-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+}
+
+.theme-title {
+    margin: 0 !important;
+    text-align: right !important;
+    font-size: 1.25rem !important;
+    max-width: 220px;
+    line-height: 1.8;
+}
+
+/* شناوری آروم کل چرخ */
+.theme-wheel-wrap {
+    display: flex;
+    justify-content: center;
+    animation: wheelFloat 5s ease-in-out infinite;
+}
+
+@keyframes wheelFloat {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+}
+
+.theme-wheel {
+    width: 230px;
+    max-width: 70vw;
+    height: auto;
+    overflow: visible;
+    filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.22));
+    transform-origin: 50% 50%;
+}
+
+/* چرخش فنری موقع انتخاب */
+.theme-wheel.spin {
+    animation: wheelSpin 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes wheelSpin {
+    from { transform: rotate(0deg) scale(0.94); }
+    to   { transform: rotate(360deg) scale(1); }
+}
+
+/* حلقه‌ی بیرونی */
+.wheel-rim {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.85);
+    stroke-width: 3;
+    pointer-events: none;
+}
+
+/* تکه‌ها */
+.theme-wheel [data-theme-choice] {
+    cursor: pointer;
+    stroke: #fff;
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+    outline: none;
+    transform-origin: 100px 100px;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.25s ease, stroke 0.2s ease;
+    /* ورود تکه‌به‌تکه */
+    animation: sliceIn 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+    animation-delay: calc(var(--i) * 70ms);
+}
+
+@keyframes sliceIn {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+
+.theme-wheel [data-theme-choice]:hover,
+.theme-wheel [data-theme-choice]:focus-visible {
+    transform: scale(1.07);
+    filter: brightness(1.12) saturate(1.15);
+}
+
+.theme-wheel [data-theme-choice]:active {
+    transform: scale(0.98);
+}
+
+.theme-wheel [data-theme-choice]:focus-visible {
+    stroke: var(--text);
+}
+
+/* تکه‌ی فعال: بیرون میاد و می‌درخشه */
+.theme-wheel [data-theme-choice].active {
+    transform: scale(1.11);
+    stroke-width: 3.5;
+    filter: brightness(1.1) drop-shadow(0 5px 8px rgba(0, 0, 0, 0.35));
+}
+
+/* لایه‌ی براق */
+.wheel-gloss {
+    pointer-events: none;
+    mix-blend-mode: soft-light;
+}
+
+/* جرقه‌ها */
+.sparkle {
+    fill: #fff;
+    pointer-events: none;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: twinkle 2.4s ease-in-out infinite;
+}
+
+.sparkle.s2 { animation-delay: -0.8s; }
+.sparkle.s3 { animation-delay: -1.6s; }
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0; transform: scale(0.3); }
+    50%      { opacity: 1; transform: scale(1.6); }
+}
+
+@media (max-width: 600px) {
+    .theme-row {
+        flex-direction: column;
+        gap: 22px;
+    }
+
+    .theme-title {
+        text-align: center !important;
+        max-width: none;
+    }
+}
 /* ==========================================================
    ریسپانسیو
    ========================================================== */
