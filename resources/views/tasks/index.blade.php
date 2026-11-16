@@ -12,9 +12,10 @@
     </div>
 
     <h1>لیست کارهای من</h1>
+
     <p class="subtitle">
-        {{ $tasks->where('is_done', false)->count() }} کار باقی مانده
-        از {{ $tasks->count() }} کار
+        <span id="remaining-count">{{ $tasks->where('is_done', false)->count() }}</span> کار باقی مانده
+        از <span id="total-count">{{ $tasks->count() }}</span> کار
     </p>
 
     <form id="add-form" action="{{ route('tasks.store') }}" method="POST" class="add-form">
@@ -27,28 +28,34 @@
         @error('title') {{ $message }} @enderror
     </p>
 
+    <div class="filters">
+        <button type="button" class="filter-btn active" data-filter="all">همه</button>
+        <button type="button" class="filter-btn" data-filter="active">انجام‌نشده</button>
+        <button type="button" class="filter-btn" data-filter="done">انجام‌شده</button>
+    </div>
+
     <p class="tip">💡 برای ویرایش یک کار، روی عنوانش دابل‌کلیک کن. Enter ذخیره می‌کنه و Esc لغو.</p>
 
- 
-  <ul id="task-list" class="task-list">
-    @forelse ($tasks as $task)
-        <li class="task {{ $task->is_done ? 'done' : '' }}"
-            data-id="{{ $task->id }}"
-            data-done="{{ $task->is_done ? 1 : 0 }}">
-            <span class="title">{{ $task->title }}</span>
+    <ul id="task-list" class="task-list">
+        @forelse ($tasks as $task)
+            <li class="task {{ $task->is_done ? 'done' : '' }}"
+                data-id="{{ $task->id }}"
+                data-done="{{ $task->is_done ? 1 : 0 }}">
+                <span class="title">{{ $task->title }}</span>
 
-            <div class="actions">
-                <button type="button" class="btn-done">
-                    {{ $task->is_done ? 'برگردان' : 'انجام شد' }}
-                </button>
-                <button type="button" class="btn-delete">حذف</button>
-            </div>
-        </li>
-    @empty
-        <li class="empty">هنوز کاری اضافه نکردی.</li>
-    @endforelse
-</ul>
-@push('scripts')
-    <script src="{{ asset('js/app.js') }}"></script>
-@endpush
+                <div class="actions">
+                    <button type="button" class="btn-done">
+                        {{ $task->is_done ? 'برگردان' : 'انجام شد' }}
+                    </button>
+                    <button type="button" class="btn-delete">حذف</button>
+                </div>
+            </li>
+        @empty
+            <li class="empty">هنوز کاری اضافه نکردی.</li>
+        @endforelse
+    </ul>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/app.js') }}?v={{ filemtime(public_path('js/app.js')) }}"></script>
+@endpush

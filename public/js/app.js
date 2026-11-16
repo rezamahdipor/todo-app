@@ -3,7 +3,49 @@ const list = document.getElementById('task-list');
 const form = document.getElementById('add-form');
 const errorBox = document.getElementById('error');
 
-// تابع کمکی برای ارسال درخواست
+// ========== فیلتر و شمارنده ==========
+let currentFilter = 'all';
+const remainingEl = document.getElementById('remaining-count');
+const totalEl = document.getElementById('total-count');
+
+function applyFilter() {
+    list.querySelectorAll('.task').forEach((li) => {
+        const isDone = li.dataset.done === '1';
+        const show =
+            currentFilter === 'all' ||
+            (currentFilter === 'done' && isDone) ||
+            (currentFilter === 'active' && !isDone);
+
+        li.style.display = show ? '' : 'none';
+    });
+}
+
+function updateCounter() {
+    const tasks = list.querySelectorAll('.task');
+    const remaining = list.querySelectorAll('.task[data-done="0"]').length;
+
+    remainingEl.textContent = remaining;
+    totalEl.textContent = tasks.length;
+}
+
+function refreshUI() {
+    updateCounter();
+    applyFilter();
+}
+
+document.querySelectorAll('.filter-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+        currentFilter = btn.dataset.filter;
+
+        document.querySelectorAll('.filter-btn').forEach((b) => {
+            b.classList.toggle('active', b === btn);
+        });
+
+        applyFilter();
+    });
+});
+
+// ========== درخواست به سرور ==========
 async function request(url, method, body = null) {
     const response = await fetch(url, {
         method: method,
@@ -24,7 +66,7 @@ async function request(url, method, body = null) {
     return data;
 }
 
-// ساخت یک آیتم لیست
+// ========== ساخت آیتم لیست ==========
 function createTaskElement(task) {
     const li = document.createElement('li');
     li.className = 'task' + (task.is_done ? ' done' : '');
@@ -67,7 +109,7 @@ function updateEmptyState() {
     }
 }
 
-// افزودن تسک
+// ========== افزودن تسک ==========
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
     errorBox.textContent = '';
@@ -80,12 +122,13 @@ form.addEventListener('submit', async (e) => {
         list.querySelector('.empty')?.remove();
         list.prepend(createTaskElement(task));
         input.value = '';
+        refreshUI();
     } catch (err) {
         errorBox.textContent = err.errors?.title?.[0] ?? 'خطایی رخ داد.';
     }
 });
 
-// کلیک روی دکمه‌های «انجام شد» و «حذف»
+// ========== انجام شد و حذف ==========
 list.addEventListener('click', async (e) => {
     const btn = e.target.closest('button');
     if (!btn) return;
@@ -103,12 +146,14 @@ list.addEventListener('click', async (e) => {
             li.dataset.done = task.is_done ? 1 : 0;
             li.classList.toggle('done', task.is_done);
             btn.textContent = task.is_done ? 'برگردان' : 'انجام شد';
+            refreshUI();
         }
 
         if (btn.classList.contains('btn-delete')) {
             await request(url, 'DELETE');
             li.remove();
             updateEmptyState();
+            refreshUI();
         }
     } catch (err) {
         errorBox.textContent = 'خطایی رخ داد.';

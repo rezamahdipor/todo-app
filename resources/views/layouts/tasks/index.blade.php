@@ -3,43 +3,51 @@
 @section('title', 'لیست کارها')
 
 @section('content')
-    <h1>لیست کارها</h1>
+    <div class="topbar">
+        <span>سلام {{ auth()->user()->name }} 👋</span>
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="btn-logout">خروج</button>
+        </form>
+    </div>
 
-    {{-- فرم افزودن --}}
-    <form action="{{ route('tasks.store') }}" method="POST" class="add-form">
+    <h1>لیست کارهای من</h1>
+
+    <p class="subtitle">
+        <span id="remaining-count">{{ $tasks->where('is_done', false)->count() }}</span> کار باقی مانده
+        از <span id="total-count">{{ $tasks->count() }}</span> کار
+    </p>
+
+    <form id="add-form" action="{{ route('tasks.store') }}" method="POST" class="add-form">
         @csrf
-        <input type="text" name="title" placeholder="کار جدید..." value="{{ old('title') }}" required>
+        <input type="text" name="title" placeholder="امروز چه کاری داری؟" value="{{ old('title') }}" required>
         <button type="submit">افزودن</button>
     </form>
 
-    {{-- نمایش خطا --}}
-    @error('title')
-        <p class="error">{{ $message }}</p>
-    @enderror
+    <p id="error" class="error">
+        @error('title') {{ $message }} @enderror
+    </p>
 
-    {{-- لیست --}}
-    <ul class="task-list">
+    <div class="filters">
+        <button type="button" class="filter-btn active" data-filter="all">همه</button>
+        <button type="button" class="filter-btn" data-filter="active">انجام‌نشده</button>
+        <button type="button" class="filter-btn" data-filter="done">انجام‌شده</button>
+    </div>
+
+    <p class="tip">💡 برای ویرایش یک کار، روی عنوانش دابل‌کلیک کن. Enter ذخیره می‌کنه و Esc لغو.</p>
+
+    <ul id="task-list" class="task-list">
         @forelse ($tasks as $task)
-            <li class="task {{ $task->is_done ? 'done' : '' }}">
+            <li class="task {{ $task->is_done ? 'done' : '' }}"
+                data-id="{{ $task->id }}"
+                data-done="{{ $task->is_done ? 1 : 0 }}">
                 <span class="title">{{ $task->title }}</span>
 
                 <div class="actions">
-                    {{-- انجام شد / برگردان --}}
-                    <form action="{{ route('tasks.update', $task) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="is_done" value="{{ $task->is_done ? 0 : 1 }}">
-                        <button type="submit" class="btn-done">
-                            {{ $task->is_done ? 'برگردان' : 'انجام شد' }}
-                        </button>
-                    </form>
-
-                    {{-- حذف --}}
-                    <form action="{{ route('tasks.destroy', $task) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn-delete">حذف</button>
-                    </form>
+                    <button type="button" class="btn-done">
+                        {{ $task->is_done ? 'برگردان' : 'انجام شد' }}
+                    </button>
+                    <button type="button" class="btn-delete">حذف</button>
                 </div>
             </li>
         @empty
@@ -47,3 +55,7 @@
         @endforelse
     </ul>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/app.js') }}"></script>
+@endpush

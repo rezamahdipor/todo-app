@@ -748,6 +748,35 @@ button:focus-visible {
     justify-content: center;
     text-align: right;
 }
+/* ========== فیلتر تسک‌ها ========== */
+.filters {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 0 0 12px;
+}
+
+.filter-btn {
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    color: var(--text);
+    background: var(--glass-strong);
+    border: 2px solid var(--glass-border);
+    --btn-shadow: var(--border);
+    --btn-depth: 3px;
+}
+
+.filter-btn:hover {
+    background: var(--glass-strong);
+    border-color: var(--primary);
+}
+
+.filter-btn.active {
+    color: #fff;
+    background: var(--primary);
+    border-color: var(--primary);
+    --btn-shadow: var(--primary-hover);
+}
 /* ==========================================================
    ریسپانسیو
    ========================================================== */
