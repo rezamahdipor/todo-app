@@ -104,6 +104,10 @@
 }
 
 body {
+    html,
+body {
+    overflow-x: hidden;
+}
     font-family: 'Vazirmatn', Tahoma, sans-serif;
     background: linear-gradient(135deg, var(--bg1), var(--bg2));
     background-attachment: fixed;
@@ -725,7 +729,6 @@ button:focus-visible {
     border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
-.swatch-auto  { background: linear-gradient(135deg, #fff 50%, #1e293b 50%); }
 .swatch-light { background: linear-gradient(135deg, #c7d2fe, #fbcfe8); }
 .swatch-dark  { background: linear-gradient(135deg, #1e1b4b, #0f172a); }
 .swatch-pink  { background: linear-gradient(135deg, #f9a8d4, #ec4899); }
@@ -1015,6 +1018,174 @@ button:focus-visible {
         padding 0.3s ease 0.05s,
         margin 0.3s ease 0.05s,
         border-width 0.3s ease;
+}
+
+/* ==========================================================
+   تقدیم‌نامه (فقط توی تم صورتی دیده می‌شه)
+   ========================================================== */
+.dedication {
+    display: none;
+    width: fit-content;
+    margin: 10px auto 0;
+    padding: 4px 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #db2777;
+    transform-origin: center;
+}
+
+/* ==========================================================
+   تم صورتی گوگولی 🌸 (افکت‌های اضافه)
+   ========================================================== */
+:root[data-theme="pink"] {
+    scrollbar-color: #f472b6 #ffe4ef;
+}
+
+:root[data-theme="pink"] ::selection {
+    background: #f9a8d4;
+    color: #5b1a3a;
+}
+
+:root[data-theme="pink"] body {
+    background:
+        radial-gradient(circle at 15% 10%, rgba(255, 255, 255, 0.9) 0, transparent 35%),
+        radial-gradient(circle at 85% 90%, rgba(255, 255, 255, 0.7) 0, transparent 35%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+    background-attachment: fixed;
+}
+
+/* قلب‌هایی که آروم بالا میان */
+:root[data-theme="pink"] .bg-blobs::before,
+:root[data-theme="pink"] .bg-blobs::after {
+    position: absolute;
+    bottom: -60px;
+    font-size: 2rem;
+    opacity: 0.6;
+    animation: heartRise 12s ease-in infinite;
+}
+
+:root[data-theme="pink"] .bg-blobs::before {
+    content: '💗';
+    left: 12%;
+}
+
+:root[data-theme="pink"] .bg-blobs::after {
+    content: '💕';
+    right: 15%;
+    font-size: 1.6rem;
+    animation-delay: -6s;
+}
+
+@keyframes heartRise {
+    0%   { transform: translateY(0) rotate(-10deg); opacity: 0; }
+    15%  { opacity: 0.7; }
+    100% { transform: translateY(-115vh) rotate(15deg); opacity: 0; }
+}
+
+/* کارت اصلی: کادر سفید و پاپیون */
+:root[data-theme="pink"] .container {
+    position: relative;
+    border: 2px solid #fff;
+    border-radius: 30px;
+}
+
+:root[data-theme="pink"] .container::before {
+    content: '🎀';
+    position: absolute;
+    top: -20px;
+    right: 28px;
+    font-size: 2.2rem;
+    transform: rotate(12deg);
+    filter: drop-shadow(0 3px 4px rgba(236, 72, 153, 0.3));
+}
+
+/* عنوان‌ها */
+:root[data-theme="pink"] h1 {
+    color: #db2777;
+    text-shadow: 2px 2px 0 #fff, 4px 4px 0 rgba(244, 114, 182, 0.25);
+}
+
+:root[data-theme="pink"] h1::after {
+    content: ' 💕';
+}
+
+/* دکمه‌ها و لینک‌های دکمه‌ای: گرد کامل */
+:root[data-theme="pink"] button,
+:root[data-theme="pink"] .btn {
+    border-radius: 999px;
+}
+
+/* اینپوت‌ها: گرد با کادر صورتی */
+:root[data-theme="pink"] input[type="text"],
+:root[data-theme="pink"] input[type="email"],
+:root[data-theme="pink"] input[type="password"] {
+    border: 2px solid #f9a8d4;
+    border-radius: 999px;
+    padding-left: 18px;
+    padding-right: 18px;
+}
+
+:root[data-theme="pink"] input:focus {
+    border-color: #ec4899;
+    box-shadow: 0 0 0 4px rgba(244, 114, 182, 0.3);
+}
+
+:root[data-theme="pink"] .search-box input {
+    padding-right: 40px;
+}
+
+/* تسک‌ها: خط‌چین صورتی و یه تکون کوچولو موقع hover */
+:root[data-theme="pink"] .task {
+    border-style: dashed;
+    border-color: rgba(244, 114, 182, 0.55);
+    border-radius: 20px;
+}
+
+:root[data-theme="pink"] .task:hover {
+    transform: translateY(-3px) rotate(-0.6deg);
+    border-color: #ec4899;
+}
+
+:root[data-theme="pink"] .check {
+    border-color: #f472b6;
+}
+
+/* کارت‌ها و باکس‌ها */
+:root[data-theme="pink"] .tip,
+:root[data-theme="pink"] .no-results,
+:root[data-theme="pink"] .empty {
+    border-color: #f9a8d4;
+    border-radius: 18px;
+}
+
+:root[data-theme="pink"] .topbar,
+:root[data-theme="pink"] .feature,
+:root[data-theme="pink"] .creator-card {
+    border-radius: 22px;
+}
+
+:root[data-theme="pink"] .progress {
+    height: 16px;
+    border: 2px solid #fff;
+}
+
+:root[data-theme="pink"] .toast {
+    border-radius: 999px;
+}
+
+/* تقدیم‌نامه با ضربان آروم */
+:root[data-theme="pink"] .dedication {
+    display: block;
+    animation: heartbeat 1.8s ease-in-out infinite;
+    will-change: transform;
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    15%      { transform: scale(1.08); }
+    30%      { transform: scale(1); }
+    45%      { transform: scale(1.08); }
+    60%      { transform: scale(1); }
 }
 /* ==========================================================
    ریسپانسیو

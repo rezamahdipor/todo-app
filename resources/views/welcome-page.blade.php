@@ -24,23 +24,19 @@
     <section class="section">
     <h2>تم دلخواهت رو انتخاب کن 🎨</h2>
     <div class="theme-picker">
-        <button type="button" class="theme-option" data-theme-choice="auto">
-            <span class="swatch swatch-auto"></span>
-            خودکار
-        </button>
-        <button type="button" class="theme-option" data-theme-choice="light">
-            <span class="swatch swatch-light"></span>
-            روشن
-        </button>
-        <button type="button" class="theme-option" data-theme-choice="dark">
-            <span class="swatch swatch-dark"></span>
-            تاریک
-        </button>
-        <button type="button" class="theme-option" data-theme-choice="pink">
-            <span class="swatch swatch-pink"></span>
-            صورتی 🌸
-        </button>
-    </div>
+    <button type="button" class="theme-option" data-theme-choice="light">
+        <span class="swatch swatch-light"></span>
+        روشن
+    </button>
+    <button type="button" class="theme-option" data-theme-choice="dark">
+        <span class="swatch swatch-dark"></span>
+        تاریک
+    </button>
+    <button type="button" class="theme-option" data-theme-choice="pink">
+        <span class="swatch swatch-pink"></span>
+        صورتی 🌸
+    </button>
+</div>
 </section>
     <section class="section">
         <h2>این برنامه چی کار می‌کنه؟</h2>
