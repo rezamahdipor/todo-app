@@ -993,6 +993,29 @@ button:focus-visible {
 .toast-error {
     border-right: 4px solid var(--danger);
 }
+
+/* ==========================================================
+   انیمیشن حذف تسک
+   ========================================================== */
+.task.removing {
+    opacity: 0;
+    transform: translateX(-60px) scale(0.95);
+    height: 0 !important;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: -10px; /* اندازه‌ی gap لیست رو جبران می‌کنه */
+    border-width: 0;
+    overflow: hidden;
+    pointer-events: none;
+    box-shadow: none;
+    transition:
+        opacity 0.25s ease,
+        transform 0.3s ease,
+        height 0.3s ease 0.05s,
+        padding 0.3s ease 0.05s,
+        margin 0.3s ease 0.05s,
+        border-width 0.3s ease;
+}
 /* ==========================================================
    ریسپانسیو
    ========================================================== */

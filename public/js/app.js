@@ -208,7 +208,23 @@ function createTaskElement(task) {
 
     return li;
 }
+// انیمیشن حذف: لغزیدن، محو شدن و جمع شدن ارتفاع
+function animateRemove(li) {
+    return new Promise((resolve) => {
+        // ارتفاع رو صریح می‌ذاریم تا بشه ازش به صفر انیمیت کرد
+        li.style.height = li.offsetHeight + 'px';
+        li.offsetHeight; // یه reflow اجباری تا مرورگر مقدار اولیه رو ثبت کنه
 
+        li.classList.add('removing');
+
+        // به‌جای transitionend از زمان ثابت استفاده می‌کنیم
+        // (اگه کاربر انیمیشن رو خاموش کرده باشه، transitionend هیچ‌وقت نمیاد)
+        setTimeout(() => {
+            li.remove();
+            resolve();
+        }, 350);
+    });
+}
 // پیام «لیست خالیه»
 function updateEmptyState() {
     const hasTasks = list.querySelector('.task');
@@ -263,8 +279,10 @@ list.addEventListener('click', async (e) => {
         }
 
         if (btn.classList.contains('btn-delete')) {
+            if (li.classList.contains('removing')) return;
+
             await request(url, 'DELETE');
-            li.remove();
+            await animateRemove(li);
             updateEmptyState();
             refreshUI();
             showToast('کار حذف شد');
