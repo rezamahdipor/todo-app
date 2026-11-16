@@ -23,8 +23,7 @@ class TaskController extends Controller
         $data['priority'] = $data['priority'] ?? 'medium';
 
         $task = $request->user()->tasks()->create($data);
-$task = $request->user()->tasks()->create($data);
-$task->refresh();
+        $task->refresh();
         if ($request->expectsJson()) {
             return response()->json($task, 201);
         }

@@ -52,6 +52,50 @@ function showToast(message, type = 'success', duration = 3000) {
     setTimeout(close, duration);
 }
 
+// ========== کانفتی 🎉 ==========
+const CONFETTI_COLORS = ['#6366f1', '#ec4899', '#22d3ee', '#f59e0b', '#22c55e', '#ef4444'];
+const CONFETTI_EMOJIS = ['💗', '💕', '🎀', '🌸', '✨', '💖'];
+
+function launchConfetti() {
+    // احترام به کاربرانی که انیمیشن نمی‌خوان
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const isPink = document.documentElement.dataset.theme === 'pink';
+    const rand = (min, max) => Math.random() * (max - min) + min;
+
+    const layer = document.createElement('div');
+    layer.className = 'confetti-layer';
+    layer.setAttribute('aria-hidden', 'true');
+
+    const count = isPink ? 32 : 60;
+
+    for (let i = 0; i < count; i++) {
+        const piece = document.createElement('span');
+        piece.className = 'confetti-piece';
+
+        piece.style.left = rand(0, 100) + '%';
+        piece.style.setProperty('--dx', rand(-120, 120) + 'px');
+        piece.style.setProperty('--rot', rand(-720, 720) + 'deg');
+        piece.style.setProperty('--dur', rand(2.2, 3.8) + 's');
+        piece.style.setProperty('--delay', rand(0, 0.5) + 's');
+
+        if (isPink) {
+            piece.textContent = CONFETTI_EMOJIS[Math.floor(rand(0, CONFETTI_EMOJIS.length))];
+            piece.style.fontSize = rand(16, 30) + 'px';
+        } else {
+            piece.style.width = rand(6, 11) + 'px';
+            piece.style.height = rand(10, 18) + 'px';
+            piece.style.background = CONFETTI_COLORS[Math.floor(rand(0, CONFETTI_COLORS.length))];
+            piece.style.borderRadius = Math.random() > 0.5 ? '2px' : '50%';
+        }
+
+        layer.append(piece);
+    }
+
+    document.body.append(layer);
+    setTimeout(() => layer.remove(), 5000);
+}
+
 // ========== فیلتر، جستجو، شمارنده و نوار پیشرفت ==========
 let currentFilter = 'all';
 let searchQuery = '';
@@ -287,6 +331,13 @@ list.addEventListener('click', async (e) => {
             li.classList.toggle('done', task.is_done);
             btn.setAttribute('aria-checked', task.is_done ? 'true' : 'false');
             refreshUI();
+
+            // اگه این آخرین کار بود: جشن! 🎉
+            const remaining = list.querySelectorAll('.task[data-done="0"]').length;
+            if (task.is_done && remaining === 0) {
+                launchConfetti();
+                showToast('همه‌ی کارها انجام شد 🎉', 'success', 4000);
+            }
         }
 
         if (btn.classList.contains('priority')) {
