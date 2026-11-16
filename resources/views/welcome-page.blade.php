@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'به لیست کارها خوش آمدی')
+@section('container-class', 'container-wide')
 
 @section('content')
     <section class="hero">
@@ -20,7 +21,27 @@
             @endauth
         </div>
     </section>
-
+    <section class="section">
+    <h2>تم دلخواهت رو انتخاب کن 🎨</h2>
+    <div class="theme-picker">
+        <button type="button" class="theme-option" data-theme-choice="auto">
+            <span class="swatch swatch-auto"></span>
+            خودکار
+        </button>
+        <button type="button" class="theme-option" data-theme-choice="light">
+            <span class="swatch swatch-light"></span>
+            روشن
+        </button>
+        <button type="button" class="theme-option" data-theme-choice="dark">
+            <span class="swatch swatch-dark"></span>
+            تاریک
+        </button>
+        <button type="button" class="theme-option" data-theme-choice="pink">
+            <span class="swatch swatch-pink"></span>
+            صورتی 🌸
+        </button>
+    </div>
+</section>
     <section class="section">
         <h2>این برنامه چی کار می‌کنه؟</h2>
         <div class="features">
@@ -46,7 +67,7 @@
             </div>
         </div>
     </section>
-
+<div class="about-creator">
     <section class="section">
         <h2>درباره‌ی پروژه</h2>
         <p class="about-text">
@@ -63,7 +84,7 @@
             <span>CSS</span>
         </div>
     </section>
-
+</div>
     <section class="section creator">
         <h2>سازنده</h2>
         <div class="creator-card">

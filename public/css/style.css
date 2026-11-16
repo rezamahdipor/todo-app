@@ -1,4 +1,6 @@
-/* ========== متغیرها ========== */
+/* ==========================================================
+   متغیرهای رنگی: تم پیش‌فرض (روشن)
+   ========================================================== */
 :root {
     --bg1: #c7d2fe;
     --bg2: #fbcfe8;
@@ -21,8 +23,9 @@
     --shadow-hover: 0 14px 40px rgba(79, 70, 229, 0.25);
 }
 
+/* تم تاریک خودکار (فقط وقتی کاربر دستی انتخاب نکرده) */
 @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme]) {
         --bg1: #1e1b4b;
         --bg2: #0f172a;
         --glass: rgba(30, 41, 59, 0.45);
@@ -38,7 +41,64 @@
     }
 }
 
-/* ========== پایه ========== */
+/* تم روشن (دستی) */
+:root[data-theme="light"] {
+    --bg1: #c7d2fe;
+    --bg2: #fbcfe8;
+    --glass: rgba(255, 255, 255, 0.45);
+    --glass-strong: rgba(255, 255, 255, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --text: #0f172a;
+    --muted: #64748b;
+    --border: rgba(148, 163, 184, 0.35);
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+    --shadow-hover: 0 14px 40px rgba(79, 70, 229, 0.25);
+}
+
+/* تم تاریک (دستی) */
+:root[data-theme="dark"] {
+    --bg1: #1e1b4b;
+    --bg2: #0f172a;
+    --glass: rgba(30, 41, 59, 0.45);
+    --glass-strong: rgba(30, 41, 59, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --border: rgba(148, 163, 184, 0.2);
+    --primary: #6366f1;
+    --primary-hover: #818cf8;
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --shadow-hover: 0 14px 40px rgba(99, 102, 241, 0.35);
+}
+
+/* تم صورتی گوگولی 🌸 */
+:root[data-theme="pink"] {
+    --bg1: #ffe4ef;
+    --bg2: #fbcfe8;
+    --glass: rgba(255, 255, 255, 0.55);
+    --glass-strong: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.8);
+    --text: #5b1a3a;
+    --muted: #b4577f;
+    --border: rgba(244, 114, 182, 0.35);
+    --primary: #ec4899;
+    --primary-hover: #db2777;
+    --success: #f472b6;
+    --success-hover: #ec4899;
+    --danger: #e11d48;
+    --danger-hover: #be123c;
+    --gray: #c084a8;
+    --gray-hover: #a8678f;
+    --radius: 22px;
+    --shadow: 0 8px 32px rgba(236, 72, 153, 0.2);
+    --shadow-hover: 0 14px 40px rgba(236, 72, 153, 0.35);
+}
+
+/* ==========================================================
+   پایه
+   ========================================================== */
 * {
     box-sizing: border-box;
 }
@@ -54,12 +114,30 @@ body {
     min-height: 100vh;
 }
 
-/* حباب‌های رنگی پشت شیشه */
+h1 {
+    margin: 0 0 20px;
+    text-align: center;
+    font-size: 1.6rem;
+}
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* ==========================================================
+   حباب‌های رنگی پشت شیشه
+   ========================================================== */
 .bg-blobs {
     position: fixed;
     inset: 0;
     z-index: -1;
     overflow: hidden;
+    pointer-events: none;
 }
 
 .blob {
@@ -74,11 +152,18 @@ body {
 .b2 { width: 280px; height: 280px; background: #ec4899; bottom: -40px; left: -40px; animation-delay: -5s; }
 .b3 { width: 220px; height: 220px; background: #22d3ee; top: 45%; left: 55%; animation-delay: -9s; }
 
+:root[data-theme="pink"] .b1 { background: #f9a8d4; }
+:root[data-theme="pink"] .b2 { background: #fda4af; }
+:root[data-theme="pink"] .b3 { background: #fbcfe8; }
+
 @keyframes float {
     0%, 100% { transform: translate(0, 0) scale(1); }
     50%      { transform: translate(30px, -40px) scale(1.12); }
 }
 
+/* ==========================================================
+   کارت اصلی شیشه‌ای
+   ========================================================== */
 .container {
     max-width: 540px;
     margin: 0 auto;
@@ -97,22 +182,9 @@ body {
     box-shadow: var(--shadow-hover);
 }
 
-h1 {
-    margin: 0 0 20px;
-    text-align: center;
-    font-size: 1.6rem;
-}
-
-a {
-    color: var(--primary);
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-/* ========== اینپوت‌ها ========== */
+/* ==========================================================
+   اینپوت‌ها
+   ========================================================== */
 input[type="text"],
 input[type="email"],
 input[type="password"] {
@@ -128,6 +200,10 @@ input[type="password"] {
     transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
+input::placeholder {
+    color: var(--muted);
+}
+
 input:hover {
     transform: translateY(-1px);
 }
@@ -138,63 +214,49 @@ input:focus {
     box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.25);
 }
 
-input::placeholder {
-    color: var(--muted);
+/* ========== دکمه‌های سه‌بعدی مینیمال ========== */
+:root {
+    --btn-depth: 4px;
+    --btn-shadow: #3730a3;
 }
 
-input:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+:root[data-theme="dark"] { --btn-shadow: #312e81; }
+:root[data-theme="pink"] { --btn-shadow: #be185d; }
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) { --btn-shadow: #312e81; }
 }
 
-/* ========== دکمه‌ها ========== */
 button {
     position: relative;
-    overflow: hidden;
     padding: 9px 16px;
     font: inherit;
     font-size: 0.9rem;
     font-weight: 500;
     color: #fff;
     background: var(--primary);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    border: none;
     border-radius: 12px;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
-    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-}
-
-/* خط نورانی که روی دکمه می‌لغزه */
-button::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -120%;
-    width: 60%;
-    height: 100%;
-    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.45), transparent);
-    transform: skewX(-20deg);
-    transition: left 0.6s ease;
+    box-shadow: 0 var(--btn-depth) 0 var(--btn-shadow);
+    transform: translateY(0);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.2s;
 }
 
 button:hover {
     background: var(--primary-hover);
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
-}
-
-button:hover::after {
-    left: 140%;
+    box-shadow: 0 calc(var(--btn-depth) + 2px) 0 var(--btn-shadow);
 }
 
 button:active {
-    transform: scale(0.96);
+    transform: translateY(var(--btn-depth));
+    box-shadow: 0 0 0 var(--btn-shadow);
 }
 
 button:focus-visible {
     outline: 2px solid var(--primary);
-    outline-offset: 2px;
+    outline-offset: 3px;
 }
 
 .btn-done {
@@ -223,7 +285,16 @@ button:focus-visible {
     background: var(--gray-hover);
 }
 
-/* ========== فرم افزودن ========== */
+.btn-done   { --btn-shadow: #166534; }
+.btn-delete { --btn-shadow: #991b1b; }
+.btn-logout { --btn-shadow: #334155; --btn-depth: 3px; }
+
+:root[data-theme="pink"] .btn-done   { --btn-shadow: #db2777; }
+:root[data-theme="pink"] .btn-delete { --btn-shadow: #9f1239; }
+:root[data-theme="pink"] .btn-logout { --btn-shadow: #a8678f; }
+/* ==========================================================
+   فرم افزودن و پیام‌ها
+   ========================================================== */
 .add-form {
     display: flex;
     gap: 8px;
@@ -237,7 +308,48 @@ button:focus-visible {
     min-height: 1.2em;
 }
 
-/* ========== لیست تسک‌ها ========== */
+.subtitle {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin: -8px 0 20px;
+}
+
+.tip {
+    font-size: 0.8rem;
+    color: var(--muted);
+    background: var(--glass-strong);
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin: 0 0 12px;
+}
+
+.hint {
+    color: var(--muted);
+    font-size: 0.78rem;
+    margin-top: -4px;
+}
+
+/* ==========================================================
+   نوار بالا (سلام و خروج)
+   ========================================================== */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 10px 14px;
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    font-size: 0.9rem;
+    color: var(--text);
+}
+
+/* ==========================================================
+   لیست تسک‌ها
+   ========================================================== */
 .task-list {
     list-style: none;
     padding: 0;
@@ -271,6 +383,7 @@ button:focus-visible {
 .task .title {
     flex: 1;
     word-break: break-word;
+    cursor: text;
     transition: color 0.2s;
 }
 
@@ -289,6 +402,15 @@ button:focus-visible {
     text-align: center;
     color: var(--muted);
     padding: 28px 0;
+    background: transparent;
+    border: 1px dashed var(--border);
+    border-radius: 14px;
+}
+
+.edit-input {
+    flex: 1;
+    padding: 6px 10px !important;
+    font-size: 1rem;
 }
 
 @keyframes slideIn {
@@ -302,34 +424,19 @@ button:focus-visible {
     }
 }
 
-/* ========== نوار بالا (سلام و خروج) ========== */
-.topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-    padding: 10px 14px;
-    background: var(--glass-strong);
-    border: 1px solid var(--glass-border);
-    border-radius: 14px;
-    font-size: 0.9rem;
-    color: var(--text);
-}
-
-.empty {
-    text-align: center;
-    color: var(--muted);
-    padding: 28px 0;
-    background: transparent;
-    border: 1px dashed var(--border);
-    border-radius: 14px;
-}
-
-/* ========== فرم‌های ورود و ثبت‌نام ========== */
+/* ==========================================================
+   فرم‌های ورود و ثبت‌نام
+   ========================================================== */
 .auth-form {
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+.auth-form label:not(.remember) {
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: -4px;
 }
 
 .auth-form button {
@@ -352,80 +459,9 @@ button:focus-visible {
     gap: 6px;
 }
 
-/* ========== ریسپانسیو ========== */
-@media (max-width: 480px) {
-    body {
-        padding: 16px 10px;
-    }
-
-    .container {
-        padding: 18px;
-    }
-
-    .task {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .actions {
-        justify-content: flex-end;
-    }
-}
-
-/* احترام به کاربرانی که انیمیشن رو نمی‌خوان */
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation: none !important;
-        transition: none !important;
-    }
-}
-.edit-input {
-    flex: 1;
-    padding: 6px 10px !important;
-    font-size: 1rem;
-}
-
-.task .title {
-    cursor: text;
-}
-
-.bg-blobs {
-    pointer-events: none;
-}
-
-button::after {
-    pointer-events: none;
-}
-
-.subtitle {
-    text-align: center;
-    color: var(--muted);
-    font-size: 0.9rem;
-    margin: -8px 0 20px;
-}
-
-.auth-form label:not(.remember) {
-    font-size: 0.85rem;
-    font-weight: 500;
-    margin-bottom: -4px;
-}
-
-.hint {
-    color: var(--muted);
-    font-size: 0.78rem;
-    margin-top: -4px;
-}
-
-.tip {
-    font-size: 0.8rem;
-    color: var(--muted);
-    background: var(--glass-strong);
-    border: 1px dashed var(--border);
-    border-radius: 10px;
-    padding: 8px 12px;
-    margin: 0 0 12px;
-}
-
+/* ==========================================================
+   فوتر
+   ========================================================== */
 .footer {
     text-align: center;
     color: var(--muted);
@@ -433,7 +469,9 @@ button::after {
     margin-top: 24px;
 }
 
-/* ========== صفحه‌ی فرود ========== */
+/* ==========================================================
+   صفحه‌ی فرود
+   ========================================================== */
 .hero {
     text-align: center;
     padding: 12px 0 8px;
@@ -475,23 +513,35 @@ button::after {
 .btn-primary {
     color: #fff;
     background: var(--primary);
-    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+    box-shadow: 0 var(--btn-depth) 0 var(--btn-shadow);
 }
 
 .btn-primary:hover {
     background: var(--primary-hover);
-    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.45);
+    transform: translateY(-2px);
+    box-shadow: 0 calc(var(--btn-depth) + 2px) 0 var(--btn-shadow);
+}
+
+.btn-primary:active {
+    transform: translateY(var(--btn-depth));
+    box-shadow: 0 0 0 var(--btn-shadow);
 }
 
 .btn-outline {
     color: var(--primary);
     background: var(--glass-strong);
-    border: 1px solid var(--primary);
+    border: 2px solid var(--primary);
+    box-shadow: 0 var(--btn-depth) 0 var(--primary);
 }
 
 .btn-outline:hover {
     background: var(--primary);
     color: #fff;
+}
+
+.btn-outline:active {
+    transform: translateY(var(--btn-depth));
+    box-shadow: 0 0 0 var(--primary);
 }
 
 .section {
@@ -603,8 +653,143 @@ button::after {
     border-radius: 50%;
 }
 
-@media (max-width: 480px) {
-    .features {
+/* ==========================================================
+   صفحه‌ی فرود: حالت پهن
+   ========================================================== */
+.container.container-wide {
+    max-width: 960px;
+    padding: 40px;
+}
+
+.container-wide .hero {
+    padding: 24px 0 16px;
+}
+
+.container-wide .hero h1 {
+    font-size: 2.2rem;
+}
+
+.container-wide .hero-text {
+    max-width: 560px;
+    font-size: 1.05rem;
+}
+
+.container-wide .features {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.container-wide .about-creator {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+/* ==========================================================
+   انتخابگر تم
+   ========================================================== */
+.theme-picker {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.theme-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    color: var(--text);
+    background: var(--glass-strong);
+    border: 2px solid var(--glass-border);
+    --btn-shadow: var(--border);
+    --btn-depth: 3px;
+}
+
+.theme-option:hover {
+    background: var(--glass-strong);
+    border-color: var(--primary);
+}
+
+.theme-option.active {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.25);
+    font-weight: 700;
+}
+
+.swatch {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.swatch-auto  { background: linear-gradient(135deg, #fff 50%, #1e293b 50%); }
+.swatch-light { background: linear-gradient(135deg, #c7d2fe, #fbcfe8); }
+.swatch-dark  { background: linear-gradient(135deg, #1e1b4b, #0f172a); }
+.swatch-pink  { background: linear-gradient(135deg, #f9a8d4, #ec4899); }
+
+.container-wide .about-creator .section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.container-wide .about-creator .about-text {
+    max-width: 380px;
+    margin: 0 auto;
+}
+
+.container-wide .about-creator .creator-card {
+    width: 100%;
+    max-width: 380px;
+    justify-content: center;
+    text-align: right;
+}
+/* ==========================================================
+   ریسپانسیو
+   ========================================================== */
+@media (max-width: 800px) {
+    .container-wide .features {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .container-wide .about-creator {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 16px 10px;
+    }
+
+    .container,
+    .container.container-wide {
+        padding: 18px;
+    }
+
+    .features,
+    .container-wide .features {
+        grid-template-columns: 1fr;
+    }
+
+    .task {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .actions {
+        justify-content: flex-end;
+    }
+}
+
+/* احترام به کاربرانی که انیمیشن رو نمی‌خوان */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
     }
 }
