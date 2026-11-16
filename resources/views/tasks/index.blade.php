@@ -3,6 +3,10 @@
 @section('title', 'لیست کارها')
 
 @section('content')
+    @php
+        $priorityLabels = ['low' => 'کم', 'medium' => 'متوسط', 'high' => 'زیاد'];
+    @endphp
+
     <div class="topbar">
         <span>سلام {{ auth()->user()->name }} 👋</span>
         <form action="{{ route('logout') }}" method="POST">
@@ -37,6 +41,13 @@
     <form id="add-form" action="{{ route('tasks.store') }}" method="POST" class="add-form">
         @csrf
         <input type="text" name="title" placeholder="امروز چه کاری داری؟" value="{{ old('title') }}" required>
+
+        <select name="priority" id="priority-select" aria-label="اولویت">
+            <option value="low">🔵 کم</option>
+            <option value="medium" selected>🟠 متوسط</option>
+            <option value="high">🔴 زیاد</option>
+        </select>
+
         <button type="submit">افزودن</button>
     </form>
 
@@ -51,7 +62,7 @@
         <button type="button" class="filter-btn" data-filter="done">انجام‌شده</button>
     </div>
 
-    <p class="tip">💡 برای ویرایش یک کار، روی عنوانش دابل‌کلیک کن. Enter ذخیره می‌کنه و Esc لغو.</p>
+    <p class="tip">💡 دابل‌کلیک روی عنوان = ویرایش. کلیک روی نشان رنگی = تغییر اولویت.</p>
 
     <ul id="task-list" class="task-list">
         @forelse ($tasks as $task)
@@ -70,6 +81,13 @@
                 </button>
 
                 <span class="title">{{ $task->title }}</span>
+
+                <button type="button"
+                        class="priority priority-{{ $task->priority }}"
+                        data-priority="{{ $task->priority }}"
+                        title="برای تغییر اولویت کلیک کن">
+                    {{ $priorityLabels[$task->priority] ?? 'متوسط' }}
+                </button>
 
                 <div class="actions">
                     <button type="button" class="btn-delete">حذف</button>

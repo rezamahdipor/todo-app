@@ -1,6 +1,17 @@
 const token = document.querySelector('meta[name="csrf-token"]').content;
 const list = document.getElementById('task-list');
 const form = document.getElementById('add-form');
+const prioritySelect = document.getElementById('priority-select');
+
+// ========== اولویت‌ها ==========
+const PRIORITY_ORDER = ['low', 'medium', 'high'];
+const PRIORITY_LABELS = { low: 'کم', medium: 'متوسط', high: 'زیاد' };
+
+function setPriority(btn, priority) {
+    btn.dataset.priority = priority;
+    btn.className = `priority priority-${priority}`;
+    btn.textContent = PRIORITY_LABELS[priority] ?? PRIORITY_LABELS.medium;
+}
 
 // ========== Toast (پیام شناور) ==========
 const toastContainer = document.createElement('div');
@@ -8,10 +19,7 @@ toastContainer.className = 'toast-container';
 toastContainer.setAttribute('aria-live', 'polite');
 document.body.append(toastContainer);
 
-const TOAST_ICONS = {
-    success: '✓',
-    error: '⚠',
-};
+const TOAST_ICONS = { success: '✓', error: '⚠' };
 
 function showToast(message, type = 'success', duration = 3000) {
     const toast = document.createElement('div');
@@ -29,7 +37,6 @@ function showToast(message, type = 'success', duration = 3000) {
     toast.append(icon, text);
     toastContainer.append(toast);
 
-    // یک فریم صبر می‌کنیم تا انیمیشن ورود اجرا بشه
     requestAnimationFrame(() => toast.classList.add('show'));
 
     let closed = false;
@@ -114,16 +121,14 @@ document.querySelectorAll('.filter-btn').forEach((btn) => {
     });
 });
 
-// جستجو
 searchInput.addEventListener('input', () => {
     searchQuery = searchInput.value;
     applyFilter();
 });
 
-// میانبر: کلید / برای رفتن به جستجو، Esc برای پاک کردن
 document.addEventListener('keydown', (e) => {
     const tag = document.activeElement.tagName;
-    const typing = tag === 'INPUT' || tag === 'TEXTAREA';
+    const typing = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
 
     if (e.key === '/' && !typing) {
         e.preventDefault();
@@ -159,7 +164,7 @@ async function request(url, method, body = null) {
     return data;
 }
 
-// ========== ساخت آیتم لیست (با چک‌باکس گرد) ==========
+// ========== ساخت آیتم لیست (چک‌باکس گرد + نشان اولویت) ==========
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 function createCheckButton(isDone) {
@@ -195,6 +200,11 @@ function createTaskElement(task) {
     title.className = 'title';
     title.textContent = task.title;
 
+    const priority = document.createElement('button');
+    priority.type = 'button';
+    priority.title = 'برای تغییر اولویت کلیک کن';
+    setPriority(priority, task.priority ?? 'medium');
+
     const actions = document.createElement('div');
     actions.className = 'actions';
 
@@ -204,28 +214,25 @@ function createTaskElement(task) {
     deleteBtn.textContent = 'حذف';
 
     actions.append(deleteBtn);
-    li.append(check, title, actions);
+    li.append(check, title, priority, actions);
 
     return li;
 }
-// انیمیشن حذف: لغزیدن، محو شدن و جمع شدن ارتفاع
+
 function animateRemove(li) {
     return new Promise((resolve) => {
-        // ارتفاع رو صریح می‌ذاریم تا بشه ازش به صفر انیمیت کرد
         li.style.height = li.offsetHeight + 'px';
-        li.offsetHeight; // یه reflow اجباری تا مرورگر مقدار اولیه رو ثبت کنه
+        li.offsetHeight;
 
         li.classList.add('removing');
 
-        // به‌جای transitionend از زمان ثابت استفاده می‌کنیم
-        // (اگه کاربر انیمیشن رو خاموش کرده باشه، transitionend هیچ‌وقت نمیاد)
         setTimeout(() => {
             li.remove();
             resolve();
         }, 350);
     });
 }
-// پیام «لیست خالیه»
+
 function updateEmptyState() {
     const hasTasks = list.querySelector('.task');
     const empty = list.querySelector('.empty');
@@ -245,11 +252,15 @@ form.addEventListener('submit', async (e) => {
     const input = form.querySelector('input[name="title"]');
 
     try {
-        const task = await request(form.action, 'POST', { title: input.value });
+        const task = await request(form.action, 'POST', {
+            title: input.value,
+            priority: prioritySelect.value,
+        });
 
         list.querySelector('.empty')?.remove();
         list.prepend(createTaskElement(task));
         input.value = '';
+        prioritySelect.value = 'medium';
         refreshUI();
         showToast('کار اضافه شد');
     } catch (err) {
@@ -257,7 +268,7 @@ form.addEventListener('submit', async (e) => {
     }
 });
 
-// ========== تیک زدن و حذف ==========
+// ========== تیک زدن، تغییر اولویت و حذف ==========
 list.addEventListener('click', async (e) => {
     const btn = e.target.closest('button');
     if (!btn) return;
@@ -276,6 +287,15 @@ list.addEventListener('click', async (e) => {
             li.classList.toggle('done', task.is_done);
             btn.setAttribute('aria-checked', task.is_done ? 'true' : 'false');
             refreshUI();
+        }
+
+        if (btn.classList.contains('priority')) {
+            const current = btn.dataset.priority;
+            const next = PRIORITY_ORDER[(PRIORITY_ORDER.indexOf(current) + 1) % PRIORITY_ORDER.length];
+
+            const task = await request(url, 'PUT', { priority: next });
+            setPriority(btn, task.priority);
+            showToast(`اولویت: ${PRIORITY_LABELS[task.priority]}`);
         }
 
         if (btn.classList.contains('btn-delete')) {

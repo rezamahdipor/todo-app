@@ -16,11 +16,15 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title' => 'required|string|max:255',
+            'title'    => 'required|string|max:255',
+            'priority' => 'sometimes|in:low,medium,high',
         ]);
 
-        $task = $request->user()->tasks()->create($data);
+        $data['priority'] = $data['priority'] ?? 'medium';
 
+        $task = $request->user()->tasks()->create($data);
+$task = $request->user()->tasks()->create($data);
+$task->refresh();
         if ($request->expectsJson()) {
             return response()->json($task, 201);
         }
@@ -33,8 +37,9 @@ class TaskController extends Controller
         abort_unless($task->user_id === $request->user()->id, 403);
 
         $data = $request->validate([
-            'title'   => 'sometimes|required|string|max:255',
-            'is_done' => 'sometimes|boolean',
+            'title'    => 'sometimes|required|string|max:255',
+            'is_done'  => 'sometimes|boolean',
+            'priority' => 'sometimes|in:low,medium,high',
         ]);
 
         $task->update($data);
