@@ -143,6 +143,103 @@
             `${fa(done)} از ${fa(total)} · ${fa(percent)}٪`;
     }
 
+    // ==========================================================
+    // انجام‌شدن خودکار کار اصلی (تمرین ۲)
+    // ==========================================================
+    const autoDone = new Set(); // شماره‌ی کارهایی که «خودکار» انجام‌شده شدن
+    const syncing = new Set();  // کارهایی که همین الان درخواستشون در راهه
+    const again = new Set();    // کارهایی که وسط درخواست، دوباره تغییر کردن
+
+    function countsOf(li) {
+        const total = li.querySelectorAll('.sub-item').length;
+        const done = li.querySelectorAll('.sub-item[data-done="1"]').length;
+
+        return { total, done, complete: total > 0 && done === total };
+    }
+
+    // ظاهر کار اصلی رو (بعد از جواب سرور) عوض می‌کنه
+    function paintParent(li, isDone) {
+        li.dataset.done = isDone ? '1' : '0';
+        li.classList.toggle('done', isDone);
+        li.querySelector('.check')?.setAttribute('aria-checked', isDone ? 'true' : 'false');
+
+        if (typeof renderDue === 'function') renderDue(li);
+        if (typeof refreshUI === 'function') refreshUI();
+    }
+
+    // وضعیت زیرتسک‌ها رو با وضعیت کار اصلی مقایسه می‌کنه و اگه لازم بود درستش می‌کنه
+    async function applyParentState(li) {
+        if (!li.isConnected) return; // کار وسط راه حذف شده
+
+        const id = li.dataset.id;
+        const { total, complete } = countsOf(li);
+        const parentDone = li.dataset.done === '1';
+
+        // کار بدون زیرتسک: کاری باهاش نداریم
+        if (total === 0) {
+            autoDone.delete(id);
+            return;
+        }
+
+        // همه‌ی زیرتسک‌ها تیک خورده ولی کار اصلی نه: انجامش بده
+        if (complete && !parentDone) {
+            const task = await request(`/tasks/${id}`, 'PUT', { is_done: 1 });
+
+            autoDone.add(id);
+            paintParent(li, Boolean(task.is_done));
+
+            const remaining = taskList.querySelectorAll('.task[data-done="0"]').length;
+
+            if (remaining === 0) {
+                if (typeof launchConfetti === 'function') launchConfetti();
+                showToast('همه‌ی کارها انجام شد 🎉', 'success', 4000);
+            } else {
+                showToast('همه‌ی زیرتسک‌ها تموم شد؛ کار اصلی هم انجام شد ✅');
+            }
+
+            return;
+        }
+
+        // یه زیرتسک باز شد (یا اضافه شد) و کار اصلی رو خودمون تیک زده بودیم: دوباره بازش کن
+        if (!complete && parentDone && autoDone.has(id)) {
+            const task = await request(`/tasks/${id}`, 'PUT', { is_done: 0 });
+
+            autoDone.delete(id);
+            paintParent(li, Boolean(task.is_done));
+            showToast('کار اصلی دوباره باز شد');
+        }
+    }
+
+    // اگه پشت سر هم چند تا تغییر بشه، درخواست‌ها قاطی نمی‌شن
+    async function syncParent(li) {
+        const id = li.dataset.id;
+
+        if (syncing.has(id)) {
+            again.add(id);
+            return;
+        }
+
+        syncing.add(id);
+
+        try {
+            do {
+                again.delete(id);
+                await applyParentState(li);
+            } while (again.has(id));
+        } catch (err) {
+            showToast('وضعیت کار اصلی ذخیره نشد.', 'error');
+        } finally {
+            again.delete(id);
+            syncing.delete(id);
+        }
+    }
+
+    // اگه خودت دستی کار اصلی رو تیک زدی یا برداشتی، دیگه «خودکار» حسابش نمی‌کنیم
+    taskList.addEventListener('click', (e) => {
+        const check = e.target.closest('.check');
+        if (check) autoDone.delete(check.closest('.task').dataset.id);
+    });
+
     // ========== اضافه کردن بخش زیرتسک به یه کار ==========
     function initTask(li) {
         if (li.querySelector('.subtasks')) return; // قبلاً ساخته شده
@@ -189,6 +286,7 @@
 
                 setSubDone(item, Boolean(sub.is_done));
                 refreshProgress(li);
+                syncParent(li);
             }
 
             if (del) {
@@ -197,6 +295,7 @@
                 item.remove();
                 refreshProgress(li);
                 showToast('زیرتسک حذف شد');
+                syncParent(li);
             }
         } catch (err) {
             showToast(firstError(err), 'error');
@@ -223,6 +322,7 @@
             input.value = '';
             input.focus();
             refreshProgress(li);
+            syncParent(li);
         } catch (err) {
             showToast(firstError(err), 'error');
         }
