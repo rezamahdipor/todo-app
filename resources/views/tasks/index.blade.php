@@ -236,4 +236,5 @@
     <script src="{{ asset('js/app.js') }}?v={{ filemtime(public_path('js/app.js')) }}"></script>
     <script src="{{ asset('js/subtasks.js') }}?v={{ filemtime(public_path('js/subtasks.js')) }}"></script>
     <script src="{{ asset('js/panels.js') }}?v={{ filemtime(public_path('js/panels.js')) }}"></script>
+    <script src="{{ asset('js/widgets.js') }}?v={{ filemtime(public_path('js/widgets.js')) }}"></script>
 @endpush

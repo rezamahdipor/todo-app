@@ -335,3 +335,4 @@
 
     refresh();
 })();
+    <script src="{{ asset('js/widgets.js') }}?v={{ filemtime(public_path('js/widgets.js')) }}"></script>

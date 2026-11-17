@@ -3231,6 +3231,132 @@ body.is-dragging .task {
         padding: 16px;
     }
 }
+
+/* ==========================================================
+   پومودورو و ساعت
+   ========================================================== */
+.pomodoro .filters {
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.pomodoro .filter-btn {
+    padding: 5px 10px;
+    font-size: 0.74rem;
+}
+
+.pm-ring {
+    position: relative;
+    width: 150px;
+    margin: 4px auto 12px;
+}
+
+.pm-ring svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    transform: rotate(-90deg);
+}
+
+.pm-track,
+.pm-fill {
+    fill: none;
+    stroke-width: 8;
+}
+
+.pm-track {
+    stroke: var(--border);
+}
+
+.pm-fill {
+    stroke: var(--primary);
+    stroke-linecap: round;
+    stroke-dasharray: 282.7;
+    stroke-dashoffset: 282.7;
+    transition: stroke-dashoffset 0.5s linear, stroke 0.3s ease;
+}
+
+.pomodoro[data-mode="short"] .pm-fill,
+.pomodoro[data-mode="long"] .pm-fill {
+    stroke: var(--success);
+}
+
+.pm-time {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.7rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.pm-task {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 7px 10px;
+    font: inherit;
+    font-size: 0.82rem;
+    color: var(--text);
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.pm-actions {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.pm-actions button {
+    padding: 7px 14px;
+    font-size: 0.85rem;
+}
+
+.pm-done {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    font-size: 0.82rem;
+}
+
+.pm-done[hidden] {
+    display: none;
+}
+
+.pm-count {
+    margin: 10px 0 0;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.dash-side .clock {
+    padding: 10px 14px;
+    text-align: center;
+}
+
+.wc-time {
+    font-size: 1.25rem;
+    font-weight: 800;
+    line-height: 1.4;
+    color: var(--primary);
+    font-variant-numeric: tabular-nums;
+}
+
+.wc-date {
+    font-size: 0.78rem;
+    color: var(--muted);
+}
+
+:root[data-theme="pink"] .pm-task {
+    padding: 7px 14px;
+    border: 2px solid #f9a8d4;
+    border-radius: 999px;
+}
 /* ==========================================================
    ریسپانسیو
    ========================================================== */
