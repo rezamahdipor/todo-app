@@ -411,6 +411,45 @@ button:focus-visible {
     margin: 0 0 12px;
 }
 
+/* راهنمای جمع‌شونده با آیکون علامت سؤال */
+.usage-help {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 0 12px;
+}
+.usage-help-toggle {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--glass-border);
+    border-radius: 50%;
+    background: var(--glass-strong);
+    color: var(--muted);
+    font-size: .9rem;
+    font-weight: 800;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+}
+.usage-help-toggle::-webkit-details-marker { display: none; }
+.usage-help-toggle:hover,
+.usage-help[open] .usage-help-toggle {
+    color: #fff;
+    background: var(--primary);
+    border-color: var(--primary);
+}
+.usage-help .tip {
+    position: absolute;
+    z-index: 5;
+    top: 36px;
+    right: 0;
+    width: min(100%, 520px);
+    margin: 0;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
+}
+
 .hint {
     color: var(--muted);
     font-size: 0.78rem;
@@ -1846,6 +1885,67 @@ body.is-dragging .task {
     transform: none;
 }
 
+/* پنل بازشونده ساخت دسته */
+.category-create-panel {
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    background: var(--glass-strong);
+    overflow: hidden;
+}
+
+.category-create-toggle {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 12px;
+    cursor: pointer;
+    list-style: none;
+    color: var(--text);
+    font-size: .88rem;
+    font-weight: 700;
+    user-select: none;
+}
+
+.category-create-toggle::-webkit-details-marker { display: none; }
+.category-create-icon {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: var(--primary);
+    color: #fff;
+    font-size: 1.1rem;
+    transition: transform .2s ease;
+}
+.category-create-hint {
+    margin-right: auto;
+    color: var(--muted);
+    font-size: .75rem;
+    font-weight: 400;
+}
+.category-create-chevron {
+    color: var(--muted);
+    transition: transform .2s ease;
+}
+.category-create-panel[open] .category-create-chevron { transform: rotate(180deg); }
+.category-create-panel[open] .category-create-icon { transform: rotate(45deg); }
+.category-create-panel .category-form {
+    display: flex;
+    align-items: end;
+    gap: 8px;
+    padding: 0 12px 12px;
+    animation: addTaskReveal .2s ease;
+}
+.category-color-field {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+    font-size: .75rem;
+    white-space: nowrap;
+}
+
 .category-form {
     display: flex;
     align-items: center;
@@ -2000,6 +2100,14 @@ body.is-dragging .task {
 }
 
 @media (max-width: 480px) {
+    .category-create-panel .category-form {
+        align-items: stretch;
+        flex-wrap: wrap;
+    }
+    .category-create-panel .category-form input[type="text"] {
+        flex-basis: 100%;
+    }
+    .category-create-hint { display: none; }
     .add-options select,
     .add-options input[type="date"] {
         flex-basis: 100%;

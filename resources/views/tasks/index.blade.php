@@ -89,12 +89,23 @@
             <button type="button" class="cat-chip active" data-category-id="all">همه دسته‌ها</button>
         </div>
 
-        <form id="category-form" action="{{ route('categories.store') }}" method="POST" class="category-form">
-            @csrf
-            <input type="text" name="name" placeholder="دسته‌ی جدید..." maxlength="40" required>
-            <input type="color" name="color" value="#8b5cf6" aria-label="رنگ دسته">
-            <button type="submit" class="cat-add">+ دسته</button>
-        </form>
+        <details class="category-create-panel">
+            <summary class="category-create-toggle">
+                <span class="category-create-icon" aria-hidden="true">＋</span>
+                <span>ساخت دسته جدید</span>
+                <span class="category-create-hint">برای نمایش فرم کلیک کن</span>
+                <span class="category-create-chevron" aria-hidden="true">⌄</span>
+            </summary>
+            <form id="category-form" action="{{ route('categories.store') }}" method="POST" class="category-form">
+                @csrf
+                <input type="text" name="name" placeholder="نام دسته را وارد کن..." maxlength="40" required>
+                <label class="category-color-field">
+                    <span>رنگ دسته</span>
+                    <input type="color" name="color" value="#8b5cf6" aria-label="رنگ دسته">
+                </label>
+                <button type="submit" class="cat-add">ثبت دسته</button>
+            </form>
+        </details>
     </div>
 
     {{-- جستجو --}}
@@ -108,7 +119,10 @@
         <button type="button" class="filter-btn" data-filter="done">انجام‌شده</button>
     </div>
 
-    <p class="tip">💡 دابل‌کلیک روی عنوان = ویرایش. کلیک روی نشان دسته یا اولویت = تغییر. کلیک روی تاریخ = تقویم. دستگیره‌ی ⋮⋮ = جابه‌جایی. نشان ☑ = زیرتسک‌ها.</p>
+    <details class="usage-help">
+        <summary class="usage-help-toggle" aria-label="نمایش راهنمای استفاده" title="راهنمای استفاده">?</summary>
+        <p class="tip">دابل‌کلیک روی عنوان = ویرایش. کلیک روی نشان دسته یا اولویت = تغییر. کلیک روی تاریخ = تقویم. دستگیره‌ی ⋮⋮ = جابه‌جایی. نشان ☑ = زیرتسک‌ها.</p>
+    </details>
 
     <ul id="task-list" class="task-list">
         @forelse ($tasks as $task)
