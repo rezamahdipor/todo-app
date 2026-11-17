@@ -42,28 +42,46 @@
         </div>
     </div>
 
-    {{-- فرم افزودن --}}
-    <form id="add-form" action="{{ route('tasks.store') }}" method="POST" class="add-form">
-        @csrf
-        <div class="add-row">
-            <input type="text" name="title" placeholder="امروز چه کاری داری؟" value="{{ old('title') }}" required>
-            <button type="submit">افزودن</button>
-        </div>
+    {{-- فرم افزودن؛ با کلیک روی دکمه باز و بسته می‌شود --}}
+    <details class="add-task-panel" {{ $errors->any() ? 'open' : '' }}>
+        <summary class="add-task-toggle">
+            <span class="add-task-toggle-icon" aria-hidden="true">＋</span>
+            <span>ساخت تسک جدید</span>
+            <span class="add-task-toggle-hint">برای نمایش فرم کلیک کن</span>
+            <span class="add-task-chevron" aria-hidden="true">⌄</span>
+        </summary>
 
-        <div class="add-options">
-            <select name="priority" id="priority-select" aria-label="اولویت">
-                <option value="low">🔵 کم</option>
-                <option value="medium" selected>🟠 متوسط</option>
-                <option value="high">🔴 زیاد</option>
-            </select>
+        <form id="add-form" action="{{ route('tasks.store') }}" method="POST" class="add-form">
+            @csrf
+            <div class="add-row">
+                <input type="text" name="title" placeholder="نام کار؛ مثلاً مطالعه فصل اول" value="{{ old('title') }}" required>
+                <button type="submit">ثبت تسک</button>
+            </div>
 
-            <select name="category_id" id="category-select" aria-label="دسته">
-                <option value="">بدون دسته</option>
-            </select>
+            <div class="add-options">
+                <label class="add-option-field">
+                    <span>درجه سختی / اولویت</span>
+                    <select name="priority" id="priority-select" aria-label="اولویت">
+                        <option value="low" @selected(old('priority', 'medium') === 'low')>🔵 کم</option>
+                        <option value="medium" @selected(old('priority', 'medium') === 'medium')>🟠 متوسط</option>
+                        <option value="high" @selected(old('priority') === 'high')>🔴 زیاد</option>
+                    </select>
+                </label>
 
-            <input type="date" id="add-due" class="add-due" aria-label="تاریخ سررسید">
-        </div>
-    </form>
+                <label class="add-option-field">
+                    <span>دسته‌بندی</span>
+                    <select name="category_id" id="category-select" aria-label="دسته">
+                        <option value="">بدون دسته</option>
+                    </select>
+                </label>
+
+                <label class="add-option-field">
+                    <span>تاریخ سررسید</span>
+                    <input type="date" id="add-due" class="add-due" aria-label="تاریخ سررسید">
+                </label>
+            </div>
+        </form>
+    </details>
 
     {{-- دسته‌ها: فیلتر + ساخت دسته‌ی جدید --}}
     <div class="category-bar">

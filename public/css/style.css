@@ -298,6 +298,89 @@ button:focus-visible {
 /* ==========================================================
    فرم افزودن و پیام‌ها
    ========================================================== */
+/* پنل بازشونده ساخت تسک */
+.add-task-panel {
+    margin: 0 0 18px;
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    background: var(--glass-strong);
+    overflow: hidden;
+}
+
+.add-task-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    cursor: pointer;
+    list-style: none;
+    color: var(--text);
+    font-weight: 700;
+    user-select: none;
+}
+
+.add-task-toggle::-webkit-details-marker { display: none; }
+.add-task-toggle-icon {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    background: var(--primary);
+    color: white;
+    font-size: 1.25rem;
+    transition: transform .2s ease;
+}
+.add-task-toggle-hint {
+    margin-right: auto;
+    color: var(--muted);
+    font-size: .78rem;
+    font-weight: 400;
+}
+.add-task-chevron {
+    color: var(--muted);
+    transition: transform .2s ease;
+}
+.add-task-panel[open] .add-task-chevron { transform: rotate(180deg); }
+.add-task-panel[open] .add-task-toggle-icon { transform: rotate(45deg); }
+.add-task-panel .add-form {
+    display: block;
+    padding: 0 16px 16px;
+    margin: 0;
+    animation: addTaskReveal .2s ease;
+}
+.add-task-panel .add-row {
+    display: flex;
+    gap: 8px;
+}
+.add-task-panel .add-row input { flex: 1; min-width: 0; }
+.add-task-panel .add-options {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+}
+.add-option-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: var(--muted);
+    font-size: .8rem;
+}
+.add-option-field select, .add-option-field input {
+    width: 100%;
+    min-width: 0;
+}
+@keyframes addTaskReveal {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@media (max-width: 600px) {
+    .add-task-panel .add-options { grid-template-columns: 1fr; }
+    .add-task-toggle-hint { display: none; }
+    .add-task-panel .add-row { flex-direction: column; }
+}
+
 .add-form {
     display: flex;
     gap: 8px;
