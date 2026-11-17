@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Task extends Model
 {
     protected $fillable = [
-        'title', 'is_done', 'priority', 'position',
+        'title', 'is_done', 'status', 'priority', 'position',
         'category_id', 'due_date', 'completed_at',
     ];
 
@@ -18,6 +18,22 @@ class Task extends Model
         'due_date'     => 'date:Y-m-d',
         'completed_at' => 'datetime',
     ];
+
+    // هر وقت is_done عوض بشه (از لیست، زیرتسک یا کانبان)، status هم هماهنگ می‌شه
+    protected static function booted(): void
+    {
+        static::saving(function (Task $task) {
+            if (! $task->isDirty('is_done')) {
+                return;
+            }
+
+            if ($task->is_done) {
+                $task->status = 'done';
+            } elseif ($task->status === 'done') {
+                $task->status = 'todo';
+            }
+        });
+    }
 
     public function user(): BelongsTo
     {

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BoardController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\SubtaskController;
@@ -22,6 +23,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/stats', [StatsController::class, 'index'])->name('stats');
+
+    // کانبان
+    Route::get('/board', [BoardController::class, 'index'])->name('board');
+    Route::post('/board/move', [BoardController::class, 'move'])->name('board.move');
 
     // باید قبل از resource بیاد
     Route::post('/tasks/reorder', [TaskController::class, 'reorder'])->name('tasks.reorder');
