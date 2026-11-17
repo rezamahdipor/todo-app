@@ -13,6 +13,7 @@ class TaskController extends Controller
     {
         $tasks = $request->user()
             ->tasks()
+            ->with('subtasks')
             ->orderBy('position')
             ->orderByDesc('id')
             ->get();
@@ -22,7 +23,16 @@ class TaskController extends Controller
             ->orderBy('id')
             ->get(['id', 'name', 'color']);
 
-        return view('tasks.index', compact('tasks', 'categories'));
+        // زیرتسک‌ها به تفکیک شماره‌ی کار، برای فرستادن به جاوااسکریپت
+        $subtasksByTask = $tasks->mapWithKeys(fn ($task) => [
+            $task->id => $task->subtasks->map(fn ($sub) => [
+                'id'      => $sub->id,
+                'title'   => $sub->title,
+                'is_done' => $sub->is_done,
+            ])->values(),
+        ]);
+
+        return view('tasks.index', compact('tasks', 'categories', 'subtasksByTask'));
     }
 
     public function store(Request $request)
@@ -36,7 +46,7 @@ class TaskController extends Controller
 
         $data['priority'] = $data['priority'] ?? 'medium';
 
-        // تسک جدید بالای لیست: یکی کمتر از کوچک‌ترین position
+        // کار جدید بالای لیست قرار می‌گیره: کمترین position منهای ۱
         $min = $request->user()->tasks()->min('position');
         $data['position'] = is_null($min) ? 0 : $min - 1;
 
@@ -61,7 +71,7 @@ class TaskController extends Controller
             'due_date'    => 'sometimes|nullable|date_format:Y-m-d',
         ]);
 
-        // زمان انجام شدن: فقط وقتی وضعیت واقعاً عوض شده
+        // اگه وضعیت انجام‌شدن عوض شد، زمان انجامش رو ثبت یا پاک می‌کنیم
         if (array_key_exists('is_done', $data) && (bool) $data['is_done'] !== $task->is_done) {
             $data['completed_at'] = $data['is_done'] ? now() : null;
         }
@@ -109,7 +119,7 @@ class TaskController extends Controller
         return response()->json(['ok' => true]);
     }
 
-    // فقط دسته‌های خود کاربر مجازن
+    // قانونی که می‌گه دسته‌بندی باید مال خود کاربر باشه
     private function ownCategory(Request $request)
     {
         return Rule::exists('categories', 'id')->where('user_id', $request->user()->id);

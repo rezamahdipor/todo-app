@@ -89,7 +89,7 @@
         <button type="button" class="filter-btn" data-filter="done">انجام‌شده</button>
     </div>
 
-    <p class="tip">💡 دابل‌کلیک روی عنوان = ویرایش. کلیک روی نشان دسته یا اولویت = تغییر. کلیک روی تاریخ = تقویم. دستگیره‌ی ⋮⋮ = جابه‌جایی.</p>
+    <p class="tip">💡 دابل‌کلیک روی عنوان = ویرایش. کلیک روی نشان دسته یا اولویت = تغییر. کلیک روی تاریخ = تقویم. دستگیره‌ی ⋮⋮ = جابه‌جایی. نشان ☑ = زیرتسک‌ها.</p>
 
     <ul id="task-list" class="task-list">
         @forelse ($tasks as $task)
@@ -149,6 +149,8 @@
 @push('scripts')
     <script>
         window.APP_CATEGORIES = @json($categories);
+        window.APP_SUBTASKS = @json($subtasksByTask);
     </script>
     <script src="{{ asset('js/app.js') }}?v={{ filemtime(public_path('js/app.js')) }}"></script>
+    <script src="{{ asset('js/subtasks.js') }}?v={{ filemtime(public_path('js/subtasks.js')) }}"></script>
 @endpush
