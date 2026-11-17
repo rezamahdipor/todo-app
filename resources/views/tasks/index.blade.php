@@ -83,19 +83,20 @@
         </form>
     </details>
 
-    {{-- دسته‌ها: فیلتر + ساخت دسته‌ی جدید --}}
+    {{-- دسته‌ها و ساخت دسته‌ی جدید داخل یک کشوی بازشونده --}}
     <div class="category-bar">
-        <div id="category-chips" class="category-chips">
-            <button type="button" class="cat-chip active" data-category-id="all">همه دسته‌ها</button>
-        </div>
-
         <details class="category-create-panel">
             <summary class="category-create-toggle">
                 <span class="category-create-icon" aria-hidden="true">＋</span>
-                <span>ساخت دسته جدید</span>
-                <span class="category-create-hint">برای نمایش فرم کلیک کن</span>
+                <span>دسته‌ها و ساخت دسته جدید</span>
+                <span class="category-create-hint">برای نمایش دسته‌ها کلیک کن</span>
                 <span class="category-create-chevron" aria-hidden="true">⌄</span>
             </summary>
+
+            <div id="category-chips" class="category-chips">
+                <button type="button" class="cat-chip active" data-category-id="all">همه دسته‌ها</button>
+            </div>
+
             <form id="category-form" action="{{ route('categories.store') }}" method="POST" class="category-form">
                 @csrf
                 <input type="text" name="name" placeholder="نام دسته را وارد کن..." maxlength="40" required>
