@@ -2,6 +2,10 @@ const token = document.querySelector('meta[name="csrf-token"]').content;
 const list = document.getElementById('task-list');
 const form = document.getElementById('add-form');
 const prioritySelect = document.getElementById('priority-select');
+const categorySelect = document.getElementById('category-select');
+const addDue = document.getElementById('add-due');
+const categoryForm = document.getElementById('category-form');
+const categoryChips = document.getElementById('category-chips');
 
 // ========== اولویت‌ها ==========
 const PRIORITY_ORDER = ['low', 'medium', 'high'];
@@ -52,6 +56,11 @@ function showToast(message, type = 'success', duration = 3000) {
     setTimeout(close, duration);
 }
 
+// اولین پیام خطای اعتبارسنجی سرور
+function firstError(err) {
+    return Object.values(err?.errors ?? {})[0]?.[0] ?? 'خطایی رخ داد.';
+}
+
 // ========== کانفتی 🎉 ==========
 const CONFETTI_COLORS = ['#6366f1', '#ec4899', '#22d3ee', '#f59e0b', '#22c55e', '#ef4444'];
 const CONFETTI_EMOJIS = ['💗', '💕', '🎀', '🌸', '✨', '💖'];
@@ -95,6 +104,126 @@ function launchConfetti() {
     setTimeout(() => layer.remove(), 5000);
 }
 
+// ========== دسته‌ها ==========
+let categories = window.APP_CATEGORIES ?? [];
+let currentCategory = 'all';
+
+const findCategory = (id) => categories.find((c) => String(c.id) === String(id));
+
+function renderCategory(li) {
+    const badge = li.querySelector('.cat-badge');
+    const cat = findCategory(li.dataset.category);
+
+    if (cat) {
+        badge.textContent = cat.name;
+        badge.style.setProperty('--cat', cat.color);
+        badge.classList.remove('empty');
+    } else {
+        li.dataset.category = '';
+        badge.textContent = 'بدون دسته';
+        badge.style.removeProperty('--cat');
+        badge.classList.add('empty');
+    }
+}
+
+function addCategoryChip(cat) {
+    const wrap = document.createElement('span');
+    wrap.className = 'cat-chip-wrap';
+    wrap.dataset.categoryId = cat.id;
+
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'cat-chip';
+    chip.dataset.categoryId = cat.id;
+    chip.style.setProperty('--cat', cat.color);
+    chip.textContent = cat.name;
+
+    const del = document.createElement('button');
+    del.type = 'button';
+    del.className = 'cat-del';
+    del.title = 'حذف دسته';
+    del.setAttribute('aria-label', `حذف دسته ${cat.name}`);
+    del.textContent = '×';
+
+    wrap.append(chip, del);
+    categoryChips.append(wrap);
+}
+
+function addCategoryOption(cat) {
+    const option = document.createElement('option');
+    option.value = cat.id;
+    option.textContent = cat.name;
+    categorySelect.append(option);
+}
+
+function setCategoryFilter(id) {
+    currentCategory = String(id);
+
+    categoryChips.querySelectorAll('.cat-chip').forEach((chip) => {
+        chip.classList.toggle('active', chip.dataset.categoryId === currentCategory);
+    });
+
+    applyFilter();
+}
+
+// ========== تاریخ سررسید ==========
+const DAY_MS = 86400000;
+
+function parseLocalDate(str) {
+    const [y, m, d] = str.split('-').map(Number);
+    return new Date(y, m - 1, d);
+}
+
+function daysFromToday(str) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return Math.round((parseLocalDate(str) - today) / DAY_MS);
+}
+
+function dueLabel(str) {
+    const diff = daysFromToday(str);
+    const fa = (n) => n.toLocaleString('fa-IR');
+
+    if (diff === 0) return 'امروز';
+    if (diff === 1) return 'فردا';
+    if (diff === -1) return 'دیروز';
+    if (diff < 0) return `${fa(Math.abs(diff))} روز گذشته`;
+    if (diff <= 7) return `${fa(diff)} روز دیگر`;
+
+    return parseLocalDate(str).toLocaleDateString('fa-IR', { month: 'long', day: 'numeric' });
+}
+
+function renderDue(li) {
+    const badge = li.querySelector('.due-badge');
+    const text = badge.querySelector('.due-text');
+    const input = badge.querySelector('.due-input');
+    const due = li.dataset.due || '';
+
+    input.value = due;
+    badge.classList.remove('empty', 'overdue', 'today', 'soon');
+
+    if (!due) {
+        text.textContent = '📅 تاریخ';
+        badge.classList.add('empty');
+        return;
+    }
+
+    text.textContent = '📅 ' + dueLabel(due);
+
+    // رنگ هشدار فقط برای کارهای انجام‌نشده
+    if (li.dataset.done !== '1') {
+        const diff = daysFromToday(due);
+        if (diff < 0) badge.classList.add('overdue');
+        else if (diff === 0) badge.classList.add('today');
+        else if (diff <= 2) badge.classList.add('soon');
+    }
+}
+
+function renderTaskMeta(li) {
+    renderCategory(li);
+    renderDue(li);
+}
+
 // ========== فیلتر، جستجو، شمارنده و نوار پیشرفت ==========
 let currentFilter = 'all';
 let searchQuery = '';
@@ -120,8 +249,11 @@ function applyFilter() {
             (currentFilter === 'done' && isDone) ||
             (currentFilter === 'active' && !isDone);
 
+        const matchesCategory =
+            currentCategory === 'all' || li.dataset.category === currentCategory;
+
         const matchesSearch = q === '' || title.includes(q);
-        const show = matchesFilter && matchesSearch;
+        const show = matchesFilter && matchesCategory && matchesSearch;
 
         li.style.display = show ? '' : 'none';
         if (show) visible++;
@@ -212,7 +344,6 @@ function currentOrder() {
     return [...list.querySelectorAll('.task')].map((li) => Number(li.dataset.id));
 }
 
-// آخرین ترتیبی که روی سرور ذخیره شده
 let savedOrder = currentOrder();
 let saveTimer = null;
 
@@ -242,7 +373,6 @@ function scheduleSave() {
     saveTimer = setTimeout(saveOrder, 400);
 }
 
-// نزدیک‌ترین تسک قابل‌دیدن قبل (-1) یا بعد (1)
 function visibleSibling(li, dir) {
     let el = dir < 0 ? li.previousElementSibling : li.nextElementSibling;
 
@@ -261,7 +391,6 @@ function middleY(el) {
     return r.top + r.height / 2;
 }
 
-// کشیدن با موس یا لمس
 list.addEventListener('pointerdown', (e) => {
     const handle = e.target.closest('.drag-handle');
     if (!handle) return;
@@ -278,12 +407,9 @@ list.addEventListener('pointerdown', (e) => {
     function onMove(ev) {
         const y = ev.clientY;
 
-        // اسکرول خودکار نزدیک لبه‌ها
         if (y < 80) window.scrollBy(0, -12);
         if (y > window.innerHeight - 80) window.scrollBy(0, 12);
 
-        // به‌جای جابه‌جا کردن خود li، همسایه رو جابه‌جا می‌کنیم
-        // تا المانی که کاربر داره می‌کشه هیچ‌وقت از DOM بیرون نره
         let prev = visibleSibling(li, -1);
         while (prev && y < middleY(prev)) {
             li.after(prev);
@@ -313,7 +439,6 @@ list.addEventListener('pointerdown', (e) => {
     document.addEventListener('pointercancel', onEnd);
 });
 
-// جابه‌جایی با کیبورد: فلش بالا و پایین روی دستگیره
 list.addEventListener('keydown', (e) => {
     const handle = e.target.closest('.drag-handle');
     if (!handle) return;
@@ -335,7 +460,7 @@ list.addEventListener('keydown', (e) => {
     scheduleSave();
 });
 
-// ========== ساخت آیتم لیست (دستگیره + چک‌باکس گرد + نشان اولویت) ==========
+// ========== ساخت آیتم لیست ==========
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 function createCheckButton(isDone) {
@@ -375,13 +500,42 @@ function createTaskElement(task) {
     li.className = 'task' + (task.is_done ? ' done' : '');
     li.dataset.id = task.id;
     li.dataset.done = task.is_done ? 1 : 0;
+    li.dataset.category = task.category_id ?? '';
+    li.dataset.due = task.due_date ?? '';
 
     const handle = createDragHandle();
     const check = createCheckButton(task.is_done);
 
+    const main = document.createElement('div');
+    main.className = 'task-main';
+
     const title = document.createElement('span');
     title.className = 'title';
     title.textContent = task.title;
+
+    const meta = document.createElement('div');
+    meta.className = 'task-meta';
+
+    const catBadge = document.createElement('button');
+    catBadge.type = 'button';
+    catBadge.className = 'cat-badge empty';
+    catBadge.title = 'برای تغییر دسته کلیک کن';
+
+    const dueBadge = document.createElement('label');
+    dueBadge.className = 'due-badge empty';
+    dueBadge.title = 'تاریخ سررسید';
+
+    const dueText = document.createElement('span');
+    dueText.className = 'due-text';
+
+    const dueInput = document.createElement('input');
+    dueInput.type = 'date';
+    dueInput.className = 'due-input';
+    dueInput.setAttribute('aria-label', 'تاریخ سررسید');
+
+    dueBadge.append(dueText, dueInput);
+    meta.append(catBadge, dueBadge);
+    main.append(title, meta);
 
     const priority = document.createElement('button');
     priority.type = 'button';
@@ -397,7 +551,9 @@ function createTaskElement(task) {
     deleteBtn.textContent = 'حذف';
 
     actions.append(deleteBtn);
-    li.append(handle, check, title, priority, actions);
+    li.append(handle, check, main, priority, actions);
+
+    renderTaskMeta(li);
 
     return li;
 }
@@ -438,24 +594,91 @@ form.addEventListener('submit', async (e) => {
         const task = await request(form.action, 'POST', {
             title: input.value,
             priority: prioritySelect.value,
+            category_id: categorySelect.value || null,
+            due_date: addDue.value || null,
         });
 
         list.querySelector('.empty')?.remove();
         list.prepend(createTaskElement(task));
 
-        // سرور تسک جدید رو بالای لیست گذاشته
         savedOrder.unshift(task.id);
 
         input.value = '';
         prioritySelect.value = 'medium';
+        addDue.value = '';
         refreshUI();
         showToast('کار اضافه شد');
     } catch (err) {
-        showToast(err.errors?.title?.[0] ?? 'خطایی رخ داد.', 'error');
+        showToast(firstError(err), 'error');
     }
 });
 
-// ========== تیک زدن، تغییر اولویت و حذف ==========
+// ========== ساخت و حذف دسته ==========
+categoryForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const nameInput = categoryForm.querySelector('input[name="name"]');
+    const colorInput = categoryForm.querySelector('input[name="color"]');
+
+    try {
+        const cat = await request(categoryForm.action, 'POST', {
+            name: nameInput.value,
+            color: colorInput.value,
+        });
+
+        categories.push(cat);
+        addCategoryChip(cat);
+        addCategoryOption(cat);
+
+        nameInput.value = '';
+        showToast('دسته ساخته شد');
+    } catch (err) {
+        showToast(firstError(err), 'error');
+    }
+});
+
+categoryChips.addEventListener('click', async (e) => {
+    const del = e.target.closest('.cat-del');
+    const chip = e.target.closest('.cat-chip');
+
+    if (del) {
+        const wrap = del.closest('.cat-chip-wrap');
+        const id = wrap.dataset.categoryId;
+
+        if (!confirm('این دسته حذف بشه؟ کارهاش پاک نمی‌شن و «بدون دسته» می‌شن.')) return;
+
+        try {
+            await request(`/categories/${id}`, 'DELETE');
+
+            categories = categories.filter((c) => String(c.id) !== String(id));
+            wrap.remove();
+            categorySelect.querySelector(`option[value="${id}"]`)?.remove();
+
+            list.querySelectorAll(`.task[data-category="${id}"]`).forEach((li) => {
+                li.dataset.category = '';
+                renderCategory(li);
+            });
+
+            if (currentCategory === String(id)) {
+                setCategoryFilter('all');
+            } else {
+                applyFilter();
+            }
+
+            showToast('دسته حذف شد');
+        } catch (err) {
+            showToast('خطایی رخ داد.', 'error');
+        }
+
+        return;
+    }
+
+    if (chip) {
+        setCategoryFilter(chip.dataset.categoryId);
+    }
+});
+
+// ========== تیک زدن، دسته، اولویت و حذف ==========
 list.addEventListener('click', async (e) => {
     const btn = e.target.closest('button');
     if (!btn) return;
@@ -473,6 +696,7 @@ list.addEventListener('click', async (e) => {
             li.dataset.done = task.is_done ? 1 : 0;
             li.classList.toggle('done', task.is_done);
             btn.setAttribute('aria-checked', task.is_done ? 'true' : 'false');
+            renderDue(li);
             refreshUI();
 
             const remaining = list.querySelectorAll('.task[data-done="0"]').length;
@@ -480,6 +704,23 @@ list.addEventListener('click', async (e) => {
                 launchConfetti();
                 showToast('همه‌ی کارها انجام شد 🎉', 'success', 4000);
             }
+        }
+
+        if (btn.classList.contains('cat-badge')) {
+            if (categories.length === 0) {
+                showToast('اول یه دسته بساز', 'error');
+                return;
+            }
+
+            const ids = [null, ...categories.map((c) => c.id)];
+            const current = li.dataset.category ? Number(li.dataset.category) : null;
+            const next = ids[(ids.indexOf(current) + 1) % ids.length];
+
+            const task = await request(url, 'PUT', { category_id: next });
+
+            li.dataset.category = task.category_id ?? '';
+            renderCategory(li);
+            applyFilter();
         }
 
         if (btn.classList.contains('priority')) {
@@ -506,6 +747,35 @@ list.addEventListener('click', async (e) => {
         }
     } catch (err) {
         showToast('خطایی رخ داد.', 'error');
+    }
+});
+
+// ========== تغییر تاریخ سررسید ==========
+// کلیک روی نشان تاریخ: باز کردن تقویم
+list.addEventListener('click', (e) => {
+    if (!e.target.classList.contains('due-input')) return;
+
+    try {
+        e.target.showPicker?.();
+    } catch (err) {}
+});
+
+list.addEventListener('change', async (e) => {
+    if (!e.target.classList.contains('due-input')) return;
+
+    const li = e.target.closest('.task');
+
+    try {
+        const task = await request(`/tasks/${li.dataset.id}`, 'PUT', {
+            due_date: e.target.value || null,
+        });
+
+        li.dataset.due = task.due_date ?? '';
+        renderDue(li);
+        showToast(task.due_date ? 'تاریخ ثبت شد' : 'تاریخ پاک شد');
+    } catch (err) {
+        renderDue(li);
+        showToast(firstError(err), 'error');
     }
 });
 
@@ -542,7 +812,7 @@ function startEdit(li) {
             titleEl.textContent = task.title;
             showToast('کار ویرایش شد');
         } catch (err) {
-            showToast(err.errors?.title?.[0] ?? 'خطایی رخ داد.', 'error');
+            showToast(firstError(err), 'error');
         }
 
         input.replaceWith(titleEl);
@@ -568,3 +838,11 @@ list.addEventListener('dblclick', (e) => {
         startEdit(e.target.closest('.task'));
     }
 });
+
+// ========== راه‌اندازی اولیه ==========
+categories.forEach((cat) => {
+    addCategoryChip(cat);
+    addCategoryOption(cat);
+});
+
+list.querySelectorAll('.task').forEach(renderTaskMeta);

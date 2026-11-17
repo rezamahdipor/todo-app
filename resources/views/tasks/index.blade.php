@@ -38,18 +38,42 @@
         </div>
     </div>
 
+    {{-- فرم افزودن --}}
     <form id="add-form" action="{{ route('tasks.store') }}" method="POST" class="add-form">
         @csrf
-        <input type="text" name="title" placeholder="امروز چه کاری داری؟" value="{{ old('title') }}" required>
+        <div class="add-row">
+            <input type="text" name="title" placeholder="امروز چه کاری داری؟" value="{{ old('title') }}" required>
+            <button type="submit">افزودن</button>
+        </div>
 
-        <select name="priority" id="priority-select" aria-label="اولویت">
-            <option value="low">🔵 کم</option>
-            <option value="medium" selected>🟠 متوسط</option>
-            <option value="high">🔴 زیاد</option>
-        </select>
+        <div class="add-options">
+            <select name="priority" id="priority-select" aria-label="اولویت">
+                <option value="low">🔵 کم</option>
+                <option value="medium" selected>🟠 متوسط</option>
+                <option value="high">🔴 زیاد</option>
+            </select>
 
-        <button type="submit">افزودن</button>
+            <select name="category_id" id="category-select" aria-label="دسته">
+                <option value="">بدون دسته</option>
+            </select>
+
+            <input type="date" id="add-due" class="add-due" aria-label="تاریخ سررسید">
+        </div>
     </form>
+
+    {{-- دسته‌ها: فیلتر + ساخت دسته‌ی جدید --}}
+    <div class="category-bar">
+        <div id="category-chips" class="category-chips">
+            <button type="button" class="cat-chip active" data-category-id="all">همه دسته‌ها</button>
+        </div>
+
+        <form id="category-form" action="{{ route('categories.store') }}" method="POST" class="category-form">
+            @csrf
+            <input type="text" name="name" placeholder="دسته‌ی جدید..." maxlength="40" required>
+            <input type="color" name="color" value="#8b5cf6" aria-label="رنگ دسته">
+            <button type="submit" class="cat-add">+ دسته</button>
+        </form>
+    </div>
 
     {{-- جستجو --}}
     <div class="search-box">
@@ -62,13 +86,15 @@
         <button type="button" class="filter-btn" data-filter="done">انجام‌شده</button>
     </div>
 
-    <p class="tip">💡 دابل‌کلیک روی عنوان = ویرایش. کلیک روی نشان رنگی = تغییر اولویت. دستگیره‌ی ⋮⋮ رو بکش تا ترتیب عوض بشه.</p>
+    <p class="tip">💡 دابل‌کلیک روی عنوان = ویرایش. کلیک روی نشان دسته یا اولویت = تغییر. کلیک روی تاریخ = تقویم. دستگیره‌ی ⋮⋮ = جابه‌جایی.</p>
 
     <ul id="task-list" class="task-list">
         @forelse ($tasks as $task)
             <li class="task {{ $task->is_done ? 'done' : '' }}"
                 data-id="{{ $task->id }}"
-                data-done="{{ $task->is_done ? 1 : 0 }}">
+                data-done="{{ $task->is_done ? 1 : 0 }}"
+                data-category="{{ $task->category_id }}"
+                data-due="{{ $task->due_date?->format('Y-m-d') }}">
 
                 <button type="button"
                         class="drag-handle"
@@ -85,7 +111,18 @@
                     </svg>
                 </button>
 
-                <span class="title">{{ $task->title }}</span>
+                <div class="task-main">
+                    <span class="title">{{ $task->title }}</span>
+
+                    <div class="task-meta">
+                        <button type="button" class="cat-badge empty" title="برای تغییر دسته کلیک کن">بدون دسته</button>
+
+                        <label class="due-badge empty" title="تاریخ سررسید">
+                            <span class="due-text">📅 تاریخ</span>
+                            <input type="date" class="due-input" value="{{ $task->due_date?->format('Y-m-d') }}" aria-label="تاریخ سررسید">
+                        </label>
+                    </div>
+                </div>
 
                 <button type="button"
                         class="priority priority-{{ $task->priority }}"
@@ -107,5 +144,8 @@
 @endsection
 
 @push('scripts')
+    <script>
+        window.APP_CATEGORIES = @json($categories);
+    </script>
     <script src="{{ asset('js/app.js') }}?v={{ filemtime(public_path('js/app.js')) }}"></script>
 @endpush

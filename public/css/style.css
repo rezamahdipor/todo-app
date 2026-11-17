@@ -1629,6 +1629,300 @@ body.is-dragging .task {
         padding: 2px 12px;
     }
 }
+
+/* ==========================================================
+   فرم افزودن: دو ردیف
+   ========================================================== */
+.add-form {
+    flex-direction: column;
+    gap: 8px;
+}
+
+.add-row {
+    display: flex;
+    gap: 8px;
+}
+
+.add-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.add-options select {
+    flex: 1;
+    min-width: 110px;
+    padding: 8px 12px;
+}
+
+.add-options input[type="date"] {
+    flex: 1;
+    min-width: 130px;
+    padding: 8px 12px;
+    font: inherit;
+    font-size: 0.85rem;
+    color: var(--text);
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+}
+
+.add-options input[type="date"]:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.25);
+}
+
+/* ==========================================================
+   نوار دسته‌ها
+   ========================================================== */
+.category-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0 0 12px;
+}
+
+.category-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.cat-chip-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.cat-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    box-shadow: none;
+    transform: none;
+}
+
+/* نقطه‌ی رنگی دسته */
+.cat-chip::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--cat, transparent);
+}
+
+.cat-chip[data-category-id="all"]::before {
+    display: none;
+}
+
+.cat-chip:hover {
+    background: var(--glass-strong);
+    border-color: var(--primary);
+    box-shadow: none;
+    transform: none;
+}
+
+.cat-chip:active {
+    transform: scale(0.96);
+    box-shadow: none;
+}
+
+.cat-chip.active {
+    color: #fff;
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.cat-del {
+    padding: 0 6px;
+    font-size: 1rem;
+    line-height: 1;
+    color: var(--muted);
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    transform: none;
+}
+
+.cat-del:hover {
+    color: var(--danger);
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+}
+
+.cat-del:active {
+    box-shadow: none;
+    transform: none;
+}
+
+.category-form {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.category-form input[type="text"] {
+    flex: 1;
+    min-width: 0;
+    padding: 7px 12px;
+    font-size: 0.85rem;
+}
+
+.category-form input[type="color"] {
+    flex-shrink: 0;
+    width: 40px;
+    height: 36px;
+    padding: 2px;
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.cat-add {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+}
+
+/* ==========================================================
+   محتوای تسک: عنوان + نشان‌ها
+   ========================================================== */
+.task-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.task-main .title {
+    flex: none;
+}
+
+.task-main .edit-input {
+    flex: none;
+    width: 100%;
+}
+
+.task-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.task.done .task-meta {
+    opacity: 0.55;
+}
+
+/* نشان دسته */
+.cat-badge {
+    padding: 2px 10px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--cat, var(--muted));
+    background: color-mix(in srgb, var(--cat, var(--muted)) 16%, transparent);
+    border: 1px solid color-mix(in srgb, var(--cat, var(--muted)) 45%, transparent);
+    border-radius: 999px;
+    box-shadow: none;
+    transform: none;
+}
+
+.cat-badge:hover {
+    background: color-mix(in srgb, var(--cat, var(--muted)) 28%, transparent);
+    box-shadow: none;
+    transform: scale(1.06);
+}
+
+.cat-badge:active {
+    box-shadow: none;
+    transform: scale(0.95);
+}
+
+.cat-badge.empty {
+    font-weight: 500;
+    border-style: dashed;
+    opacity: 0.85;
+}
+
+/* نشان تاریخ: یه برچسب که روش یه input تاریخ نامرئی افتاده */
+.due-badge {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 10px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--muted);
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.due-badge:hover {
+    transform: scale(1.06);
+}
+
+.due-badge.empty {
+    font-weight: 500;
+    border-style: dashed;
+}
+
+.due-badge.soon {
+    color: #0369a1;
+    background: rgba(14, 165, 233, 0.15);
+    border-color: rgba(14, 165, 233, 0.45);
+}
+
+.due-badge.today {
+    color: #b45309;
+    background: rgba(245, 158, 11, 0.18);
+    border-color: rgba(245, 158, 11, 0.5);
+}
+
+.due-badge.overdue {
+    color: #b91c1c;
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.5);
+}
+
+.due-input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    transform: none !important;
+}
+
+/* تم تاریک: رنگ‌های روشن‌تر برای خوانایی */
+:root[data-theme="dark"] .due-badge.soon    { color: #7dd3fc; }
+:root[data-theme="dark"] .due-badge.today   { color: #fcd34d; }
+:root[data-theme="dark"] .due-badge.overdue { color: #fca5a5; }
+
+/* تم صورتی */
+:root[data-theme="pink"] .category-form input[type="text"] {
+    padding: 7px 14px;
+}
+
+@media (max-width: 480px) {
+    .add-options select,
+    .add-options input[type="date"] {
+        flex-basis: 100%;
+    }
+}
 /* ==========================================================
    ریسپانسیو
    ========================================================== */
