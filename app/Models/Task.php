@@ -7,11 +7,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Task extends Model
 {
-    protected $fillable = ['title', 'is_done', 'priority', 'position', 'category_id', 'due_date'];
+    protected $fillable = [
+        'title', 'is_done', 'priority', 'position',
+        'category_id', 'due_date', 'completed_at',
+    ];
 
     protected $casts = [
-        'is_done'  => 'boolean',
-        'due_date' => 'date:Y-m-d',
+        'is_done'      => 'boolean',
+        'due_date'     => 'date:Y-m-d',
+        'completed_at' => 'datetime',
     ];
 
     public function user(): BelongsTo

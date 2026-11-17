@@ -9,10 +9,13 @@
 
     <div class="topbar">
         <span>سلام {{ auth()->user()->name }} 👋</span>
-        <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit" class="btn-logout">خروج</button>
-        </form>
+        <div class="topbar-actions">
+            <a href="{{ route('stats') }}" class="topbar-link">📊 آمار</a>
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="btn-logout">خروج</button>
+            </form>
+        </div>
     </div>
 
     <h1>لیست کارهای من</h1>

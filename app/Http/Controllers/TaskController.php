@@ -61,6 +61,11 @@ class TaskController extends Controller
             'due_date'    => 'sometimes|nullable|date_format:Y-m-d',
         ]);
 
+        // زمان انجام شدن: فقط وقتی وضعیت واقعاً عوض شده
+        if (array_key_exists('is_done', $data) && (bool) $data['is_done'] !== $task->is_done) {
+            $data['completed_at'] = $data['is_done'] ? now() : null;
+        }
+
         $task->update($data);
 
         if ($request->expectsJson()) {
