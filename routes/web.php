@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\HabitController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\SubtaskController;
 use App\Http\Controllers\TaskController;
@@ -27,6 +28,12 @@ Route::middleware('auth')->group(function () {
     // کانبان
     Route::get('/board', [BoardController::class, 'index'])->name('board');
     Route::post('/board/move', [BoardController::class, 'move'])->name('board.move');
+
+    // عادت‌ها
+    Route::get('/habits', [HabitController::class, 'index'])->name('habits');
+    Route::post('/habits', [HabitController::class, 'store'])->name('habits.store');
+    Route::post('/habits/{habit}/toggle', [HabitController::class, 'toggle'])->name('habits.toggle');
+    Route::delete('/habits/{habit}', [HabitController::class, 'destroy'])->name('habits.destroy');
 
     // باید قبل از resource بیاد
     Route::post('/tasks/reorder', [TaskController::class, 'reorder'])->name('tasks.reorder');

@@ -16,6 +16,7 @@
     <div class="topbar">
         <span>سلام {{ auth()->user()->name }} 👋</span>
         <div class="topbar-actions">
+            <a href="{{ route('habits') }}" class="topbar-link">🔥 عادت‌ها</a>
             <a href="{{ route('board') }}" class="topbar-link">🗂️ کانبان</a>
             <a href="{{ route('stats') }}" class="topbar-link">📊 آمار</a>
             <form action="{{ route('logout') }}" method="POST">

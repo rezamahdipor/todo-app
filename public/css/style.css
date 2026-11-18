@@ -3357,6 +3357,228 @@ body.is-dragging .task {
     border: 2px solid #f9a8d4;
     border-radius: 999px;
 }
+
+/* ==========================================================
+   صفحه‌ی عادت‌ها
+   ========================================================== */
+.container.container-habits {
+    max-width: 980px;
+    padding: 28px;
+}
+
+.container.container-habits:hover {
+    transform: none;
+}
+
+.stats-grid.hb-stats {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.hb-form .add-options input[type="color"] {
+    flex-shrink: 0;
+    width: 48px;
+    height: 38px;
+    padding: 2px;
+    cursor: pointer;
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+}
+
+.hb-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-top: 14px;
+}
+
+.hb-list .empty {
+    grid-column: 1 / -1;
+}
+
+.hb-card {
+    padding: 14px;
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.hb-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--hc);
+    box-shadow: var(--shadow-hover);
+}
+
+.hb-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.hb-icon {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    font-size: 1.4rem;
+    background: color-mix(in srgb, var(--hc) 20%, transparent);
+    border: 1px solid color-mix(in srgb, var(--hc) 50%, transparent);
+    border-radius: 14px;
+}
+
+.hb-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.hb-name {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hb-meta {
+    font-size: 0.74rem;
+    color: var(--muted);
+}
+
+/* دکمه‌های داخل کارت: ریست سبک دکمه‌های سه‌بعدی */
+.hb-cell,
+.hb-today,
+.hb-del {
+    box-shadow: none;
+    transform: none;
+}
+
+.hb-today {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    font-size: 1.1rem;
+    color: transparent;
+    background: transparent;
+    border: 2px solid var(--hc);
+    border-radius: 50%;
+    transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.hb-today:hover {
+    background: color-mix(in srgb, var(--hc) 20%, transparent);
+    box-shadow: none;
+    transform: scale(1.1);
+}
+
+.hb-today:active {
+    box-shadow: none;
+    transform: scale(0.92);
+}
+
+.hb-today[aria-pressed="true"],
+.hb-today[aria-pressed="true"]:hover {
+    color: #fff;
+    background: var(--hc);
+}
+
+.hb-del {
+    flex-shrink: 0;
+    padding: 0 8px;
+    font-size: 1.1rem;
+    line-height: 1;
+    color: var(--muted);
+    background: transparent;
+}
+
+.hb-del:hover,
+.hb-del:active {
+    color: var(--danger);
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+}
+
+.hb-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.hb-wd {
+    text-align: center;
+    font-size: 0.68rem;
+    color: var(--muted);
+}
+
+.hb-cell {
+    min-width: 0;
+    padding: 0;
+    aspect-ratio: 1;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.hb-cell:hover,
+.hb-cell:active {
+    background: color-mix(in srgb, var(--hc) 30%, transparent);
+    box-shadow: none;
+    transform: scale(1.12);
+}
+
+.hb-cell.on,
+.hb-cell.on:hover,
+.hb-cell.on:active {
+    background: var(--hc);
+    border-color: var(--hc);
+}
+
+.hb-cell.today {
+    outline: 2px solid var(--primary);
+    outline-offset: 1px;
+}
+
+.hb-cell.future {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* تم صورتی */
+:root[data-theme="pink"] .hb-card {
+    border-style: dashed;
+    border-color: rgba(244, 114, 182, 0.55);
+    border-radius: 24px;
+}
+
+:root[data-theme="pink"] .hb-cell {
+    border-radius: 50%;
+}
+
+@media (max-width: 760px) {
+    .hb-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .container.container-habits {
+        padding: 18px;
+    }
+
+    .hb-stats .stat-card {
+        padding: 10px 4px;
+    }
+
+    .hb-stats .stat-value {
+        font-size: 1.3rem;
+    }
+}
 /* ==========================================================
    ریسپانسیو
    ========================================================== */
