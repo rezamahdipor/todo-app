@@ -64,6 +64,7 @@
             </svg>
         </div>
     </div>
+        @include('partials.side-menu')
 </section>
     <section class="section">
         <h2>این برنامه چی کار می‌کنه؟</h2>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\CategoryController;
@@ -22,6 +23,13 @@ Route::middleware('guest')->group(function () {
 // فقط کاربرهای وارد شده
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // داشبورد، حساب کاربری و سازنده
+    Route::view('/dashboard', 'dashboard')->name('dashboard');
+    Route::view('/creator', 'creator')->name('creator');
+    Route::get('/account', [AccountController::class, 'show'])->name('account');
+    Route::put('/account/profile', [AccountController::class, 'updateProfile'])->name('account.profile');
+    Route::put('/account/password', [AccountController::class, 'updatePassword'])->name('account.password');
 
     Route::get('/stats', [StatsController::class, 'index'])->name('stats');
 
