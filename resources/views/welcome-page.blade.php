@@ -97,3 +97,7 @@
 
     @include('partials.live-stats')
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/wheel-hover.js') }}?v={{ filemtime(public_path('js/wheel-hover.js')) }}"></script>
+@endpush

@@ -4379,6 +4379,85 @@ body.menu-open {
 :root[data-theme="pink"] .wc-row {
     border-radius: 999px;
 }
+
+/* ==========================================================
+   افکت هاور چرخ تم (تیکه بالا میاد، صفحه تار می‌شه، اسم با خط)
+   ========================================================== */
+.theme-wheel-wrap {
+    position: relative;
+    z-index: 5;
+}
+
+.theme-wheel [data-theme-choice].hov {
+    transform: translate(var(--tx, 0px), var(--ty, 0px)) scale(1.03);
+    filter: brightness(1.12) saturate(1.15) drop-shadow(0 6px 8px rgba(0, 0, 0, 0.35));
+}
+
+.theme-wheel [data-theme-choice].active.hov {
+    transform: translate(var(--tx, 0px), var(--ty, 0px)) scale(1.11);
+}
+
+.wheel-dimmable {
+    transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+.wheel-dim {
+    filter: blur(6px);
+    opacity: 0.4;
+}
+
+.wheel-line {
+    position: absolute;
+    z-index: 1;
+    height: 2px;
+    margin-top: -1px;
+    background: var(--wc, var(--primary));
+    border-radius: 2px;
+    transform-origin: 0 50%;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.wheel-line::before {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    margin-top: -4px;
+    background: var(--wc, var(--primary));
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85);
+}
+
+.wheel-tip {
+    position: absolute;
+    z-index: 2;
+    padding: 5px 18px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    white-space: nowrap;
+    color: var(--text);
+    background: var(--bg1);
+    border: 2px solid var(--wc, var(--primary));
+    border-radius: 999px;
+    box-shadow: var(--shadow);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0.9);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.theme-wheel-wrap.tip-on .wheel-line {
+    opacity: 1;
+}
+
+.theme-wheel-wrap.tip-on .wheel-tip {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
 /* ==========================================================
    ریسپانسیو
    ========================================================== */
