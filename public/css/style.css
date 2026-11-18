@@ -3988,6 +3988,397 @@ body.menu-open {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* ==========================================================
+   تقویم شمسی کارها
+   ========================================================== */
+.cal {
+    margin-top: 16px;
+    padding: 20px;
+}
+
+.cal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.cal-head h2 {
+    margin: 0;
+    font-size: 1.05rem;
+}
+
+.cal-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cal-title {
+    min-width: 130px;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.cal-btn {
+    padding: 4px 12px;
+    font-size: 0.85rem;
+    color: var(--text);
+    background: var(--glass);
+    border: 1px solid var(--border);
+    box-shadow: none;
+    transform: none;
+}
+
+.cal-btn:hover {
+    background: var(--glass);
+    border-color: var(--primary);
+    box-shadow: none;
+    transform: none;
+}
+
+.cal-btn:active {
+    box-shadow: none;
+    transform: scale(0.95);
+}
+
+.cal-today {
+    color: #fff;
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.cal-today:hover {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+.cal-sum {
+    margin: 0 0 12px;
+    font-size: 0.82rem;
+    color: var(--muted);
+}
+
+.cal-week,
+.cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 6px;
+}
+
+.cal-week {
+    margin-bottom: 6px;
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--muted);
+}
+
+.cal-week .fri,
+.cal-cell.fri .cal-dnum > span {
+    color: var(--danger);
+}
+
+.cal-cell {
+    min-height: 116px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cal-cell:hover {
+    border-color: var(--primary);
+}
+
+.cal-cell.out {
+    opacity: 0.45;
+}
+
+.cal-cell.today {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 35%, transparent);
+}
+
+.cal-cell.over,
+.cal-undated.over {
+    border-color: var(--primary);
+    background: color-mix(in srgb, var(--primary) 14%, transparent);
+}
+
+.cal-dnum {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.cal-cell.today .cal-dnum > span:first-child {
+    padding: 0 7px;
+    color: #fff;
+    background: var(--primary);
+    border-radius: 999px;
+}
+
+.cal-add {
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    font-size: 1rem;
+    line-height: 1;
+    color: var(--primary);
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    box-shadow: none;
+    transform: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.cal-cell:hover .cal-add,
+.cal-add:focus-visible {
+    opacity: 1;
+}
+
+.cal-add:hover {
+    color: #fff;
+    background: var(--primary);
+    box-shadow: none;
+    transform: none;
+}
+
+.cal-add:active {
+    box-shadow: none;
+    transform: none;
+}
+
+@media (hover: none) {
+    .cal-add {
+        opacity: 0.7;
+    }
+}
+
+.cal-chip {
+    display: block;
+    padding: 2px 7px;
+    overflow: hidden;
+    font-size: 0.72rem;
+    color: var(--text);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: color-mix(in srgb, var(--c) 18%, transparent);
+    border-inline-start: 3px solid var(--c);
+    border-radius: 8px;
+    cursor: grab;
+    user-select: none;
+    transition: transform 0.15s ease, opacity 0.2s ease;
+}
+
+.cal-chip:hover {
+    transform: translateY(-1px);
+}
+
+.cal-chip.done {
+    opacity: 0.55;
+    text-decoration: line-through;
+}
+
+.cal-chip.late {
+    background: color-mix(in srgb, var(--danger) 18%, transparent);
+}
+
+.cal-chip.dragging {
+    opacity: 0.4;
+}
+
+.cal-more {
+    padding: 0;
+    font-size: 0.7rem;
+    text-align: start;
+    color: var(--muted);
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    transform: none;
+}
+
+.cal-more:hover {
+    color: var(--primary);
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+}
+
+.cal-more:active {
+    box-shadow: none;
+    transform: none;
+}
+
+.cal-undated {
+    margin-top: 12px;
+    padding: 10px 12px;
+    border: 1px dashed var(--border);
+    border-radius: 14px;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.cal-undated h3 {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+}
+
+.cal-und-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.cal-und-list .cal-chip {
+    max-width: 220px;
+}
+
+.cal-note {
+    font-size: 0.78rem;
+    color: var(--muted);
+}
+
+.task.flash {
+    animation: calFlash 1.2s ease;
+}
+
+@keyframes calFlash {
+    30% {
+        border-color: var(--primary);
+        box-shadow: var(--shadow-hover);
+        transform: scale(1.02);
+    }
+}
+
+/* تم صورتی */
+:root[data-theme="pink"] .cal-cell {
+    border-radius: 18px;
+}
+
+:root[data-theme="pink"] .cal-chip {
+    border-radius: 999px;
+}
+
+:root[data-theme="pink"] .cal-undated {
+    border-radius: 22px;
+}
+
+@media (max-width: 700px) {
+    .cal {
+        padding: 12px;
+    }
+
+    .cal-cell {
+        min-height: 78px;
+        padding: 4px;
+    }
+
+    .cal-chip {
+        padding: 1px 4px;
+        font-size: 0.62rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .cal-grid .cal-chip {
+        height: 7px;
+        padding: 0;
+        font-size: 0;
+        border-radius: 99px;
+    }
+}
+
+/* ==========================================================
+   ساعت کنار «سلام» و ساعت کشورها
+   ========================================================== */
+.tb-clock {
+    display: inline-block;
+    margin-inline-start: 8px;
+    padding: 2px 10px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--primary);
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-variant-numeric: tabular-nums;
+    cursor: default;
+}
+
+.wclock .wc-date {
+    margin: -4px 0 8px;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--muted);
+}
+
+.wc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.wc-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 8px;
+    font-size: 0.82rem;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    transition: background 0.2s ease;
+}
+
+.wc-row:hover {
+    background: var(--glass);
+}
+
+.wc-row.me {
+    background: color-mix(in srgb, var(--primary) 14%, transparent);
+    border-color: color-mix(in srgb, var(--primary) 40%, transparent);
+}
+
+.wc-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.wc-tm {
+    font-weight: 800;
+    color: var(--primary);
+    font-variant-numeric: tabular-nums;
+}
+
+.wc-off {
+    padding: 0 7px;
+    font-size: 0.66rem;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+}
+
+:root[data-theme="pink"] .wc-row {
+    border-radius: 999px;
+}
 /* ==========================================================
    ریسپانسیو
    ========================================================== */
