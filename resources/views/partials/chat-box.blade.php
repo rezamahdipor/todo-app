@@ -1,7 +1,8 @@
 <div class="chat" data-chat
      data-poll="{{ route('chat.poll') }}"
      data-send="{{ url('/chat') }}"
-     data-me="{{ auth()->id() }}">
+     data-me="{{ auth()->id() }}"
+     data-admin="{{ auth()->user()->is_admin ? 1 : 0 }}">
 
     <div class="chat-rooms" role="tablist" aria-label="اتاق‌ها">
         @foreach ([1 => '۱', 2 => '۲', 3 => '۳'] as $n => $label)

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BoardController;
@@ -12,6 +13,8 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\SubtaskController;
 use App\Http\Controllers\TaskController;
+use App\Http\Middleware\EnsureAdmin;
+use App\Http\Middleware\NotBanned;
 use App\Http\Middleware\TouchLastSeen;
 use Illuminate\Support\Facades\Route;
 
@@ -53,12 +56,27 @@ Route::middleware(['auth', TouchLastSeen::class])->group(function () {
         ->middleware('throttle:10,1')->name('account.avatar');
     Route::delete('/account/avatar', [AccountController::class, 'removeAvatar'])->name('account.avatar.remove');
 
+    // پنل مدیریت (فقط ادمین)
+    Route::middleware(EnsureAdmin::class)->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/', [AdminController::class, 'index'])->name('index');
+        Route::get('/users', [AdminController::class, 'users'])->name('users');
+        Route::post('/users/{user}/ban', [AdminController::class, 'toggleBan'])->name('users.ban');
+        Route::post('/users/{user}/admin', [AdminController::class, 'toggleAdmin'])->name('users.admin');
+        Route::get('/chat', [AdminController::class, 'chat'])->name('chat');
+        Route::get('/posts', [AdminController::class, 'posts'])->name('posts');
+        Route::post('/posts/{post}/hide', [AdminController::class, 'toggleHide'])->name('posts.hide');
+        Route::delete('/posts/{post}', [AdminController::class, 'destroyPost'])->name('posts.destroy');
+        Route::delete('/chat/{message}', [AdminController::class, 'deleteMessage'])->name('chat.delete');
+    });
+
     // نوشته‌های من (پنل شخصی)
     Route::get('/my/posts', [PostController::class, 'index'])->name('posts.index');
     Route::get('/my/posts/create', [PostController::class, 'create'])->name('posts.create');
-    Route::post('/my/posts', [PostController::class, 'store'])->middleware('throttle:20,1')->name('posts.store');
+    Route::post('/my/posts', [PostController::class, 'store'])
+        ->middleware(['throttle:20,1', NotBanned::class])->name('posts.store');
     Route::get('/my/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
-    Route::put('/my/posts/{post}', [PostController::class, 'update'])->middleware('throttle:20,1')->name('posts.update');
+    Route::put('/my/posts/{post}', [PostController::class, 'update'])
+        ->middleware(['throttle:20,1', NotBanned::class])->name('posts.update');
     Route::delete('/my/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
 
     Route::get('/stats', [StatsController::class, 'index'])->name('stats');
@@ -66,7 +84,8 @@ Route::middleware(['auth', TouchLastSeen::class])->group(function () {
     // چت عمومی
     Route::get('/chat', [ChatController::class, 'page'])->name('chat.page');
     Route::get('/chat/poll', [ChatController::class, 'poll'])->middleware('throttle:90,1')->name('chat.poll');
-    Route::post('/chat/{room}', [ChatController::class, 'send'])->whereNumber('room')->middleware('throttle:30,1')->name('chat.send');
+    Route::post('/chat/{room}', [ChatController::class, 'send'])->whereNumber('room')
+        ->middleware(['throttle:30,1', NotBanned::class])->name('chat.send');
 
     // کانبان
     Route::get('/board', [BoardController::class, 'index'])->name('board');

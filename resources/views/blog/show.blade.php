@@ -8,8 +8,7 @@
 
     <article class="post">
         @unless ($post->isPublished())
-            <div class="flash">👁️ این نوشته پیش‌نویسه و فقط خودت می‌بینیش.</div>
-        @endunless
+<div class="flash">{{ $post->hidden_at ? '🚫 این نوشته توسط مدیریت پنهان شده و برای بقیه دیده نمی‌شه.' : '👁️ این نوشته پیش‌نویسه و فقط خودت می‌بینیش.' }}</div>        @endunless
 
         <header class="post-head">
             <h1>{{ $post->title }}</h1>

@@ -27,7 +27,7 @@
         @forelse ($posts as $p)
             <div class="my-post">
                 <strong>{{ $p->title }}</strong>
-                <span class="badge {{ $p->isPublished() ? 'live' : '' }}">{{ $p->isPublished() ? 'منتشرشده' : 'پیش‌نویس' }}</span>
+                <span class="badge {{ $p->hidden_at ? 'bad' : ($p->isPublished() ? 'live' : '') }}">{{ $p->hidden_at ? 'پنهان توسط مدیریت' : ($p->isPublished() ? 'منتشرشده' : 'پیش‌نویس') }}</span>
 
                 @if ($p->isPublished())
                     <a href="{{ route('blog.show', [$p, $p->slug]) }}" class="topbar-link">مشاهده</a>

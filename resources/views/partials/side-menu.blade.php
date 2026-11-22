@@ -23,6 +23,10 @@
                 <strong>{{ auth()->user()->name }}</strong>
                 <span>{{ auth()->user()->email }}</span>
             </div>
+
+            @if (auth()->user()->is_admin)
+                <a href="{{ route('admin.index') }}" @class(['menu-admin', 'active' => request()->routeIs('admin.*')]) title="پنل مدیریت">🛡️ پنل ادمین</a>
+            @endif
         </div>
     @endauth
 

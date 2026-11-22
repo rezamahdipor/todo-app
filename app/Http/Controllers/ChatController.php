@@ -41,9 +41,13 @@ class ChatController extends Controller
             $latest[$r] = (int) ($rows[$r] ?? 0);
         }
 
+        // شماره‌ی پیام‌های موجود؛ کلاینت پیام‌های حذف‌شده رو از صفحه برمی‌داره
+        $alive = ChatMessage::where('room', $data['room'])->orderByDesc('id')->limit(60)->pluck('id');
+
         return response()->json([
             'messages' => $messages->map(fn ($m) => $this->payload($m))->values(),
             'latest'   => $latest,
+            'alive'    => $alive,
         ])->header('Cache-Control', 'no-store');
     }
 

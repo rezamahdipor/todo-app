@@ -9,6 +9,7 @@
     const POLL = box.dataset.poll;
     const SEND = box.dataset.send;
     const ME = box.dataset.me;
+    const ADMIN = box.dataset.admin === '1';
     const token = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
     const panel = document.getElementById('chat-panel'); // روی صفحه‌ی /chat نیست
@@ -22,6 +23,7 @@
     const errEl = box.querySelector('.chat-err');
     const tabs = [...box.querySelectorAll('.chat-room')];
     const timeFmt = new Intl.DateTimeFormat('fa-IR', { hour: '2-digit', minute: '2-digit' });
+    const EMPTY = 'هنوز پیامی نیست؛ اولین نفر باش 👋';
 
     const store = {
         get(k, f) { try { return JSON.parse(localStorage.getItem(k)) ?? f; } catch (e) { return f; } },
@@ -77,6 +79,14 @@
         const head = el('div', 'cm-head');
         head.append(el('strong', '', m.name), el('time', '', timeFmt.format(new Date(m.at))));
 
+        if (ADMIN) {
+            const del = el('button', 'cm-del', '🗑');
+            del.type = 'button';
+            del.title = 'حذف پیام (مدیر)';
+            del.setAttribute('aria-label', 'حذف پیام');
+            head.append(del);
+        }
+
         const body = el('div', 'cm-body');
         body.append(head, el('p', 'cm-text', m.body)); // textContent: امن در برابر HTML
 
@@ -96,6 +106,21 @@
 
         while (list.children.length > 200) list.firstElementChild.remove();
         if (stick) list.scrollTop = list.scrollHeight;
+    }
+
+    // پیام‌هایی که ادمین حذف کرده از صفحه برداشته می‌شن
+    function prune(alive) {
+        if (!Array.isArray(alive)) return;
+
+        const ids = new Set(alive.map(Number));
+        const min = alive.length ? Math.min(...ids) : Infinity;
+
+        list.querySelectorAll('.cm').forEach((row) => {
+            const id = Number(row.dataset.id);
+            if (!ids.has(id) && (alive.length === 0 || id >= min)) row.remove();
+        });
+
+        if (!list.querySelector('.cm')) setEmpty(EMPTY);
     }
 
     // ---------- نقطه‌ی قرمز پیام تازه ----------
@@ -138,7 +163,8 @@
 
             if (asked === room) {
                 append(d.messages);
-                if (last === 0) setEmpty('هنوز پیامی نیست؛ اولین نفر باش 👋');
+                prune(d.alive);
+                if (last === 0) setEmpty(EMPTY);
                 badges(d.latest);
             }
         } catch (e) {
@@ -208,6 +234,29 @@
             sending = false;
             sendBtn.disabled = false;
             input.focus();
+        }
+    });
+
+    // ---------- حذف پیام (فقط ادمین) ----------
+    list.addEventListener('click', async (e) => {
+        const b = e.target.closest('.cm-del');
+        if (!b) return;
+
+        const row = b.closest('.cm');
+        if (!confirm('این پیام برای همه حذف بشه؟')) return;
+
+        try {
+            const r = await fetch(`/admin/chat/${row.dataset.id}`, {
+                method: 'DELETE',
+                headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': token },
+            });
+
+            if (!r.ok) throw new Error();
+
+            row.remove();
+            if (!list.querySelector('.cm')) setEmpty(EMPTY);
+        } catch (err) {
+            showErr('حذف نشد؛ دوباره امتحان کن.');
         }
     });
 

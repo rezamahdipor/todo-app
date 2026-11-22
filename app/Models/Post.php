@@ -13,6 +13,7 @@ class Post extends Model
 
     protected $casts = [
         'published_at' => 'datetime',
+        'hidden_at'    => 'datetime',
     ];
 
     public function user(): BelongsTo
@@ -20,14 +21,19 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
+    // منتشرشده و پنهان‌نشده
     public function scopePublished(Builder $query): Builder
     {
-        return $query->whereNotNull('published_at')->where('published_at', '<=', now());
+        return $query->whereNotNull('published_at')
+            ->where('published_at', '<=', now())
+            ->whereNull('hidden_at');
     }
 
     public function isPublished(): bool
     {
-        return $this->published_at !== null && $this->published_at->lte(now());
+        return $this->hidden_at === null
+            && $this->published_at !== null
+            && $this->published_at->lte(now());
     }
 
     // اسلاگ فارسی (حروف و عددها می‌مونن، بقیه می‌شن خط تیره)

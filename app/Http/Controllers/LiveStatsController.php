@@ -18,7 +18,8 @@ class LiveStatsController extends Controller
         $data = Cache::remember('live-stats-v2', 10, function () {
             $published = fn () => DB::table('posts')
                 ->whereNotNull('published_at')
-                ->where('published_at', '<=', now());
+                ->where('published_at', '<=', now())
+                ->whereNull('hidden_at');
 
             return [
                 'online'     => DB::table('users')->where('last_seen_at', '>=', now()->subMinutes(5))->count(),

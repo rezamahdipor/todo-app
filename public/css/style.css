@@ -6657,6 +6657,371 @@ body.menu-open .chat-btn {
         padding: 24px 20px;
     }
 }
+
+/* ==========================================================
+   پنل مدیریت
+   ========================================================== */
+.container.container-admin {
+    max-width: 1000px;
+    padding: 28px;
+}
+
+.container.container-admin:hover {
+    transform: none;
+}
+
+.adm-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 14px;
+}
+
+.adm-tabs a {
+    padding: 7px 16px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.adm-tabs a:hover {
+    text-decoration: none;
+    border-color: var(--primary);
+}
+
+.adm-tabs a.on {
+    color: #fff;
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.adm-stats {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.adm-search {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.adm-search input {
+    flex: 1;
+    min-width: 0;
+}
+
+.adm-scroll {
+    overflow-x: auto;
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+}
+
+.adm-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.adm-table th,
+.adm-table td {
+    padding: 10px 12px;
+    text-align: start;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border);
+}
+
+.adm-table th {
+    font-size: 0.76rem;
+    white-space: nowrap;
+    color: var(--muted);
+}
+
+.adm-table tr:last-child td {
+    border-bottom: 0;
+}
+
+.adm-table td.empty {
+    text-align: center;
+    color: var(--muted);
+}
+
+.adm-title {
+    min-width: 180px;
+    word-break: break-word;
+}
+
+.adm-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 190px;
+}
+
+.adm-user .avatar {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    font-size: 0.9rem;
+}
+
+.adm-user small {
+    display: block;
+    direction: ltr;
+    text-align: start;
+    color: var(--muted);
+}
+
+.adm-acts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.adm-table form {
+    margin: 0;
+}
+
+.adm-table .btn-sm {
+    min-width: 0;
+    height: 32px;
+    padding: 0 12px;
+    font-size: 0.78rem;
+}
+
+.badge.bad {
+    color: var(--danger);
+    border: 1px solid var(--danger);
+}
+
+/* دکمه‌ی حذف پیام برای ادمین توی چت */
+.cm-del {
+    margin-inline-start: auto;
+    padding: 0 4px;
+    font-size: 0.8rem;
+    line-height: 1;
+    background: transparent;
+    box-shadow: none;
+    opacity: 0.55;
+    transform: none;
+}
+
+.cm-del:hover {
+    background: transparent;
+    box-shadow: none;
+    opacity: 1;
+    transform: none;
+}
+
+.cm-del:active {
+    box-shadow: none;
+    transform: none;
+}
+
+:root[data-theme="pink"] .adm-scroll {
+    border-radius: 24px;
+}
+
+@media (max-width: 560px) {
+    .container.container-admin {
+        padding: 16px;
+    }
+}
+
+/* ==========================================================
+   پنل مدیریت: دکمه‌ی منو، کارت‌ها و تب چت
+   ========================================================== */
+.menu-user > div {
+    flex: 1;
+}
+
+.menu-admin {
+    flex: none;
+    margin-inline-start: auto;
+    padding: 4px 12px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    white-space: nowrap;
+    color: #fff;
+    background: linear-gradient(135deg, var(--primary), var(--accent, #ec4899));
+    border-radius: 999px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.menu-admin:hover {
+    color: #fff;
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.menu-admin.active {
+    outline: 2px solid var(--glass-border);
+    outline-offset: 2px;
+}
+
+.flash.flash-bad {
+    color: var(--danger);
+    background: color-mix(in srgb, var(--danger) 14%, transparent);
+    border-color: color-mix(in srgb, var(--danger) 45%, transparent);
+}
+
+.adm-sub {
+    margin-top: -4px;
+}
+
+.adm-sub a {
+    padding: 4px 14px;
+    font-size: 0.8rem;
+}
+
+.stat-link {
+    color: var(--text);
+}
+
+.stat-link:hover {
+    text-decoration: none;
+}
+
+.adm-two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 14px;
+}
+
+.adm-two .panel {
+    margin-bottom: 0;
+}
+
+.adm-two h2 {
+    margin: 0 0 12px;
+    font-size: 0.95rem;
+}
+
+.adm-mini {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.adm-mini li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 8px;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.adm-mini li.empty {
+    justify-content: center;
+    color: var(--muted);
+}
+
+.adm-mini .avatar {
+    flex: none;
+    width: 32px;
+    height: 32px;
+    font-size: 0.85rem;
+}
+
+.adm-mini div {
+    flex: 1;
+    min-width: 0;
+}
+
+.adm-mini strong,
+.adm-mini small {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.adm-mini small,
+.adm-mini time {
+    font-size: 0.72rem;
+    color: var(--muted);
+}
+
+.adm-msgs {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.adm-msg {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+}
+
+.adm-msg .avatar {
+    flex: none;
+    width: 36px;
+    height: 36px;
+    font-size: 0.95rem;
+}
+
+.adm-msg-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.adm-msg-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+}
+
+.adm-msg-head time {
+    font-size: 0.7rem;
+    color: var(--muted);
+}
+
+.adm-msg p {
+    margin: 2px 0 0;
+    font-size: 0.88rem;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.adm-msg form {
+    margin: 0;
+}
+
+.adm-msg .btn-sm {
+    min-width: 0;
+    height: 34px;
+    padding: 0 12px;
+}
+
+:root[data-theme="pink"] .adm-msg,
+:root[data-theme="pink"] .adm-mini li {
+    border-radius: 22px;
+}
+
+@media (max-width: 760px) {
+    .adm-two {
+        grid-template-columns: 1fr;
+    }
+}
 /* ==========================================================
    ریسپانسیو
    ========================================================== */
