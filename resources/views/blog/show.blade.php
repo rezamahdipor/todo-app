@@ -11,16 +11,18 @@
             <div class="flash">👁️ این نوشته پیش‌نویسه و فقط خودت می‌بینیش.</div>
         @endunless
 
-        <h1>{{ $post->title }}</h1>
+        <header class="post-head">
+            <h1>{{ $post->title }}</h1>
 
-        <div class="by by-lg">
-            @include('partials.avatar', ['user' => $post->user])
-            <a href="{{ route('blog.author', $post->user) }}">{{ $post->user->name }}</a>
-            @if ($post->published_at)
-                · <time datetime="{{ $post->published_at->toDateString() }}" data-fa>{{ $post->published_at->format('Y-m-d') }}</time>
-            @endif
-            · ⏱️ {{ $post->readingMinutes() }} دقیقه مطالعه
-        </div>
+            <div class="by by-lg">
+                @include('partials.avatar', ['user' => $post->user])
+                <a href="{{ route('blog.author', $post->user) }}">{{ $post->user->name }}</a>
+                @if ($post->published_at)
+                    · <time datetime="{{ $post->published_at->toDateString() }}" data-fa>{{ $post->published_at->format('Y-m-d') }}</time>
+                @endif
+                · ⏱️ {{ $post->readingMinutes() }} دقیقه مطالعه
+            </div>
+        </header>
 
         <div class="post-body">
             @foreach (preg_split('/\n{2,}/', str_replace("\r", '', trim($post->body))) as $block)

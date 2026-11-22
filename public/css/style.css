@@ -4656,6 +4656,263 @@ input[type="file"] {
     }
 }
 /* ==========================================================
+   اصلاح ظاهر: وبلاگ، حساب کاربری و دکمه‌های هم‌اندازه
+   ========================================================== */
+.container-blog,
+.container-account {
+    overflow-wrap: anywhere;
+}
+
+/* ---------- وبلاگ ---------- */
+.post-head,
+.post-body {
+    padding: 22px 24px;
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+}
+
+.post-head {
+    margin-bottom: 14px;
+}
+
+.post-head h1 {
+    margin: 0 0 12px;
+    font-size: 1.6rem;
+    line-height: 1.6;
+    text-align: start;
+}
+
+.post-head .by {
+    margin: 0;
+}
+
+.post-body {
+    font-size: 1.02rem;
+    line-height: 2.1;
+}
+
+.post-body p {
+    margin: 0 0 1em;
+}
+
+.post-body p:last-child {
+    margin-bottom: 0;
+}
+
+.post-body h2 {
+    margin: 1.2em 0 0.4em;
+    padding-bottom: 6px;
+    font-size: 1.25rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.post-body h2:first-child {
+    margin-top: 0;
+}
+
+.post-card p {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.my-post form {
+    margin: 0;
+}
+
+.my-post .topbar-link {
+    white-space: nowrap;
+}
+
+/* ---------- دکمه‌های هم‌اندازه ---------- */
+.btn-sm {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 120px;
+    height: 40px;
+    padding: 0 16px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    color: #fff;
+    background: var(--primary);
+    border: 0;
+    border-radius: 12px;
+    box-shadow: 0 var(--btn-depth) 0 var(--btn-shadow);
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.2s ease;
+}
+
+.btn-sm:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 calc(var(--btn-depth) + 2px) 0 var(--btn-shadow);
+}
+
+.btn-sm:active {
+    transform: translateY(var(--btn-depth));
+    box-shadow: 0 0 0 var(--btn-shadow);
+}
+
+.btn-sm.btn-danger {
+    background: var(--danger);
+    --btn-shadow: #991b1b;
+}
+
+.btn-sm.btn-danger:hover {
+    background: var(--danger-hover);
+}
+
+.btn-sm.btn-ghost {
+    color: var(--text);
+    background: var(--glass);
+    border: 1px solid var(--border);
+    box-shadow: none;
+}
+
+.btn-sm.btn-ghost:hover {
+    background: var(--glass-strong);
+    border-color: var(--primary);
+    box-shadow: none;
+    transform: none;
+}
+
+.btn-sm.btn-ghost:active {
+    box-shadow: none;
+    transform: scale(0.97);
+}
+
+.btn-full {
+    width: 100%;
+}
+
+:root[data-theme="pink"] .btn-sm {
+    border-radius: 999px;
+}
+
+/* ---------- حساب کاربری ---------- */
+.container.container-account {
+    max-width: 860px;
+}
+
+.acc-hero {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    margin-bottom: 14px;
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+}
+
+.acc-hero .avatar {
+    flex: none;
+    width: 96px;
+    height: 96px;
+    font-size: 2.4rem;
+    border: 3px solid var(--glass-border);
+}
+
+.acc-hero-info {
+    flex: 1;
+    min-width: 230px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.acc-hero-info h2 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.acc-hero-info p,
+.acc-hero-info .error {
+    margin: 0;
+    font-size: 0.85rem;
+}
+
+.acc-hero-info p {
+    color: var(--muted);
+}
+
+.acc-hero-info .hint {
+    font-size: 0.78rem;
+}
+
+.acc-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 10px 0 4px;
+}
+
+.acc-actions form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+
+.acc-cols {
+    align-items: start;
+}
+
+.acc-cols .panel h2 {
+    margin: 0 0 14px;
+}
+
+.acc-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.field input {
+    width: 100%;
+}
+
+.field .error {
+    min-height: 0;
+    margin: 0;
+}
+
+@media (max-width: 560px) {
+    .post-head,
+    .post-body {
+        padding: 16px;
+    }
+
+    .acc-hero {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .acc-actions,
+    .acc-actions form {
+        justify-content: center;
+    }
+}
+/* ==========================================================
    ریسپانسیو
    ========================================================== */
 @media (max-width: 800px) {
