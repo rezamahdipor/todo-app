@@ -6409,6 +6409,254 @@ body.menu-open .chat-btn {
         padding: 18px;
     }
 }
+
+/* ==========================================================
+   صفحه‌ی ثبت‌نام
+   ========================================================== */
+.container.container-auth {
+    max-width: 940px;
+    padding: 0;
+    overflow: hidden;
+}
+
+.container.container-auth:hover {
+    transform: none;
+}
+
+.reg {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+}
+
+.reg-promo {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 36px 30px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--primary), var(--accent, #ec4899));
+}
+
+.reg-promo::before,
+.reg-promo::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.13);
+    pointer-events: none;
+}
+
+.reg-promo::before {
+    width: 220px;
+    height: 220px;
+    top: -70px;
+    left: -70px;
+}
+
+.reg-promo::after {
+    width: 160px;
+    height: 160px;
+    bottom: -50px;
+    right: -40px;
+}
+
+.reg-promo > * {
+    position: relative;
+    z-index: 1;
+}
+
+.reg-promo h2 {
+    margin: 10px 0 0;
+    font-size: 1.5rem;
+}
+
+.reg-promo p {
+    margin: 0;
+    line-height: 1.9;
+    opacity: 0.92;
+}
+
+.reg-promo a,
+.reg-promo a:hover {
+    color: #fff;
+}
+
+.reg-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 800;
+}
+
+.reg-logo:hover {
+    text-decoration: none;
+}
+
+.reg-logo span {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    background: rgba(255, 255, 255, 0.22);
+    border-radius: 11px;
+}
+
+.reg-promo ul {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 4px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.92rem;
+}
+
+.reg-note {
+    margin-top: auto;
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 14px;
+}
+
+.reg-card {
+    padding: 36px 32px;
+}
+
+.reg-card h1 {
+    margin: 0;
+    font-size: 1.6rem;
+    text-align: start;
+}
+
+.reg-sub {
+    margin: 4px 0 20px;
+    color: var(--muted);
+}
+
+.reg-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.pw {
+    position: relative;
+}
+
+.pw input {
+    padding-left: 46px;
+    text-align: left;
+}
+
+.pw-eye {
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    font-size: 1rem;
+    line-height: 1;
+    color: var(--muted);
+    background: transparent;
+    box-shadow: none;
+    transform: translateY(-50%);
+}
+
+.pw-eye:hover,
+.pw-eye:active {
+    color: var(--text);
+    background: transparent;
+    box-shadow: none;
+    transform: translateY(-50%);
+}
+
+.pw-meter {
+    height: 6px;
+    margin-top: 6px;
+    overflow: hidden;
+    background: var(--border);
+    border-radius: 999px;
+}
+
+.pw-meter i {
+    display: block;
+    width: 0;
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.3s ease, background 0.3s ease;
+}
+
+.pw-text,
+.pw-match {
+    min-height: 1.3em;
+    font-size: 0.78rem;
+    color: var(--muted);
+}
+
+.pw-match.ok {
+    color: var(--success);
+}
+
+.pw-match.bad {
+    color: var(--danger);
+}
+
+.reg-terms {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.84rem;
+    color: var(--muted);
+}
+
+.reg-terms input {
+    margin-top: 5px;
+    accent-color: var(--primary);
+}
+
+.reg-submit {
+    width: 100%;
+    margin-top: 4px;
+    padding: 13px;
+    font-size: 1rem;
+}
+
+.reg-submit:disabled {
+    opacity: 0.65;
+    cursor: wait;
+}
+
+.reg-card .auth-link {
+    margin-top: 16px;
+}
+
+:root[data-theme="pink"] .container-auth {
+    border-radius: 32px;
+}
+
+@media (max-width: 760px) {
+    .reg {
+        grid-template-columns: 1fr;
+    }
+
+    .reg-promo {
+        padding: 22px 20px;
+    }
+
+    .reg-promo ul,
+    .reg-note {
+        display: none;
+    }
+
+    .reg-card {
+        padding: 24px 20px;
+    }
+}
 /* ==========================================================
    ریسپانسیو
    ========================================================== */
