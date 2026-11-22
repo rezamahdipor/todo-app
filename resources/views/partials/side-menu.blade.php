@@ -1,6 +1,10 @@
-{{-- منوی سه‌خط سمت راست (همه‌ی صفحه‌ها) --}}
+{{-- منوی سمت راست؛ دکمه‌ی بازکننده‌ش عکس پروفایله (همه‌ی صفحه‌ها) --}}
 <button type="button" id="menu-btn" class="menu-btn" aria-expanded="false" aria-controls="menu-drawer" aria-label="باز کردن منو">
-    <span></span><span></span><span></span>
+    @auth
+        @include('partials.avatar', ['user' => auth()->user(), 'class' => 'menu-av'])
+    @else
+        <i class="menu-guest" aria-hidden="true">👤</i>
+    @endauth
 </button>
 
 <div id="menu-overlay" class="menu-overlay"></div>
@@ -17,18 +21,20 @@
     @endauth
 
     <nav class="menu-links" aria-label="صفحه‌ها">
+        @auth
+            <a href="{{ route('account') }}" @class(['active' => request()->routeIs('account')])>👤 حساب کاربری</a>
+        @endauth
+
         <a href="{{ route('home') }}" @class(['active' => request()->routeIs('home')])>🌐 صفحه‌ی اصلی</a>
         <a href="{{ route('blog.index') }}" @class(['active' => request()->routeIs('blog.*')])>📰 وبلاگ</a>
 
         @auth
-            <h2>ابزارها</h2>
-            <a href="{{ route('dashboard') }}" @class(['active' => request()->routeIs('dashboard')])>🏠 داشبورد</a>
             <a href="{{ route('tasks.index') }}" @class(['active' => request()->routeIs('tasks.*')])>📋 لیست کارها</a>
+            <a href="{{ route('dashboard') }}" @class(['active' => request()->routeIs('dashboard')])>🏠 داشبورد</a>
             <a href="{{ route('board') }}" @class(['active' => request()->routeIs('board')])>🗂️ کانبان</a>
             <a href="{{ route('habits') }}" @class(['active' => request()->routeIs('habits')])>🔥 عادت‌ها</a>
             <a href="{{ route('stats') }}" @class(['active' => request()->routeIs('stats')])>📊 آمار</a>
             <a href="{{ route('posts.index') }}" @class(['active' => request()->routeIs('posts.*')])>✍️ نوشته‌های من</a>
-            <a href="{{ route('account') }}" @class(['active' => request()->routeIs('account')])>👤 حساب کاربری</a>
         @else
             <a href="{{ route('login') }}" @class(['active' => request()->routeIs('login')])>🔑 ورود</a>
             <a href="{{ route('register') }}" @class(['active' => request()->routeIs('register')])>📝 ثبت‌نام</a>
@@ -42,11 +48,13 @@
         </form>
     @endauth
 
-    <nav class="menu-links menu-legal" aria-label="اطلاعات سایت">
-        <a href="{{ route('privacy') }}">🔐 حریم خصوصی</a>
-        <a href="{{ route('terms') }}">📜 قوانین</a>
-        <a href="{{ route('contact') }}">✉️ تماس</a>
-    </nav>
+    @if (Route::has('privacy') && Route::has('terms') && Route::has('contact'))
+        <nav class="menu-links menu-legal" aria-label="اطلاعات سایت">
+            <a href="{{ route('privacy') }}">🔐 حریم خصوصی</a>
+            <a href="{{ route('terms') }}">📜 قوانین</a>
+            <a href="{{ route('contact') }}">✉️ تماس</a>
+        </nav>
+    @endif
 
     <h2>🛠️ سازنده</h2>
     <div class="creator-card">
