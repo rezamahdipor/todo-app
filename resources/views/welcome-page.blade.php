@@ -38,6 +38,7 @@
                 <span>📅 تقویم شمسی</span>
                 <span>📱 سازگار با موبایل</span>
                 <span>🔒 لیست شخصی</span>
+                <span>💬 چت عمومی</span>
             </div>
         </div>
 
@@ -116,6 +117,41 @@
         @endif
 
         <p class="lp-more"><a href="{{ route('blog.index') }}" class="btn btn-outline">دیدن همه‌ی نوشته‌ها ←</a></p>
+    </section>
+
+    {{-- چت عمومی --}}
+    <section class="lp-sec lp-rv" id="chat">
+        <div class="lp-chat">
+            <div>
+                <span class="lp-badge">💬 تازه</span>
+                <h2>چت عمومی؛ با بقیه حرف بزن</h2>
+                <p>
+                    یه دکمه‌ی چت گوشه‌ی بالای هر صفحه هست. با یه کلیک، پنل چت باز می‌شه و می‌تونی
+                    توی سه اتاق عمومی با بقیه‌ی کاربرها پیام بدی و بگیری؛ بدون اینکه صفحه‌ای که توشی عوض بشه.
+                </p>
+                <ul class="lp-list">
+                    <li>🏠 سه اتاق عمومی: «عمومی ۱»، «عمومی ۲» و «عمومی ۳»</li>
+                    <li>⚡ پیام‌ها تقریباً لحظه‌ای و خودکار بروز می‌شن</li>
+                    <li>🔴 نقطه‌ی قرمز نشونت می‌ده کجا پیام تازه اومده</li>
+                    <li>🖼️ اسم و عکس پروفایل کنار هر پیام می‌یاد</li>
+                    <li>🔒 فقط برای کاربرهای واردشده</li>
+                </ul>
+
+                @auth
+                    <a href="{{ route('chat.page') }}" class="btn btn-primary">💬 ورود به چت</a>
+                @else
+                    <a href="{{ route('register') }}" class="btn btn-primary">🚀 ثبت‌نام و شروع چت</a>
+                @endauth
+            </div>
+
+            <div class="lp-chatmock" aria-hidden="true">
+                <div class="lp-cm-rooms"><span class="on">عمومی ۱</span><span>عمومی ۲</span><span>عمومی ۳</span></div>
+                <div class="lp-cm-msg"><i>ن</i><div><b>نگار</b><p>سلام! کسی هست درباره‌ی عادت‌ها حرف بزنه؟ 🔥</p></div></div>
+                <div class="lp-cm-msg me"><i>ر</i><div><b>رضا</b><p>آره، من امروز ۷ روز پشت‌سرهم شدم 😄</p></div></div>
+                <div class="lp-cm-msg"><i>م</i><div><b>مهدی</b><p>عالیه! منم از کانبان استفاده می‌کنم 🗂️</p></div></div>
+                <div class="lp-cm-type"><span></span><span></span><span></span></div>
+            </div>
+        </div>
     </section>
 
     {{-- چرخ تم --}}
