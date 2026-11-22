@@ -20,13 +20,7 @@
     @endif
 
     <div class="acc-head">
-        <div class="avatar">{{ mb_substr($user->name, 0, 1) }}</div>
-        <div>
-            <h2>{{ $user->name }}</h2>
-            <p>{{ $user->email }}</p>
-            <p>عضو از <span data-date="{{ $user->created_at?->format('Y-m-d') }}"></span></p>
-        </div>
-    </div>
+@include('partials.avatar', ['user' => $user])
 
     <div class="stats-grid">
         <div class="stat-card"><span class="stat-icon">📋</span><span class="stat-value">{{ $stats['tasks'] }}</span><span class="stat-label">کل کارها</span></div>
@@ -35,48 +29,28 @@
         <div class="stat-card"><span class="stat-icon">🏷️</span><span class="stat-value">{{ $stats['categories'] }}</span><span class="stat-label">دسته</span></div>
     </div>
 
+    <section class="panel" style="margin-bottom: 14px">
+        <h2>🖼️ عکس پروفایل</h2>
+        <form method="POST" action="{{ route('account.avatar') }}" enctype="multipart/form-data" class="auth-form">
+            @csrf
+            @method('PUT')
+            <input type="file" name="avatar" accept="image/png,image/jpeg,image/webp" required>
+            <p class="hint">jpg، png یا webp، حداکثر ۲ مگابایت، حداقل ۱۰۰×۱۰۰</p>
+            @error('avatar', 'avatar')
+                <div class="error">{{ $message }}</div>
+            @enderror
+            <button type="submit">آپلود عکس</button>
+        </form>
+        @if ($user->avatar)
+            <form method="POST" action="{{ route('account.avatar.remove') }}" onsubmit="return confirm('عکس پروفایل حذف بشه؟')" style="margin-top: 8px">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn-logout">حذف عکس</button>
+            </form>
+        @endif
+    </section>
+
     <div class="acc-cols">
-        <section class="panel">
-            <h2>✏️ ویرایش نام</h2>
-            <form method="POST" action="{{ route('account.profile') }}" class="auth-form">
-                @csrf
-                @method('PUT')
-
-                <label for="name">نام</label>
-                <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}" maxlength="60" required>
-                @error('name', 'profile')
-                    <div class="error">{{ $message }}</div>
-                @enderror
-
-                <button type="submit">ذخیره</button>
-            </form>
-        </section>
-
-        <section class="panel">
-            <h2>🔒 تغییر رمز عبور</h2>
-            <form method="POST" action="{{ route('account.password') }}" class="auth-form">
-                @csrf
-                @method('PUT')
-
-                <label for="current_password">رمز فعلی</label>
-                <input type="password" id="current_password" name="current_password" autocomplete="current-password" required>
-                @error('current_password', 'password')
-                    <div class="error">{{ $message }}</div>
-                @enderror
-
-                <label for="password">رمز جدید (حداقل ۸ کاراکتر)</label>
-                <input type="password" id="password" name="password" autocomplete="new-password" required>
-                @error('password', 'password')
-                    <div class="error">{{ $message }}</div>
-                @enderror
-
-                <label for="password_confirmation">تکرار رمز جدید</label>
-                <input type="password" id="password_confirmation" name="password_confirmation" autocomplete="new-password" required>
-
-                <button type="submit">تغییر رمز</button>
-            </form>
-        </section>
-    </div>
 @endsection
 
 @push('scripts')

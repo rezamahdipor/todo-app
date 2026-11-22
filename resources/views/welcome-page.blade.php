@@ -15,6 +15,7 @@
         </p>
 
         <div class="hero-actions">
+            <a href="{{ route('blog.index') }}" class="btn btn-outline">📰 وبلاگ</a>
             @auth
                 <a href="{{ route('tasks.index') }}" class="btn btn-primary">رفتن به لیست کارها</a>
             @else

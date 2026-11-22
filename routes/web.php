@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HabitController;
 use App\Http\Controllers\LiveStatsController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\SubtaskController;
 use App\Http\Controllers\TaskController;
@@ -13,6 +15,12 @@ use App\Http\Middleware\TouchLastSeen;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome-page')->name('home');
+
+// وبلاگ عمومی (برای سئو، بدون نیاز به ورود)
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{post}/{slug?}', [BlogController::class, 'show'])->whereNumber('post')->name('blog.show');
+Route::get('/authors/{user}', [BlogController::class, 'author'])->whereNumber('user')->name('blog.author');
+Route::get('/sitemap.xml', [BlogController::class, 'sitemap'])->name('sitemap');
 
 // آمار زنده‌ی کلی (فقط عدد، بدون اطلاعات شخصی)
 Route::get('/live-stats', LiveStatsController::class)
@@ -37,6 +45,17 @@ Route::middleware(['auth', TouchLastSeen::class])->group(function () {
     Route::get('/account', [AccountController::class, 'show'])->name('account');
     Route::put('/account/profile', [AccountController::class, 'updateProfile'])->name('account.profile');
     Route::put('/account/password', [AccountController::class, 'updatePassword'])->name('account.password');
+    Route::put('/account/avatar', [AccountController::class, 'updateAvatar'])
+        ->middleware('throttle:10,1')->name('account.avatar');
+    Route::delete('/account/avatar', [AccountController::class, 'removeAvatar'])->name('account.avatar.remove');
+
+    // نوشته‌های من (پنل شخصی)
+    Route::get('/my/posts', [PostController::class, 'index'])->name('posts.index');
+    Route::get('/my/posts/create', [PostController::class, 'create'])->name('posts.create');
+    Route::post('/my/posts', [PostController::class, 'store'])->middleware('throttle:20,1')->name('posts.store');
+    Route::get('/my/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
+    Route::put('/my/posts/{post}', [PostController::class, 'update'])->middleware('throttle:20,1')->name('posts.update');
+    Route::delete('/my/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
 
     Route::get('/stats', [StatsController::class, 'index'])->name('stats');
 

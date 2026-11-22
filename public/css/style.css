@@ -4458,6 +4458,203 @@ body.menu-open {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
 }
+
+/* ==========================================================
+   وبلاگ، پنل نوشته‌ها و عکس پروفایل
+   ========================================================== */
+.container.container-blog {
+    max-width: 900px;
+    padding: 28px;
+}
+
+.container.container-blog:hover {
+    transform: none;
+}
+
+.avatar-img {
+    display: block;
+    object-fit: cover;
+}
+
+.blog-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin: 16px 0;
+}
+
+.post-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    color: var(--text);
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.post-card:hover {
+    text-decoration: none;
+    transform: translateY(-4px);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-hover);
+}
+
+.post-card h2 {
+    margin: 0;
+    font-size: 1.05rem;
+}
+
+.post-card p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.by {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: auto;
+    font-size: 0.78rem;
+    color: var(--muted);
+}
+
+.by .avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
+}
+
+.by-lg {
+    margin: 4px 0 18px;
+    font-size: 0.85rem;
+}
+
+.by-lg .avatar {
+    width: 38px;
+    height: 38px;
+}
+
+.post h1 {
+    margin-bottom: 8px;
+    text-align: start;
+    line-height: 1.5;
+}
+
+.post-body {
+    font-size: 1.02rem;
+    line-height: 2.1;
+}
+
+.post-body h2 {
+    margin: 1.5em 0 0.3em;
+    font-size: 1.25rem;
+}
+
+.post-body p {
+    margin: 0 0 1em;
+}
+
+.more-list {
+    margin: 0;
+    padding-inline-start: 20px;
+}
+
+.pager {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+textarea {
+    width: 100%;
+    padding: 11px 14px;
+    font: inherit;
+    line-height: 1.9;
+    color: var(--text);
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    resize: vertical;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.25);
+}
+
+input[type="file"] {
+    padding: 8px 10px;
+    font: inherit;
+    font-size: 0.85rem;
+    color: var(--text);
+    background: var(--glass-strong);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+}
+
+.my-posts {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.my-post {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px 14px;
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+}
+
+.my-post strong {
+    flex: 1;
+    min-width: 160px;
+    word-break: break-word;
+}
+
+.my-post button {
+    padding: 5px 12px;
+    font-size: 0.8rem;
+}
+
+.badge {
+    padding: 2px 10px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--muted);
+    border: 1px dashed var(--border);
+    border-radius: 999px;
+}
+
+.badge.live {
+    color: var(--success);
+    border: 1px solid var(--success);
+}
+
+:root[data-theme="pink"] .post-card,
+:root[data-theme="pink"] .my-post {
+    border-style: dashed;
+    border-color: rgba(244, 114, 182, 0.55);
+    border-radius: 24px;
+}
+
+@media (max-width: 700px) {
+    .blog-grid {
+        grid-template-columns: 1fr;
+    }
+}
 /* ==========================================================
    ریسپانسیو
    ========================================================== */

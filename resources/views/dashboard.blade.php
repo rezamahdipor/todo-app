@@ -10,6 +10,8 @@
             <a href="{{ route('home') }}" class="topbar-link">🌐 صفحه‌ی اصلی</a>
             <a href="{{ route('tasks.index') }}" class="topbar-link">📋 کارها</a>
             <a href="{{ route('habits') }}" class="topbar-link">🔥 عادت‌ها</a>
+            <a href="{{ route('posts.index') }}" class="topbar-link">✍️ نوشته‌ها</a>
+            <a href="{{ route('blog.index') }}" class="topbar-link">📰 وبلاگ</a>
             <a href="{{ route('stats') }}" class="topbar-link">📊 آمار</a>
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
@@ -19,7 +21,7 @@
     </div>
 
     <div class="hero">
-        <div class="avatar home-avatar">{{ mb_substr(auth()->user()->name, 0, 1) }}</div>
+        @include('partials.avatar', ['user' => auth()->user(), 'class' => 'home-avatar'])
         <h1>سلام {{ auth()->user()->name }} 👋</h1>
         <p class="hero-text">به داشبورد خوش اومدی. از اینجا به بخش‌های مختلف سر بزن.</p>
     </div>
