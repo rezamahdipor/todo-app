@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\HabitController;
 use App\Http\Controllers\LiveStatsController;
 use App\Http\Controllers\PostController;
@@ -62,13 +63,18 @@ Route::middleware(['auth', TouchLastSeen::class])->group(function () {
 
     Route::get('/stats', [StatsController::class, 'index'])->name('stats');
 
+    // چت عمومی
+    Route::get('/chat', [ChatController::class, 'page'])->name('chat.page');
+    Route::get('/chat/poll', [ChatController::class, 'poll'])->middleware('throttle:90,1')->name('chat.poll');
+    Route::post('/chat/{room}', [ChatController::class, 'send'])->whereNumber('room')->middleware('throttle:30,1')->name('chat.send');
+
     // کانبان
     Route::get('/board', [BoardController::class, 'index'])->name('board');
     Route::post('/board/move', [BoardController::class, 'move'])->name('board.move');
 
     // عادت‌ها
     Route::get('/habits', [HabitController::class, 'index'])->name('habits');
-        Route::get('/habits/data', [HabitController::class, 'data'])->name('habits.data');
+    Route::get('/habits/data', [HabitController::class, 'data'])->name('habits.data');
     Route::post('/habits', [HabitController::class, 'store'])->name('habits.store');
     Route::post('/habits/{habit}/toggle', [HabitController::class, 'toggle'])->name('habits.toggle');
     Route::delete('/habits/{habit}', [HabitController::class, 'destroy'])->name('habits.destroy');

@@ -9,6 +9,12 @@
 
 <div id="menu-overlay" class="menu-overlay"></div>
 
+@auth
+    @unless (request()->routeIs('chat.page'))
+        @include('partials.chat-dock')
+    @endunless
+@endauth
+
 <aside id="menu-drawer" class="menu-drawer" aria-label="منو" tabindex="-1">
     @auth
         <div class="menu-user">
@@ -35,6 +41,7 @@
             <a href="{{ route('habits') }}" @class(['active' => request()->routeIs('habits')])>🔥 عادت‌ها</a>
             <a href="{{ route('stats') }}" @class(['active' => request()->routeIs('stats')])>📊 آمار</a>
             <a href="{{ route('posts.index') }}" @class(['active' => request()->routeIs('posts.*')])>✍️ نوشته‌های من</a>
+            <a href="{{ route('chat.page') }}" @class(['active' => request()->routeIs('chat.page')])>💬 چت عمومی</a>
         @else
             <a href="{{ route('login') }}" @class(['active' => request()->routeIs('login')])>🔑 ورود</a>
             <a href="{{ route('register') }}" @class(['active' => request()->routeIs('register')])>📝 ثبت‌نام</a>
