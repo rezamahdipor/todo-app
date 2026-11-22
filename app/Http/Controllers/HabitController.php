@@ -12,15 +12,15 @@ class HabitController extends Controller
 
     public function index(Request $request)
     {
-        $habits = Habit::where('user_id', $request->user()->id)
-            ->with('logs')
-            ->orderBy('position')
-            ->orderBy('id')
-            ->get()
-            ->map(fn (Habit $h) => $this->payload($h))
-            ->values();
+        $habits = $this->listFor($request);
 
         return view('habits', compact('habits'));
+    }
+
+    // برای بخش عادت‌ها توی صفحه‌ی لیست کارها
+    public function data(Request $request)
+    {
+        return response()->json($this->listFor($request));
     }
 
     public function store(Request $request)
@@ -74,6 +74,17 @@ class HabitController extends Controller
         $habit->delete();
 
         return response()->json(['deleted' => true]);
+    }
+
+    private function listFor(Request $request)
+    {
+        return Habit::where('user_id', $request->user()->id)
+            ->with('logs')
+            ->orderBy('position')
+            ->orderBy('id')
+            ->get()
+            ->map(fn (Habit $h) => $this->payload($h))
+            ->values();
     }
 
     private function payload(Habit $h): array

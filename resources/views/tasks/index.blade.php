@@ -242,4 +242,5 @@
     <script src="{{ asset('js/widgets.js') }}?v={{ filemtime(public_path('js/widgets.js')) }}"></script>
     <script src="{{ asset('js/calendar.js') }}?v={{ filemtime(public_path('js/calendar.js')) }}"></script>
     <script src="{{ asset('js/clock.js') }}?v={{ filemtime(public_path('js/clock.js')) }}"></script>
+    <script src="{{ asset('js/habits-panel.js') }}?v={{ filemtime(public_path('js/habits-panel.js')) }}"></script>
 @endpush

@@ -42,6 +42,12 @@
         </form>
     @endauth
 
+    <nav class="menu-links menu-legal" aria-label="اطلاعات سایت">
+        <a href="{{ route('privacy') }}">🔐 حریم خصوصی</a>
+        <a href="{{ route('terms') }}">📜 قوانین</a>
+        <a href="{{ route('contact') }}">✉️ تماس</a>
+    </nav>
+
     <h2>🛠️ سازنده</h2>
     <div class="creator-card">
         <div class="avatar">ر</div>

@@ -4714,6 +4714,7 @@ input[type="file"] {
 .post-card p {
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -4975,6 +4976,76 @@ body.has-menu .topbar-actions {
 
 .menu-drawer form {
     margin: 0;
+}
+
+/* ==========================================================
+   بخش عادت‌ها زیر تقویم (صفحه‌ی لیست کارها)
+   ========================================================== */
+.hbp {
+    margin-top: 16px;
+    padding: 20px;
+}
+
+.hbp .hb-list {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 1000px) {
+    .hbp .hb-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .hbp {
+        padding: 12px;
+    }
+
+    .hbp .hb-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================================
+   صفحه‌های خطا و حقوقی
+   ========================================================== */
+.err {
+    padding: 36px 24px;
+    text-align: center;
+}
+
+.err-code {
+    font-size: 5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(90deg, var(--primary), var(--accent, #ec4899));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.err h1 {
+    margin: 6px 0 10px;
+}
+
+.post-body ul {
+    margin: 0 0 1em;
+    padding-inline-start: 22px;
+}
+
+.post-body li {
+    margin-bottom: 0.3em;
+}
+
+.menu-legal {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.menu-legal a {
+    padding: 6px 12px;
+    font-size: 0.8rem;
 }
 /* ==========================================================
    ریسپانسیو

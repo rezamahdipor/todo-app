@@ -15,6 +15,9 @@ use App\Http\Middleware\TouchLastSeen;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome-page')->name('home');
+Route::view('/privacy', 'legal.privacy')->name('privacy');
+Route::view('/terms', 'legal.terms')->name('terms');
+Route::view('/contact', 'legal.contact')->name('contact');
 
 // وبلاگ عمومی (برای سئو، بدون نیاز به ورود)
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
@@ -65,6 +68,7 @@ Route::middleware(['auth', TouchLastSeen::class])->group(function () {
 
     // عادت‌ها
     Route::get('/habits', [HabitController::class, 'index'])->name('habits');
+        Route::get('/habits/data', [HabitController::class, 'data'])->name('habits.data');
     Route::post('/habits', [HabitController::class, 'store'])->name('habits.store');
     Route::post('/habits/{habit}/toggle', [HabitController::class, 'toggle'])->name('habits.toggle');
     Route::delete('/habits/{habit}', [HabitController::class, 'destroy'])->name('habits.destroy');

@@ -54,7 +54,7 @@ class BlogController extends Controller
 
     public function sitemap()
     {
-        $urls = [[route('home'), null], [route('blog.index'), null]];
+        $urls = [[route('home'), null], [route('blog.index'), null], [route('privacy'), null], [route('terms'), null], [route('contact'), null]];
 
         $posts = Post::published()
             ->latest('published_at')
