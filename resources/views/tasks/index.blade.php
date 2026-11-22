@@ -4,6 +4,7 @@
 @section('container-class', 'container-dash')
 
 @section('content')
+    @include('partials.side-menu')
     @php
         $priorityLabels = ['low' => 'کم', 'medium' => 'متوسط', 'high' => 'زیاد'];
         $columns = ['todo' => '📝 باقی‌مانده', 'doing' => '🔄 در حال انجام', 'done' => '✅ انجام‌شده'];

@@ -3,6 +3,7 @@
 @section('title', 'ثبت‌نام')
 
 @section('content')
+    @include('partials.side-menu')
     <h1>ساخت حساب جدید ✨</h1>
     <p class="subtitle">در چند ثانیه ثبت‌نام کن و لیست کارهای شخصی خودت رو بساز.</p>
 

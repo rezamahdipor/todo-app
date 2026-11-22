@@ -70,32 +70,6 @@
         </div>
     </section>
 
-    <section class="section">
-        <h2>این برنامه چی کار می‌کنه؟</h2>
-        <div class="features">
-            <div class="feature">
-                <span class="feature-icon">➕</span>
-                <h3>افزودن سریع</h3>
-                <p>کارهات رو در چند ثانیه اضافه کن، بدون رفرش صفحه.</p>
-            </div>
-            <div class="feature">
-                <span class="feature-icon">✏️</span>
-                <h3>ویرایش آسان</h3>
-                <p>با دابل‌کلیک روی عنوان، کارت رو ویرایش کن.</p>
-            </div>
-            <div class="feature">
-                <span class="feature-icon">🔒</span>
-                <h3>لیست شخصی</h3>
-                <p>هر کاربر فقط کارهای خودش رو می‌بینه.</p>
-            </div>
-            <div class="feature">
-                <span class="feature-icon">🌙</span>
-                <h3>تم روشن و تاریک</h3>
-                <p>ظاهر برنامه خودکار با تنظیم دستگاهت هماهنگ می‌شه.</p>
-            </div>
-        </div>
-    </section>
-
     @include('partials.live-stats')
 @endsection
 

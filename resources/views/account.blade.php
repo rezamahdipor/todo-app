@@ -4,6 +4,7 @@
 @section('container-class', 'container-account')
 
 @section('content')
+    @include('partials.side-menu')
     <div class="topbar">
         <span>👤 حساب کاربری</span>
         <div class="topbar-actions">

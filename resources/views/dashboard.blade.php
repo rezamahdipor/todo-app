@@ -4,6 +4,7 @@
 @section('container-class', 'container-home')
 
 @section('content')
+    @include('partials.side-menu')
     <div class="topbar">
         <span>🏠 داشبورد</span>
         <div class="topbar-actions">

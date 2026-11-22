@@ -5,6 +5,7 @@
 @section('container-class', 'container-stats')
 
 @section('content')
+    @include('partials.side-menu')
     @php
         $fa = fn ($n) => strtr((string) $n, [
             '0' => '۰', '1' => '۱', '2' => '۲', '3' => '۳', '4' => '۴',

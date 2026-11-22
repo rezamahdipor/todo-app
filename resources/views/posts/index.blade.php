@@ -4,6 +4,7 @@
 @section('container-class', 'container-blog')
 
 @section('content')
+    @include('partials.side-menu')
     <div class="topbar">
         <span>✍️ نوشته‌های من</span>
         <div class="topbar-actions">

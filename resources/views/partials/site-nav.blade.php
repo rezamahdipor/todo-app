@@ -1,16 +1,4 @@
-<nav class="topbar">
-    <a href="{{ route('home') }}" class="topbar-link">🏠 خانه</a>
-    <div class="topbar-actions">
-        <a href="{{ route('blog.index') }}" class="topbar-link">📰 وبلاگ</a>
-        @auth
-            <a href="{{ route('posts.index') }}" class="topbar-link">✍️ نوشته‌های من</a>
-            <a href="{{ route('dashboard') }}" class="topbar-link">📊 داشبورد</a>
-        @else
-            <a href="{{ route('login') }}" class="topbar-link">ورود</a>
-            <a href="{{ route('register') }}" class="topbar-link">ثبت‌نام</a>
-        @endauth
-    </div>
-</nav>
+@include('partials.side-menu')
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {

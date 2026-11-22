@@ -3,6 +3,7 @@
 @section('title', 'ورود')
 
 @section('content')
+    @include('partials.side-menu')
     <h1>خوش برگشتی 👋</h1>
     <p class="subtitle">برای دیدن و مدیریت کارهات وارد حسابت شو.</p>
 

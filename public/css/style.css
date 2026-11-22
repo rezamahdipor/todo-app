@@ -4912,6 +4912,70 @@ input[type="file"] {
         justify-content: center;
     }
 }
+
+/* ==========================================================
+   منوی سه‌خط در همه‌ی صفحه‌ها
+   ========================================================== */
+body.has-menu {
+    padding-top: 72px;
+}
+
+/* گزینه‌های قدیمی بالای صفحه (کانبان، خروج و...) حالا توی منو هستن */
+body.has-menu .topbar-actions {
+    display: none;
+}
+
+.menu-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+}
+
+.menu-user .avatar {
+    flex: none;
+    width: 46px;
+    height: 46px;
+    font-size: 1.2rem;
+}
+
+.menu-user div {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-user strong,
+.menu-user span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.menu-user span {
+    font-size: 0.74rem;
+    color: var(--muted);
+}
+
+.menu-links h2 {
+    margin: 8px 0 0;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.menu-links a.active {
+    color: #fff;
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.menu-drawer form {
+    margin: 0;
+}
 /* ==========================================================
    ریسپانسیو
    ========================================================== */

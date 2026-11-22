@@ -4,6 +4,7 @@
 @section('container-class', 'container-board')
 
 @section('content')
+    @include('partials.side-menu')
     @php
         $statuses = [
             'todo'  => '📝 باقی‌مانده',

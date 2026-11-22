@@ -1,4 +1,4 @@
-{{-- منوی سه‌خط سمت راست (برای صفحه‌ی ولکام) --}}
+{{-- منوی سه‌خط سمت راست (همه‌ی صفحه‌ها) --}}
 <button type="button" id="menu-btn" class="menu-btn" aria-expanded="false" aria-controls="menu-drawer" aria-label="باز کردن منو">
     <span></span><span></span><span></span>
 </button>
@@ -6,6 +6,42 @@
 <div id="menu-overlay" class="menu-overlay"></div>
 
 <aside id="menu-drawer" class="menu-drawer" aria-label="منو" tabindex="-1">
+    @auth
+        <div class="menu-user">
+            @include('partials.avatar', ['user' => auth()->user()])
+            <div>
+                <strong>{{ auth()->user()->name }}</strong>
+                <span>{{ auth()->user()->email }}</span>
+            </div>
+        </div>
+    @endauth
+
+    <nav class="menu-links" aria-label="صفحه‌ها">
+        <a href="{{ route('home') }}" @class(['active' => request()->routeIs('home')])>🌐 صفحه‌ی اصلی</a>
+        <a href="{{ route('blog.index') }}" @class(['active' => request()->routeIs('blog.*')])>📰 وبلاگ</a>
+
+        @auth
+            <h2>ابزارها</h2>
+            <a href="{{ route('dashboard') }}" @class(['active' => request()->routeIs('dashboard')])>🏠 داشبورد</a>
+            <a href="{{ route('tasks.index') }}" @class(['active' => request()->routeIs('tasks.*')])>📋 لیست کارها</a>
+            <a href="{{ route('board') }}" @class(['active' => request()->routeIs('board')])>🗂️ کانبان</a>
+            <a href="{{ route('habits') }}" @class(['active' => request()->routeIs('habits')])>🔥 عادت‌ها</a>
+            <a href="{{ route('stats') }}" @class(['active' => request()->routeIs('stats')])>📊 آمار</a>
+            <a href="{{ route('posts.index') }}" @class(['active' => request()->routeIs('posts.*')])>✍️ نوشته‌های من</a>
+            <a href="{{ route('account') }}" @class(['active' => request()->routeIs('account')])>👤 حساب کاربری</a>
+        @else
+            <a href="{{ route('login') }}" @class(['active' => request()->routeIs('login')])>🔑 ورود</a>
+            <a href="{{ route('register') }}" @class(['active' => request()->routeIs('register')])>📝 ثبت‌نام</a>
+        @endauth
+    </nav>
+
+    @auth
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="btn-sm btn-danger btn-full">🚪 خروج</button>
+        </form>
+    @endauth
+
     <h2>🛠️ سازنده</h2>
     <div class="creator-card">
         <div class="avatar">ر</div>
@@ -25,17 +61,6 @@
         <span>JavaScript</span>
         <span>CSS</span>
     </div>
-
-    <h2>🔗 دسترسی سریع</h2>
-    <nav class="menu-links">
-        @auth
-            <a href="{{ route('dashboard') }}">🏠 داشبورد</a>
-            <a href="{{ route('tasks.index') }}">📋 لیست کارها</a>
-        @else
-            <a href="{{ route('login') }}">🔑 ورود</a>
-            <a href="{{ route('register') }}">📝 ثبت‌نام</a>
-        @endauth
-    </nav>
 </aside>
 
 <script>
@@ -47,6 +72,7 @@
 
         // کارت اصلی افکت شیشه‌ای داره و المان‌های ثابت داخلش جابه‌جا می‌شن؛ پس می‌ریم بیرونش
         document.body.append(btn, overlay, drawer);
+        document.body.classList.add('has-menu');
 
         function setOpen(open) {
             btn.setAttribute('aria-expanded', open ? 'true' : 'false');

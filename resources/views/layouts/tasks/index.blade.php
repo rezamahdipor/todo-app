@@ -3,6 +3,7 @@
 @section('title', 'لیست کارها')
 
 @section('content')
+    @include('partials.side-menu')
     <div class="topbar">
         <span>سلام {{ auth()->user()->name }} 👋</span>
         <form action="{{ route('logout') }}" method="POST">

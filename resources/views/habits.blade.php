@@ -4,6 +4,7 @@
 @section('container-class', 'container-habits')
 
 @section('content')
+    @include('partials.side-menu')
     <div class="topbar">
         <span>سلام {{ auth()->user()->name }} 👋</span>
         <div class="topbar-actions">
