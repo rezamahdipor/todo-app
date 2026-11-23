@@ -146,6 +146,14 @@
                                             <button type="submit" class="btn-sm {{ $u->is_banned ? '' : 'btn-danger' }}">{{ $u->is_banned ? '✅ آزاد کردن' : '🚫 مسدود' }}</button>
                                         </form>
                                     @endunless
+
+                                    @unless ($u->is_admin)
+                                        <form method="POST" action="{{ route('admin.users.destroy', $u) }}" class="adm-del" data-name="{{ $u->name }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-sm btn-danger">🗑 حذف کاربر</button>
+                                        </form>
+                                    @endunless
                                 </div>
                             @endif
                         </td>
@@ -278,6 +286,19 @@
             if (!isNaN(d)) {
                 t.textContent = d.toLocaleString('fa-IR-u-ca-persian', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
             }
+        });
+    </script>
+    <script>
+        document.querySelectorAll('form.adm-del').forEach((f) => {
+            f.addEventListener('submit', (e) => {
+                const name = f.dataset.name;
+                const typed = prompt('⚠️ حذف کاربر «' + name + '» دائمیه و همه‌ی کارها، عادت‌ها، نوشته‌ها و پیام‌هاش پاک می‌شن.\n\nبرای تأیید، نام کاربر رو دقیق بنویس:');
+
+                if (typed === null || typed.trim() !== name.trim()) {
+                    e.preventDefault();
+                    if (typed !== null) alert('نام درست وارد نشد؛ حذف انجام نشد.');
+                }
+            });
         });
     </script>
 @endpush

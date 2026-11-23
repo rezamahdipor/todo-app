@@ -25,6 +25,7 @@
         </aside>
 
         <section class="reg-card">
+            @include('partials.reg-steps', ['step' => 1])
             <h1>ثبت‌نام</h1>
             <p class="reg-sub">چند ثانیه بیشتر وقت نمی‌گیره.</p>
 
@@ -74,7 +75,7 @@
                     </span>
                 </label>
 
-                <button type="submit" class="reg-submit">🚀 ساخت حساب</button>
+                <button type="submit" class="reg-submit">ادامه ←</button>
             </form>
 
             <p class="auth-link">حساب داری؟ <a href="{{ route('login') }}">وارد شو</a></p>

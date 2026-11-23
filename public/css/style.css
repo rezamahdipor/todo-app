@@ -7214,6 +7214,209 @@ body.menu-open .chat-btn {
 :root[data-theme="pink"] .adm-rep {
     border-radius: 22px;
 }
+
+/* ==========================================================
+   ثبت‌نام دو مرحله‌ای و فرم مشخصات تکمیلی
+   ========================================================== */
+.reg-steps {
+    display: flex;
+    align-items: center;
+    margin: 0 0 18px;
+    padding: 0;
+    list-style: none;
+}
+
+.reg-steps li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: var(--muted);
+}
+
+.reg-steps li:first-child {
+    flex: 1;
+}
+
+.reg-steps li:first-child::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    margin: 0 10px;
+    background: var(--border);
+    border-radius: 2px;
+    transition: background 0.3s ease;
+}
+
+.reg-steps.s2 li:first-child::after {
+    background: var(--primary);
+}
+
+.reg-steps b {
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    flex: none;
+    font-weight: 800;
+    color: var(--muted);
+    background: var(--glass);
+    border: 2px solid var(--border);
+    border-radius: 50%;
+}
+
+.reg-steps li.on b {
+    color: #fff;
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.reg-steps li.now {
+    font-weight: 700;
+    color: var(--text);
+}
+
+.field select {
+    width: 100%;
+    padding: 11px 14px;
+    font: inherit;
+    color: var(--text);
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.field select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 25%, transparent);
+}
+
+.ob-sub {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 12px;
+    background: var(--glass);
+    border: 1px dashed var(--border);
+    border-radius: 14px;
+}
+
+.ob-sub[hidden] {
+    display: none;
+}
+
+.ob-set {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.ob-set legend {
+    margin-bottom: 8px;
+    padding: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.ob-scale {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+}
+
+.ob-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.ob-pill,
+.ob-chip {
+    position: relative;
+    display: block;
+}
+
+.ob-pill input,
+.ob-chip input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.ob-pill span,
+.ob-chip span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    font-size: 0.78rem;
+    color: var(--text);
+    background: var(--glass);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.ob-pill span {
+    flex-direction: column;
+    padding: 8px 2px;
+    border-radius: 12px;
+}
+
+.ob-pill b {
+    font-size: 1rem;
+}
+
+.ob-chip span {
+    padding: 6px 14px;
+    border-radius: 999px;
+}
+
+.ob-pill span:hover,
+.ob-chip span:hover {
+    border-color: var(--primary);
+}
+
+.ob-pill input:checked + span,
+.ob-chip input:checked + span {
+    color: #fff;
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.ob-pill input:focus-visible + span,
+.ob-chip input:focus-visible + span {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.ob-skip {
+    margin: 10px 0 0;
+}
+
+.ob-skip .btn-sm {
+    min-width: 0;
+    height: 38px;
+}
+
+:root[data-theme="pink"] .field select {
+    border: 2px solid #f9a8d4;
+    border-radius: 999px;
+    padding: 11px 18px;
+}
+
+:root[data-theme="pink"] .ob-sub {
+    border-radius: 22px;
+}
+
+@media (max-width: 420px) {
+    .ob-pill span {
+        font-size: 0.7rem;
+    }
+}
 /* ==========================================================
    ریسپانسیو
    ========================================================== */

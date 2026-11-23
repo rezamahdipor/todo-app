@@ -53,6 +53,8 @@
         </div>
     </section>
 
+    <p style="margin: 0 0 14px"><a href="{{ route('onboarding') }}" class="btn-sm btn-ghost">🎓 مشخصات تکمیلی</a></p>
+
     <div class="stats-grid">
         <div class="stat-card"><span class="stat-icon">📋</span><span class="stat-value">{{ $stats['tasks'] }}</span><span class="stat-label">کل کارها</span></div>
         <div class="stat-card"><span class="stat-icon">✅</span><span class="stat-value stat-good">{{ $stats['done'] }}</span><span class="stat-label">انجام‌شده</span></div>

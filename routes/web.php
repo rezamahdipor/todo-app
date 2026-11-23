@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Middleware\EnsureOnboarded;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
@@ -9,6 +9,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\HabitController;
 use App\Http\Controllers\LiveStatsController;
+use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StatsController;
@@ -45,8 +46,13 @@ Route::middleware('guest')->group(function () {
 });
 
 // فقط کاربرهای وارد شده
-Route::middleware(['auth', TouchLastSeen::class])->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::middleware(['auth', TouchLastSeen::class, EnsureOnboarded::class])->group(function () {
+   Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // تکمیل مشخصات (مرحله‌ی دوم ثبت‌نام و ویرایش بعدی)
+    Route::get('/welcome/profile', [OnboardingController::class, 'show'])->name('onboarding');
+    Route::post('/welcome/profile', [OnboardingController::class, 'save'])->name('onboarding.save');
+    Route::post('/welcome/profile/skip', [OnboardingController::class, 'skip'])->name('onboarding.skip');
 
     // داشبورد، حساب کاربری و سازنده
     Route::view('/dashboard', 'dashboard')->name('dashboard');
@@ -64,6 +70,7 @@ Route::middleware(['auth', TouchLastSeen::class])->group(function () {
         Route::get('/users', [AdminController::class, 'users'])->name('users');
         Route::post('/users/{user}/ban', [AdminController::class, 'toggleBan'])->name('users.ban');
         Route::post('/users/{user}/admin', [AdminController::class, 'toggleAdmin'])->name('users.admin');
+        Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('users.destroy');
         Route::get('/chat', [AdminController::class, 'chat'])->name('chat');
         Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
         Route::post('/reports/{report}', [AdminController::class, 'reportAct'])->name('reports.act');

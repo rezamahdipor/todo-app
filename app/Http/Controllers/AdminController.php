@@ -97,6 +97,56 @@ class AdminController extends Controller
             : "دسترسی مدیریت {$user->name} برداشته شد");
     }
 
+    public function destroyUser(Request $request, User $user)
+    {
+        // نه خودت، نه مدیر (اول باید مدیریتش برداشته بشه)
+        abort_if($user->id === $request->user()->id || $user->is_admin, 403);
+
+        $name = $user->name;
+        $avatar = $user->avatar;
+
+        DB::transaction(function () use ($user) {
+            $postIds = DB::table('posts')->where('user_id', $user->id)->pluck('id');
+            $msgIds = DB::table('chat_messages')->where('user_id', $user->id)->pluck('id');
+
+            // گزارش‌های مربوط به محتوای این کاربر و گزارش‌هایی که خودش داده
+            DB::table('reports')->where('type', 'post')->whereIn('target_id', $postIds)->delete();
+            DB::table('reports')->where('type', 'message')->whereIn('target_id', $msgIds)->delete();
+            DB::table('reports')->where('user_id', $user->id)->delete();
+
+            DB::table('chat_messages')->where('user_id', $user->id)->delete();
+            DB::table('posts')->where('user_id', $user->id)->delete();
+
+            $habitIds = DB::table('habits')->where('user_id', $user->id)->pluck('id');
+            DB::table('habit_logs')->whereIn('habit_id', $habitIds)->delete();
+            DB::table('habits')->where('user_id', $user->id)->delete();
+
+            $taskIds = DB::table('tasks')->where('user_id', $user->id)->pluck('id');
+            DB::table('subtasks')->whereIn('task_id', $taskIds)->delete();
+            DB::table('tasks')->where('user_id', $user->id)->delete();
+            DB::table('categories')->where('user_id', $user->id)->delete();
+
+            DB::table('user_profiles')->where('user_id', $user->id)->delete();
+
+            if (\Illuminate\Support\Facades\Schema::hasTable('sessions')) {
+                DB::table('sessions')->where('user_id', $user->id)->delete();
+            }
+
+            $user->delete();
+        });
+
+        // فایل عکس پروفایل
+        if ($avatar) {
+            $path = public_path('uploads/avatars/' . basename($avatar));
+
+            if (is_file($path)) {
+                @unlink($path);
+            }
+        }
+
+        return back()->with('status', "کاربر «{$name}» و همه‌ی اطلاعاتش حذف شد 🗑️");
+    }
+
     public function posts(Request $request)
     {
         $filter = $request->query('filter');
