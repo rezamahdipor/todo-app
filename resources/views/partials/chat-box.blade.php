@@ -16,6 +16,8 @@
 
     <p class="chat-err" role="alert" hidden></p>
 
+    <script src="{{ asset('js/report.js') }}?v={{ filemtime(public_path('js/report.js')) }}" defer></script>
+
     <form class="chat-form" autocomplete="off">
         <input type="text" maxlength="500" placeholder="پیامت رو بنویس..." aria-label="متن پیام" required>
         <button type="submit" class="btn-sm">ارسال</button>

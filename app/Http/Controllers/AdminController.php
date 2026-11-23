@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\ChatMessage;
 use App\Models\Post;
+use App\Models\Report;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
+    // همه‌ی صفحه‌های پنل؛ شمار گزارش‌های باز برای عدد قرمز تب
+    private function page(array $data)
+    {
+        return view('admin', $data + ['openReports' => Report::whereNull('resolved_at')->count()]);
+    }
+
     public function index()
     {
         $stats = [
@@ -23,9 +30,10 @@ class AdminController extends Controller
             'tasks'    => DB::table('tasks')->count(),
             'habits'   => DB::table('habits')->count(),
             'messages' => ChatMessage::count(),
+            'reports'  => Report::whereNull('resolved_at')->count(),
         ];
 
-        return view('admin', [
+        return $this->page([
             'tab'         => 'overview',
             'stats'       => $stats,
             'recentUsers' => User::latest('id')->take(5)->get(),
@@ -57,7 +65,7 @@ class AdminController extends Controller
         $postCounts = DB::table('posts')->whereIn('user_id', $ids)
             ->selectRaw('user_id, COUNT(*) as c')->groupBy('user_id')->pluck('c', 'user_id');
 
-        return view('admin', [
+        return $this->page([
             'tab' => 'users', 'q' => $q, 'filter' => $filter, 'users' => $users,
             'taskCounts' => $taskCounts, 'postCounts' => $postCounts,
         ]);
@@ -100,7 +108,7 @@ class AdminController extends Controller
             ->simplePaginate(20)
             ->withQueryString();
 
-        return view('admin', ['tab' => 'posts', 'posts' => $posts, 'filter' => $filter]);
+        return $this->page(['tab' => 'posts', 'posts' => $posts, 'filter' => $filter]);
     }
 
     public function toggleHide(Post $post)
@@ -128,7 +136,7 @@ class AdminController extends Controller
             ->simplePaginate(30)
             ->withQueryString();
 
-        return view('admin', ['tab' => 'chat', 'messages' => $messages, 'room' => $room]);
+        return $this->page(['tab' => 'chat', 'messages' => $messages, 'room' => $room]);
     }
 
     public function deleteMessage(Request $request, ChatMessage $message)
@@ -140,5 +148,89 @@ class AdminController extends Controller
         }
 
         return back()->with('status', 'پیام حذف شد');
+    }
+
+    // ---------- گزارش‌ها ----------
+    public function reports(Request $request)
+    {
+        $state = $request->query('state') === 'resolved' ? 'resolved' : 'open';
+
+        $reports = Report::with('reporter:id,name')
+            ->when(
+                $state === 'open',
+                fn ($q) => $q->whereNull('resolved_at'),
+                fn ($q) => $q->whereNotNull('resolved_at')
+            )
+            ->latest('id')
+            ->simplePaginate(20)
+            ->withQueryString();
+
+        $items = $reports->getCollection();
+
+        $posts = Post::with('user:id,name,is_admin')
+            ->whereIn('id', $items->where('type', 'post')->pluck('target_id')->unique())
+            ->get()->keyBy('id');
+
+        $msgs = ChatMessage::with('user:id,name,is_admin')
+            ->whereIn('id', $items->where('type', 'message')->pluck('target_id')->unique())
+            ->get()->keyBy('id');
+
+        $counts = Report::whereNull('resolved_at')
+            ->selectRaw('type, target_id, COUNT(*) as c')
+            ->groupBy('type', 'target_id')
+            ->get()
+            ->mapWithKeys(fn ($r) => [$r->type . ':' . $r->target_id => $r->c]);
+
+        return $this->page([
+            'tab' => 'reports', 'state' => $state, 'reports' => $reports,
+            'posts' => $posts, 'msgs' => $msgs, 'counts' => $counts,
+        ]);
+    }
+
+    public function reportAct(Request $request, Report $report)
+    {
+        $action = $request->validate(['action' => 'required|in:dismiss,hide,delete,ban'])['action'];
+
+        $post = $report->type === 'post' ? Post::find($report->target_id) : null;
+        $msg = $report->type === 'message' ? ChatMessage::find($report->target_id) : null;
+        $authorId = $post?->user_id ?? $msg?->user_id;
+
+        if ($action === 'hide' && $post) {
+            $post->hidden_at = now();
+            $post->save();
+        }
+
+        if ($action === 'delete' || $action === 'ban') {
+            if ($action === 'ban' && $authorId) {
+                $author = User::find($authorId);
+
+                if ($author && ! $author->is_admin && $author->id !== $request->user()->id) {
+                    $author->forceFill(['is_banned' => true])->save();
+                }
+            }
+
+            // با مسدودسازی، نوشته پنهان و پیام حذف می‌شه؛ با «حذف»، هر دو پاک می‌شن
+            if ($action === 'ban' && $post) {
+                $post->hidden_at = now();
+                $post->save();
+            } else {
+                $post?->delete();
+            }
+
+            $msg?->delete();
+        }
+
+        // همه‌ی گزارش‌های باز همین محتوا بسته می‌شن
+        Report::whereNull('resolved_at')
+            ->where('type', $report->type)
+            ->where('target_id', $report->target_id)
+            ->update(['resolved_at' => now()]);
+
+        return back()->with('status', match ($action) {
+            'hide'  => 'نوشته پنهان و گزارش بسته شد 🙈',
+            'delete' => 'محتوا حذف و گزارش بسته شد 🗑️',
+            'ban'   => 'نویسنده مسدود، محتوا برداشته و گزارش بسته شد 🚫',
+            default => 'گزارش رد شد ✅',
+        });
     }
 }

@@ -20,6 +20,7 @@
         <a href="{{ route('admin.users') }}" @class(['on' => $tab === 'users'])>👥 کاربرها</a>
         <a href="{{ route('admin.posts') }}" @class(['on' => $tab === 'posts'])>📰 نوشته‌ها</a>
         <a href="{{ route('admin.chat') }}" @class(['on' => $tab === 'chat'])>💬 چت</a>
+        <a href="{{ route('admin.reports') }}" @class(['on' => $tab === 'reports'])>🚩 گزارش‌ها@if (($openReports ?? 0) > 0)<span class="adm-count">{{ $openReports }}</span>@endif</a>
     </nav>
 
     {{-- ============ نمای کلی ============ --}}
@@ -36,6 +37,7 @@
                 ['📋', 'کل کارها', 'tasks', null],
                 ['🔥', 'عادت', 'habits', null],
                 ['💬', 'پیام چت', 'messages', route('admin.chat')],
+                ['🚩', 'گزارش باز', 'reports', route('admin.reports')],
             ];
         @endphp
 
@@ -216,6 +218,10 @@
             @if ($posts->previousPageUrl()) <a href="{{ $posts->previousPageUrl() }}" class="topbar-link">→ قبلی</a> @else <span></span> @endif
             @if ($posts->nextPageUrl()) <a href="{{ $posts->nextPageUrl() }}" class="topbar-link">بعدی ←</a> @endif
         </div>
+
+    {{-- ============ گزارش‌ها ============ --}}
+    @elseif ($tab === 'reports')
+        @include('partials.admin-reports')
 
     {{-- ============ چت ============ --}}
     @else

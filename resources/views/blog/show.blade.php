@@ -10,6 +10,13 @@
         @unless ($post->isPublished())
 <div class="flash">{{ $post->hidden_at ? '🚫 این نوشته توسط مدیریت پنهان شده و برای بقیه دیده نمی‌شه.' : '👁️ این نوشته پیش‌نویسه و فقط خودت می‌بینیش.' }}</div>        @endunless
 
+        @if (session('status'))
+            <div class="flash" role="status">{{ session('status') }}</div>
+        @endif
+        @if ($errors->any())
+            <div class="flash flash-bad" role="alert">{{ $errors->first() }}</div>
+        @endif
+
         <header class="post-head">
             <h1>{{ $post->title }}</h1>
 
@@ -32,6 +39,37 @@
                 @endif
             @endforeach
         </div>
+    @auth
+            @if ($post->isPublished() && auth()->id() !== $post->user_id)
+                <details class="report-box">
+                    <summary>🚩 گزارش این نوشته</summary>
+
+                    <form method="POST" action="{{ route('reports.store') }}" class="reg-form">
+                        @csrf
+                        <input type="hidden" name="type" value="post">
+                        <input type="hidden" name="id" value="{{ $post->id }}">
+
+                        <div class="field">
+                            <label for="rp-reason">دلیل گزارش</label>
+                            <select id="rp-reason" name="reason" required>
+                                @foreach (\App\Models\Report::REASONS as $key => $label)
+                                    <option value="{{ $key }}">{{ $label }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="rp-note">توضیح (اختیاری)</label>
+                            <input type="text" id="rp-note" name="note" maxlength="300">
+                        </div>
+
+                        <button type="submit" class="btn-sm btn-danger">ارسال گزارش</button>
+                    </form>
+                </details>
+            @endif
+        @else
+            <p class="report-hint"><a href="{{ route('login') }}">وارد شو</a> تا بتونی این نوشته رو گزارش کنی.</p>
+        @endauth
     </article>
 
     @if ($more->isNotEmpty())
